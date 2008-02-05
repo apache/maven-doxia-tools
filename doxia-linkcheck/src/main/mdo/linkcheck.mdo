@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<model>
+  <id>linkcheck</id>
+  <name>LinkcheckModel</name>
+  <description>Model for the linkcheck report.</description>
+  <defaults>
+    <default>
+      <key>package</key>
+      <value>org.apache.maven.doxia.linkcheck.model</value>
+    </default>
+  </defaults>
+  <classes>
+    <class rootElement="true" xml.tagName="linkcheck">
+      <name>LinkcheckModel</name>
+      <description><![CDATA[
+         The <code>&lt;linkcheck&gt;</code> element is the root of the linkcheck descriptor.
+      ]]></description>
+      <version>1.0.0</version>
+      <fields>
+        <field xml.listStyle="flat">
+          <name>files</name>
+          <description><![CDATA[
+            List of <code>&lt;file&gt;</code> elements.
+          ]]></description>
+          <version>1.0.0</version>
+          <association>
+            <type>LinkcheckFile</type>
+            <multiplicity>*</multiplicity>
+          </association>
+          <identifier>true</identifier>
+        </field>
+      </fields>
+    </class>
+    <class>
+      <name>LinkcheckFile</name>
+      <description><![CDATA[
+        The <code>&lt;file&gt;</code> to be checked.
+      ]]></description>
+      <version>1.0.0</version>
+      <fields>
+        <field>
+          <name>absolutePath</name>
+          <version>1.0.0</version>
+          <description><![CDATA[
+            The file to check as String Object.
+          ]]></description>
+          <type>String</type>
+          <identifier>true</identifier>
+        </field>
+        <field>
+          <name>relativePath</name>
+          <version>1.0.0</version>
+          <description><![CDATA[
+            The relative path of the file.
+          ]]></description>
+          <type>String</type>
+          <identifier>true</identifier>
+        </field>
+        <field>
+          <name>successful</name>
+          <version>1.0.0</version>
+          <description><![CDATA[
+            The number of successful links in this file.
+          ]]></description>
+          <type>int</type>
+          <identifier>true</identifier>
+          <defaultValue>-1</defaultValue>
+        </field>
+        <field>
+          <name>unsuccessful</name>
+          <version>1.0.0</version>
+          <description><![CDATA[
+            The number of unsuccessful links in this file.
+          ]]></description>
+          <type>int</type>
+          <identifier>true</identifier>
+          <defaultValue>-1</defaultValue>
+        </field>
+        <field>
+          <name>results</name>
+          <version>1.0.0</version>
+          <description><![CDATA[
+            All error details in this file.
+          ]]></description>
+          <association>
+            <type>LinkcheckFileResult</type>
+            <multiplicity>*</multiplicity>
+          </association>
+          <identifier>true</identifier>
+        </field>
+      </fields>
+      <codeSegments>
+        <codeSegment>
+          <version>1.0.0</version>
+          <code>
+            <![CDATA[
+    /**
+     * Get the number of links for this file depending the level wanted.
+     *
+     * {@link LinkcheckFileResult#ERROR_LEVEL}
+     * {@link LinkcheckFileResult#UNKNOWN_LEVEL}
+     * {@link LinkcheckFileResult#VALID_LEVEL}
+     * {@link LinkcheckFileResult#WARNING_LEVEL}
+     *
+     * @param level the restricted level
+     * @return the number of links for the restrict level, -1 if the level is not a valid one
+     * or no results was found.
+     * @throws UnsupportedOperationException if the level is unsupported.
+     */
+    public int getNumberOfLinks( int level )
+    {
+        if ( results == null )
+        {
+            return -1;
+        }
+
+        if ( !( level == LinkcheckFileResult.ERROR_LEVEL || level == LinkcheckFileResult.WARNING_LEVEL
+            || level == LinkcheckFileResult.VALID_LEVEL || level == LinkcheckFileResult.UNKNOWN_LEVEL ) )
+        {
+            throw new UnsupportedOperationException( "This level [" + level + "] is unsupported." );
+        }
+
+        int number = 0;
+        for ( java.util.Iterator it = results.iterator(); it.hasNext(); )
+        {
+            LinkcheckFileResult linkcheckFileResult = (LinkcheckFileResult) it.next();
+
+            if ( linkcheckFileResult.getStatusLevel() == level )
+            {
+                number++;
+            }
+        }
+
+        return number;
+    }
+
+    /**
+     * Get the number of links for this file.
+     *
+     * @param level
+     * @return
+     */
+    public int getNumberOfLinks()
+    {
+        if ( results == null )
+        {
+            return -1;
+        }
+
+        return results.size();
+    }
+            ]]>
+          </code>
+        </codeSegment>
+      </codeSegments>
+    </class>
+    <class>
+      <name>LinkcheckFileResult</name>
+      <description><![CDATA[
+        An class containing the results of a single check of a link.
+      ]]></description>
+      <version>1.0.0</version>
+      <fields>
+        <field>
+          <name>target</name>
+          <description><![CDATA[
+            The target URL.
+          ]]></description>
+          <version>1.0.0</version>
+          <type>String</type>
+          <identifier>true</identifier>
+        </field>
+        <field>
+          <name>status</name>
+          <description><![CDATA[
+            The status.
+          ]]></description>
+          <version>1.0.0</version>
+          <type>String</type>
+          <identifier>true</identifier>
+        </field>
+        <field>
+          <name>errorMessage</name>
+          <description><![CDATA[
+            The error message.
+          ]]></description>
+          <version>1.0.0</version>
+          <type>String</type>
+          <identifier>true</identifier>
+        </field>
+      </fields>
+      <codeSegments>
+        <codeSegment>
+          <version>1.0.0</version>
+          <code>
+            <![CDATA[
+    /** The vm line separator. */
+    private static final String EOL = System.getProperty( "line.separator" );
+
+    /** Validation result level: error. */
+    public static final int ERROR_LEVEL = 1;
+
+    /** Validation result level: warning. */
+    public static final int WARNING_LEVEL = 2;
+
+    /** Validation result level: valid. */
+    public static final int VALID_LEVEL = 3;
+
+    /** Validation result level: unknown. */
+    public static final int UNKNOWN_LEVEL = 4;
+
+    /** Validation result: error. */
+    public static final String ERROR = "error";
+
+    /** Validation result: warning. */
+    public static final String WARNING = "warning";
+
+    /** Validation result: valid. */
+    public static final String VALID = "valid";
+
+    /** Validation result: unknown. */
+    public static final String UNKNOWN = "unknown";
+
+    /**
+     * Returns the status as an integer.
+     *
+     * @return One of ERROR, WARNING, VALID or UNKNOWN.
+     */
+    public int getStatusLevel()
+    {
+        int level = UNKNOWN_LEVEL;
+
+        if ( VALID.equals( getStatus() ) )
+        {
+            level = VALID_LEVEL;
+        }
+        else if ( WARNING.equals( getStatus() ) )
+        {
+            level = WARNING_LEVEL;
+        }
+        else if ( ERROR.equals( getStatus() ) )
+        {
+            level = ERROR_LEVEL;
+        }
+
+        return level;
+    }
+            ]]>
+          </code>
+        </codeSegment>
+      </codeSegments>
+    </class>
+  </classes>
+</model>

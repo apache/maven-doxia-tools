@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<model>
+  <id>http</id>
+  <name>HttpBean</name>
+  <description>Bean for supported HTTP parameters.</description>
+  <defaults>
+    <default>
+      <key>package</key>
+      <value>org.apache.maven.doxia.linkcheck</value>
+    </default>
+  </defaults>
+  <classes>
+    <class>
+      <name>HttpBean</name>
+      <description><![CDATA[
+         Http bean to encapsulate the supported HTTP parameters.
+
+         @see org.apache.commons.httpclient.HttpMethod
+      ]]></description>
+      <version>1.0.0</version>
+      <fields>
+        <field>
+          <name>method</name>
+          <description><![CDATA[
+     The HTTP method to use. Currently supported are "GET" and "HEAD".
+     <dl>
+     <dt>HTTP GET</dt>
+     <dd>
+     The HTTP GET method is defined in section 9.3 of
+     <a HREF="http://www.ietf.org/rfc/rfc2616.txt">RFC2616</a>:
+     <blockquote>
+     The GET method means retrieve whatever information (in the form of an
+     entity) is identified by the Request-URI.
+     </blockquote>
+     </dd>
+     <dt>HTTP HEAD</dt>
+     <dd>
+     The HTTP HEAD method is defined in section 9.4 of
+     <a HREF="http://www.ietf.org/rfc/rfc2616.txt">RFC2616</a>:
+     <blockquote>
+     The HEAD method is identical to GET except that the server MUST NOT
+     return a message-body in the response.
+     </blockquote>
+     </dd>
+     </dl>
+          ]]></description>
+          <version>1.0.0</version>
+          <identifier>true</identifier>
+          <type>String</type>
+          <defaultValue>head</defaultValue>
+        </field>
+        <field>
+          <name>followRedirects</name>
+          <description><![CDATA[
+     if the HTTP method should automatically follow HTTP redirects
+     (status code 302, etc.), <tt>false</tt> otherwise.
+          ]]></description>
+          <version>1.0.0</version>
+          <identifier>true</identifier>
+          <type>boolean</type>
+        </field>
+        <field>
+          <name>proxyHost</name>
+          <description><![CDATA[
+            The proxy host.
+          ]]></description>
+          <version>1.0.0</version>
+          <identifier>true</identifier>
+          <type>String</type>
+        </field>
+        <field>
+          <name>proxyPort</name>
+          <description><![CDATA[
+            The proxy port.
+          ]]></description>
+          <version>1.0.0</version>
+          <identifier>true</identifier>
+          <type>int</type>
+          <defaultValue>0</defaultValue>
+        </field>
+        <field>
+          <name>proxyUser</name>
+          <description><![CDATA[
+            The proxy user.
+          ]]></description>
+          <version>1.0.0</version>
+          <identifier>true</identifier>
+          <type>String</type>
+        </field>
+        <field>
+          <name>proxyPassword</name>
+          <description><![CDATA[
+            The proxy password.
+          ]]></description>
+          <version>1.0.0</version>
+          <identifier>true</identifier>
+          <type>String</type>
+        </field>
+        <field>
+          <name>proxyNtlmHost</name>
+          <description><![CDATA[
+            The proxy NTLM (NT Lan Manager) host.
+          ]]></description>
+          <version>1.0.0</version>
+          <identifier>true</identifier>
+          <type>String</type>
+        </field>
+        <field>
+          <name>proxyNtlmDomain</name>
+          <description><![CDATA[
+            The proxy NTLM (NT Lan Manager) domain.
+          ]]></description>
+          <version>1.0.0</version>
+          <identifier>true</identifier>
+          <type>String</type>
+        </field>
+      </fields>
+    </class>
+  </classes>
+</model>
