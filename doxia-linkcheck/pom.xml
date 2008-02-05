@@ -23,13 +23,15 @@ under the License.
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <artifactId>doxia</artifactId>
     <groupId>org.apache.maven.doxia</groupId>
-    <version>1.0-beta-1-SNAPSHOT</version>
+    <artifactId>doxia-tools</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
   </parent>
 
+  <groupId>org.apache.maven.doxia.tools</groupId>
   <artifactId>doxia-linkcheck</artifactId>
-  <name>Doxia :: Linkcheck</name>
+  <name>Doxia Tools :: Linkcheck</name>
   <description>Doxia linkcheck is a tool to check the validity of links</description>
 
   <dependencies>
@@ -49,20 +51,10 @@ under the License.
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-container-default</artifactId>
-      <version>1.0-alpha-9</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-utils</artifactId>
-      <version>1.4.5</version>
-    </dependency>
-
-    <!-- test dependencies -->
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
     </dependency>
   </dependencies>
 

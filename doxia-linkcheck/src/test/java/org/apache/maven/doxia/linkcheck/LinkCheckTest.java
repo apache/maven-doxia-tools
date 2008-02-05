@@ -47,13 +47,13 @@ public class LinkCheckTest
 
         lc.setOnline( true ); // TODO: check if online
 
-        lc.setBasedir( new File( "src/test/resources" ) ); // TODO
+        lc.setBasedir( new File( getBasedir(), "src/test/resources" ) ); // TODO
 
-        lc.setReportOutput( new File( "target/linkcheck/linkcheck.xml" ) );
+        lc.setReportOutput( new File( getBasedir(), "target/linkcheck/linkcheck.xml" ) );
 
         lc.setReportOutputEncoding( "UTF-8" );
 
-        lc.setLinkCheckCache( new File( "target/linkcheck/linkcheck.cache" ) ); // TODO
+        lc.setLinkCheckCache( new File( getBasedir(), "target/linkcheck/linkcheck.cache" ) ); // TODO
 
         String[] excludes = new String[] {
             "http://cvs.apache.org/viewcvs.cgi/maven-pluginszz/",
