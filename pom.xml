@@ -195,6 +195,7 @@ under the License.
 
   <modules>
     <module>doxia-linkcheck</module>
+    <module>doxia-converter</module>
   </modules>
 
   <distributionManagement>
