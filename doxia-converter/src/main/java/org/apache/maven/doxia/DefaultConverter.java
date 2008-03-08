@@ -249,6 +249,10 @@ public class DefaultConverter
         {
             return new FmlParser();
         }
+        else if ( format.equals( TWIKI_PARSER ) )
+        {
+            return new TWikiParser();
+        }
         else if ( format.equals( XDOC_PARSER ) )
         {
             return new XdocParser();
