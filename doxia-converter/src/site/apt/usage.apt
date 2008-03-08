@@ -30,7 +30,7 @@ Usage
 
  The following examples describe the basic usage of the Doxia Converter.
 
-* Display Help
+* Command Line Help
 
 +-----+
 # java -jar target/apache-doxia-1.0-SNAPSHOT-jar-with-dependencies.jar -h
@@ -53,7 +53,7 @@ from: apt, confluence, docbook, fml, twiki, xdoc, xhtml
 out: apt, docbook, fo, itext, latex, rtf, xdoc, xhtml
 +-----+
 
-* Executes Conversion
+* Command Line Execution
 
 +-----+
 # java -jar target/apache-doxia-1.0-SNAPSHOT-jar-with-dependencies.jar \
@@ -61,4 +61,33 @@ out: apt, docbook, fo, itext, latex, rtf, xdoc, xhtml
     -from xhtml \
     -out /path/to/outputdir \
     -to apt
++-----+
+
+  <<Note>>: <<<from>>> parameter could be empty. In this case, Doxia converter try to autodetect the <<<from>>>
+  input from the <<<in>>> file parameter.
+
+* Java Usage
+
++-----+
+String in = "...";
+String from = "...";
+String out = "...";
+String to = "...";
+
+Converter converter = new DefaultConverter();
+try
+{
+    InputFile input = InputFile.valueOf( in, from, converter.getInputFormats() );
+    OutputFile output = OutputFile.valueOf( out, to, converter.getOutputFormats() );
+
+    converter.convert( input, output );
+}
+catch ( UnsupportedFormatException e )
+{
+    e.printStackTrace();
+}
+catch ( ConverterException e )
+{
+    e.printStackTrace();
+}
 +-----+
