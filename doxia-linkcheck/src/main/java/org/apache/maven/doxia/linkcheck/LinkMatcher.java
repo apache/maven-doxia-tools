@@ -50,6 +50,10 @@ class LinkMatcher
     /** No need to create a new object each time a file is processed. Just clear it. */
     private static final Set LINK_LIST = new TreeSet();
 
+    private LinkMatcher()
+    {
+    }
+
     /**
      * Reads a file and returns a StringBuffer with its contents.
      *

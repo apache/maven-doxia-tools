@@ -35,6 +35,7 @@ import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.NTCredentials;
 import org.apache.commons.httpclient.StatusLine;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
+import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.HeadMethod;
 
@@ -264,7 +265,7 @@ public final class OnlineHTTPLinkValidator extends HTTPLinkValidator
                         .getProxyPassword() );
                 }
 
-                state.setProxyCredentials( null, null, credentials );
+                state.setProxyCredentials( AuthScope.ANY, credentials );
             }
 
         }

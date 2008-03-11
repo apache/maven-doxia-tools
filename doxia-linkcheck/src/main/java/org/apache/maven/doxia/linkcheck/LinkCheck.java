@@ -21,7 +21,6 @@ package org.apache.maven.doxia.linkcheck;
 
 import java.io.File;
 
-import org.apache.commons.httpclient.HttpStatus;
 import org.apache.maven.doxia.linkcheck.model.LinkcheckModel;
 
 /**
