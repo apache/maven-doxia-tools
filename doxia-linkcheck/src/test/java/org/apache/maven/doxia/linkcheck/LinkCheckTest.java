@@ -93,6 +93,9 @@ public class LinkCheckTest
         // There are 805 distinct links in this page
         check( map, "index-all.html", 805 );
 
+        // FIXME: this fails because the local (anchor) link is reported as valid, why?
+        //ftc = (LinkcheckFile) map.get( "testA.html" );
+        //assertEquals( "Non-existent links", 0, ftc.getSuccessful() );
     }
 
     private void check( Map map, String name, int linkCount )

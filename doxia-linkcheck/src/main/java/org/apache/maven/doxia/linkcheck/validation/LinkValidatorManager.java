@@ -374,6 +374,11 @@ public class LinkValidatorManager implements Serializable
 
     protected static boolean matchPattern( String link, String pattern )
     {
+        if ( StringUtils.isEmpty( pattern ) )
+        {
+            return StringUtils.isEmpty( link );
+        }
+
         if ( pattern.indexOf( '*' ) == -1 )
         {
             if ( pattern.endsWith( "/" ) )
