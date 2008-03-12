@@ -143,17 +143,16 @@ public class ConverterTest
         converter.convert( input, output );
         assertTrue( new File( out ).exists() );
 
-        //TODO
-        //        in = getBasedir() + "/target/unit/file/apt/test.apt.xhtml";
-        //        from = "xhtml";
-        //        out = getBasedir() + "/target/unit/file/apt/test.apt";
-        //        to = "apt";
-        //
-        //        input = InputFileWrapper.valueOf( in, from, converter.getInputFormats() );
-        //        output = OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
-        //
-        //        converter.convert( input, output );
-        //        assertTrue( new File( out ).exists() );
+        in = getBasedir() + "/target/unit/file/apt/test.apt.xhtml";
+        from = "xhtml";
+        out = getBasedir() + "/target/unit/file/apt/test.apt";
+        to = "apt";
+
+        input = InputFileWrapper.valueOf( in, from, converter.getInputFormats() );
+        output = OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
+
+        converter.convert( input, output );
+        assertTrue( new File( out ).exists() );
     }
 
     /**

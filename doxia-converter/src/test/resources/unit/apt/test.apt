@@ -1,1 +1,86 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head></head><body></body></html>
+                                    ------
+                                    Title
+                                    ------
+                                    Author
+                                    ------
+                                     Date
+
+  Paragraph 1, line 1.
+  Paragraph 1, line 2.
+
+  Paragraph 2, line 1.
+  Paragraph 2, line 2.
+
+Section title
+
+* Sub-section title
+
+** Sub-sub-section title
+
+*** Sub-sub-sub-section title
+
+**** Sub-sub-sub-sub-section title
+
+      * List item 1.
+
+      * List item 2.
+
+        Paragraph contained in list item 2.
+
+            * Sub-list item 1.
+
+            * Sub-list item 2.
+
+      * List item 3.
+        Force end of list:
+
+      []
+
++------------------------------------------+
+Verbatim text not contained in list item 3
++------------------------------------------+
+
+      [[1]] Numbered item 1.
+
+                [[A]] Numbered item A.
+
+                [[B]] Numbered item B.
+
+      [[2]] Numbered item 2.
+
+  List numbering schemes: [[1]], [[a]], [[A]], [[i]], [[I]].
+
+      [Defined term 1] of definition list.
+
+      [Defined term 2] of definition list.
+
++-------------------------------+
+Verbatim text
+                        in a box        
++-------------------------------+
+
+  --- instead of +-- suppresses the box around verbatim text.
+
+  Horizontal line:
+
+=======================================================================
+
+
+  New page.
+
+  <Italic> font. <<Bold>> font. <<<Monospaced>>> font.
+
+  {Anchor}. Link to {{Anchor}}. Link to {{http://www.pixware.fr}}. 
+  Link to {{{Anchor}showing alternate text}}.
+  Link to {{{http://www.pixware.fr}Pixware home page}}.
+
+  Force line\
+  break.
+
+  Non\ breaking\ space.
+
+  Escaped special characters: \~, \=, \-, \+, \*, \[, \], \<, \>, \{, \}, \\.
+
+  Copyright symbol: \251, \xA9, \u00a9.
+
+~~Commented out.
