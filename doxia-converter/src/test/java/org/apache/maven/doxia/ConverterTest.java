@@ -215,7 +215,7 @@ public class ConverterTest
         converter.convert( input, output );
         assertTrue( new File( out ).exists() );
 
-        // TODO
+        // TODO: docbook output is still crap, see DOXIA-184
         //        in = getBasedir() + "/target/unit/file/docbook/test.docbook.xhtml";
         //        from = "xhtml";
         //        out = getBasedir() + "/target/unit/file/docbook/test.docbook";
