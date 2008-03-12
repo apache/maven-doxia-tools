@@ -28,10 +28,10 @@ import org.apache.maven.doxia.Converter;
 import org.apache.maven.doxia.ConverterException;
 import org.apache.maven.doxia.DefaultConverter;
 import org.apache.maven.doxia.UnsupportedFormatException;
-import org.apache.maven.doxia.convertor.model.InputFile;
-import org.apache.maven.doxia.convertor.model.OutputFile;
 import org.apache.maven.doxia.logging.Log;
 import org.apache.maven.doxia.logging.SystemStreamLog;
+import org.apache.maven.doxia.wrapper.InputFileWrapper;
+import org.apache.maven.doxia.wrapper.OutputFileWrapper;
 import org.codehaus.plexus.util.Os;
 
 /**
@@ -78,7 +78,6 @@ public class ConverterCli
             return 1;
         }
 
-        // TODO: maybe classworlds could handle this requirement...
         if ( "1.4".compareTo( System.getProperty( "java.specification.version" ) ) > 0 )
         {
             System.err.println( "Sorry, but JDK 1.4 or above is required to execute Maven. You appear to be using "
@@ -125,13 +124,13 @@ public class ConverterCli
         }
         converter.enableLogging( log );
 
-        InputFile input;
-        OutputFile output;
+        InputFileWrapper input;
+        OutputFileWrapper output;
         try
         {
-            input = InputFile.valueOf( commandLine.getOptionValue( CLIManager.IN ), commandLine
+            input = InputFileWrapper.valueOf( commandLine.getOptionValue( CLIManager.IN ), commandLine
                 .getOptionValue( CLIManager.FROM ), converter.getInputFormats() );
-            output = OutputFile.valueOf( commandLine.getOptionValue( CLIManager.OUT ), commandLine
+            output = OutputFileWrapper.valueOf( commandLine.getOptionValue( CLIManager.OUT ), commandLine
                 .getOptionValue( CLIManager.TO ), converter.getOutputFormats() );
         }
         catch ( IllegalArgumentException e )

@@ -19,18 +19,16 @@
 package org.apache.maven.doxia;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
-import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang.ClassUtils;
-import org.apache.maven.doxia.convertor.model.InputFile;
-import org.apache.maven.doxia.convertor.model.OutputFile;
 import org.apache.maven.doxia.logging.Log;
 import org.apache.maven.doxia.logging.SystemStreamLog;
 import org.apache.maven.doxia.module.apt.AptParser;
@@ -51,6 +49,10 @@ import org.apache.maven.doxia.module.xhtml.XhtmlSink;
 import org.apache.maven.doxia.parser.ParseException;
 import org.apache.maven.doxia.parser.Parser;
 import org.apache.maven.doxia.sink.Sink;
+import org.apache.maven.doxia.wrapper.InputFileWrapper;
+import org.apache.maven.doxia.wrapper.InputReaderWrapper;
+import org.apache.maven.doxia.wrapper.OutputFileWrapper;
+import org.apache.maven.doxia.wrapper.OutputWriterWrapper;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.SelectorUtils;
@@ -153,7 +155,7 @@ public class DefaultConverter
     }
 
     /** {@inheritDoc} */
-    public void convert( InputFile input, OutputFile output )
+    public void convert( InputFileWrapper input, OutputFileWrapper output )
         throws UnsupportedFormatException, ConverterException
     {
         if ( input == null )
@@ -172,17 +174,9 @@ public class DefaultConverter
             getLog().debug( "Parser used: " + parser.getClass().getName() );
         }
 
-        StringWriter stringWriter = new StringWriter();
-        Sink sink = getSink( output.getFormat(), stringWriter );
-
-        if ( getLog().isDebugEnabled() )
-        {
-            getLog().debug( "Sink used: " + sink.getClass().getName() );
-        }
-
         if ( input.getFile().isFile() )
         {
-            parse( input.getFile(), output, parser, sink, stringWriter );
+            parse( input.getFile(), output, parser );
         }
         else
         {
@@ -201,10 +195,58 @@ public class DefaultConverter
             {
                 File f = (File) it.next();
 
-                parse( f, output, parser, sink, stringWriter );
+                parse( f, output, parser );
             }
         }
     }
+
+    /** {@inheritDoc} */
+    public void convert( InputReaderWrapper input, OutputWriterWrapper output )
+        throws UnsupportedFormatException, ConverterException
+    {
+        if ( input == null )
+        {
+            throw new IllegalArgumentException( "input is required" );
+        }
+        if ( output == null )
+        {
+            throw new IllegalArgumentException( "output is required" );
+        }
+
+        Parser parser = getParser( input.getFormat() );
+
+        if ( getLog().isDebugEnabled() )
+        {
+            getLog().debug( "Parser used: " + parser.getClass().getName() );
+        }
+
+        Sink sink = getSink( output.getFormat(), output.getWriter() );
+
+        if ( getLog().isDebugEnabled() )
+        {
+            getLog().debug( "Sink used: " + sink.getClass().getName() );
+        }
+
+        try
+        {
+            parser.parse( input.getReader(), sink );
+        }
+        catch ( ParseException e )
+        {
+            throw new ConverterException( "ParseException: " + e.getMessage(), e );
+        }
+        finally
+        {
+            IOUtil.close( input.getReader() );
+            sink.flush();
+            sink.close();
+            IOUtil.close( output.getWriter() );
+        }
+    }
+
+    // ----------------------------------------------------------------------
+    // Private methods
+    // ----------------------------------------------------------------------
 
     /**
      * @param clazz an implementation of <code>Parser</code> with the pattern <code>&lt;format&gt;Parser</code>
@@ -267,30 +309,31 @@ public class DefaultConverter
 
     /**
      * @param format
+     * @param writer
      * @return an instance of <code>Sink</code> depending the format.
      * @throws IllegalArgumentException if any
      */
-    private static Sink getSink( String format, StringWriter stringWriter )
+    private static Sink getSink( String format, Writer writer )
     {
         if ( format.equals( APT_SINK ) )
         {
-            return new AptSink( stringWriter );
+            return new AptSink( writer );
         }
         else if ( format.equals( DOCBOOK_SINK ) )
         {
-            return new DocBookSink( stringWriter );
+            return new DocBookSink( writer );
         }
         else if ( format.equals( FO_SINK ) )
         {
-            return new FoSink( stringWriter );
+            return new FoSink( writer );
         }
         else if ( format.equals( ITEXT_SINK ) )
         {
-            return new ITextSink( stringWriter );
+            return new ITextSink( writer );
         }
         else if ( format.equals( LATEX_SINK ) )
         {
-            return new LatexSink( stringWriter );
+            return new LatexSink( writer );
         }
         else if ( format.equals( RTF_SINK ) )
         {
@@ -299,11 +342,11 @@ public class DefaultConverter
         }
         else if ( format.equals( XDOC_SINK ) )
         {
-            return new XdocSink( stringWriter );
+            return new XdocSink( writer );
         }
         else if ( format.equals( XHTML_SINK ) )
         {
-            return new XhtmlSink( stringWriter );
+            return new XhtmlSink( writer );
         }
 
         throw new IllegalArgumentException( "Sink not found for: " + format );
@@ -313,29 +356,68 @@ public class DefaultConverter
      * @param inputFile
      * @param output
      * @param parser
-     * @param sink
-     * @param stringWriter
      * @throws ConverterException if any
      */
-    private void parse( File inputFile, OutputFile output, Parser parser, Sink sink, StringWriter stringWriter )
+    private void parse( File inputFile, OutputFileWrapper output, Parser parser )
         throws ConverterException
     {
         if ( getLog().isDebugEnabled() )
         {
             getLog().debug(
-                            "Parsing file from '" + inputFile.getAbsolutePath() + "' to '" + output.getAbsolutePath()
-                                + "'" );
+                            "Parsing file from '" + inputFile.getAbsolutePath() + "' to '"
+                                + output.getFile().getAbsolutePath() + "'" );
         }
 
-        Reader reader = null;
+        File outputFile;
+        if ( output.getFile().exists() && output.getFile().isDirectory() )
+        {
+            outputFile = new File( output.getFile(), inputFile.getName() + "." + output.getFormat() );
+        }
+        else
+        {
+            if ( !SelectorUtils.match( "**.*", output.getFile().getName() ) )
+            {
+                // assume it is a directory
+                output.getFile().mkdirs();
+                outputFile = new File( output.getFile(), inputFile.getName() + "." + output.getFormat() );
+            }
+            else
+            {
+                output.getFile().getParentFile().mkdirs();
+                outputFile = output.getFile();
+            }
+        }
+
+        Writer writer;
         try
         {
-            reader = new FileReader( inputFile );
-            parser.parse( reader, sink );
+            writer = new FileWriter( outputFile );
         }
         catch ( IOException e )
         {
             throw new ConverterException( "IOException: " + e.getMessage(), e );
+        }
+
+        Sink sink = getSink( output.getFormat(), writer );
+
+        if ( getLog().isDebugEnabled() )
+        {
+            getLog().debug( "Sink used: " + sink.getClass().getName() );
+        }
+
+        Reader reader;
+        try
+        {
+            reader = new FileReader( inputFile );
+        }
+        catch ( FileNotFoundException e )
+        {
+            throw new ConverterException( "IOException: " + e.getMessage(), e );
+        }
+
+        try
+        {
+            parser.parse( reader, sink );
         }
         catch ( ParseException e )
         {
@@ -344,41 +426,9 @@ public class DefaultConverter
         finally
         {
             IOUtil.close( reader );
-        }
-
-        Writer writer = null;
-        try
-        {
-            if ( output.getFile().exists() && output.getFile().isDirectory() )
-            {
-                writer = new FileWriter( new File( output.getFile(), inputFile.getName() + "." + output.getFormat() ) );
-            }
-            else
-            {
-                if ( !SelectorUtils.match( "**.*", output.getFile().getName() ) )
-                {
-                    // assume it is a directory
-                    output.getFile().mkdirs();
-                    writer = new FileWriter(
-                                             new File( output.getFile(), inputFile.getName() + "." + output.getFormat() ) );
-                }
-                else
-                {
-                    output.getFile().getParentFile().mkdirs();
-                    writer = new FileWriter( output.getFile() );
-                }
-            }
-
-            IOUtil.copy( stringWriter.toString(), writer );
-        }
-        catch ( IOException e )
-        {
-            throw new ConverterException( "IOException: " + e.getMessage(), e );
-        }
-        finally
-        {
+            sink.flush();
+            sink.close();
             IOUtil.close( writer );
-            IOUtil.close( stringWriter );
         }
     }
 }

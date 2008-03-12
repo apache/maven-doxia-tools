@@ -77,8 +77,8 @@ String to = "...";
 Converter converter = new DefaultConverter();
 try
 {
-    InputFile input = InputFile.valueOf( in, from, converter.getInputFormats() );
-    OutputFile output = OutputFile.valueOf( out, to, converter.getOutputFormats() );
+    InputFileWrapper input = InputFileWrapper.valueOf( in, from, converter.getInputFormats() );
+    OutputFileWrapper output = OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
 
     converter.convert( input, output );
 }
