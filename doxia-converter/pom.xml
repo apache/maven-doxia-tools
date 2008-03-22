@@ -136,7 +136,7 @@ under the License.
         <version>2.2-beta-2</version>
         <configuration>
           <descriptorId>jar-with-dependencies</descriptorId>
-          <finalName>apache-doxia-${version}</finalName>
+          <finalName>apache-doxia-${project.version}</finalName>
           <archive>
             <manifestEntries>
               <Main-Class>org.apache.maven.doxia.cli.ConverterCli</Main-Class>
