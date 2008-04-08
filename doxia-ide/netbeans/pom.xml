@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.apache.maven.doxia.ide</groupId>
+    <artifactId>netbeans</artifactId>
+    <packaging>nbm</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <name>Doxia Editing integration for NetBeans</name>
+    
+    <repositories>
+        <!-- this is a remote repository hosting the netbeans api artifacts.
+         the versions of the artifacts are netbeans IDE release based, eg. RELEASE41, RELEASE50.
+         You might want to use your own repository. To create one, use the nbm:populate-repository goal.
+          -->
+        <repository>
+            <id>netbeans</id>
+            <name>repository hosting netbeans.org api artifacts</name>
+            <url>http://deadlock.netbeans.org/maven2</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-util</artifactId>
+            <version>RELEASE60</version>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-filesystems</artifactId>
+            <version>RELEASE60</version>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-loaders</artifactId>
+            <version>RELEASE60</version>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-nodes</artifactId>
+            <version>RELEASE60</version>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-text</artifactId>
+            <version>RELEASE60</version>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-windows</artifactId>
+            <version>RELEASE60</version>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-netbeans-modules-editor-lib</artifactId>
+            <version>RELEASE60</version>
+        </dependency>
+        <!--dependency>
+            <groupId>org.netbeans.modules</groupId>
+            <artifactId>org-netbeans-spi-editor-hints</artifactId>
+            <version>RELEASE60</version>
+        </dependency-->
+        
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-netbeans-modules-editor-errorstripe-api</artifactId>
+            <version>RELEASE60</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>nbm-maven-plugin</artifactId>
+                <version>2.6.2</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <descriptor>src/main/nbm/module.xml</descriptor>
+                </configuration>
+            </plugin>
+            
+            <!-- netbeans modules in 5.5+ are 1.5 compatible -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.0.2</version>
+                <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

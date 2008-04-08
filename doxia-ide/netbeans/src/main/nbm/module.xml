@@ -1,0 +1,22 @@
+<nbm>
+   <!--moduleType>autoload</moduleType-->
+   <!--codeNameBase>org.apache.maven.doxia.ide.netbeans/1</codeNameBase-->
+   <!-- the cluster where you want the module to be located. -->
+   <!--cluster>mycluster1</cluster-->
+   <manifest>src/main/nbm/manifest.mf</manifest>
+   <!-- base url of the autoupdate center (where the nbm will be located -->
+   <!--distributionUrl>http://myorg.org/autoupdate</distributionUrl-->
+   <licenseName>Apache License, Version 2.0</licenseName>
+   <licenseFile>license.txt</licenseFile>
+   <!--dependencies that are not part of existing module, you need to include as part of this module -->
+   <!--libraries>
+      <library>jdom:jdom</library>
+   </libraries--> 
+   <dependencies>
+       <dependency>
+           <id>org.netbeans.modules:org-netbeans-spi-editor-hints</id>
+           <type>impl</type>
+       </dependency>
+   </dependencies>
+   
+</nbm>
