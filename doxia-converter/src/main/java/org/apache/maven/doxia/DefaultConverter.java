@@ -25,8 +25,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.ClassUtils;
 import org.apache.maven.doxia.logging.Log;
@@ -53,6 +55,12 @@ import org.apache.maven.doxia.wrapper.InputFileWrapper;
 import org.apache.maven.doxia.wrapper.InputReaderWrapper;
 import org.apache.maven.doxia.wrapper.OutputFileWrapper;
 import org.apache.maven.doxia.wrapper.OutputWriterWrapper;
+import org.codehaus.plexus.ContainerConfiguration;
+import org.codehaus.plexus.DefaultContainerConfiguration;
+import org.codehaus.plexus.DefaultPlexusContainer;
+import org.codehaus.plexus.PlexusContainer;
+import org.codehaus.plexus.PlexusContainerException;
+import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.SelectorUtils;
@@ -158,6 +166,16 @@ public class DefaultConverter
     public void convert( InputFileWrapper input, OutputFileWrapper output )
         throws UnsupportedFormatException, ConverterException
     {
+        PlexusContainer plexus;
+        try
+        {
+            plexus = startPlexusContainer();
+        }
+        catch ( PlexusContainerException e )
+        {
+            throw new ConverterException( "PlexusContainerException: " + e.getMessage(), e );
+        }
+
         if ( input == null )
         {
             throw new IllegalArgumentException( "input is required" );
@@ -167,36 +185,51 @@ public class DefaultConverter
             throw new IllegalArgumentException( "output is required" );
         }
 
-        Parser parser = getParser( input.getFormat() );
-
-        if ( getLog().isDebugEnabled() )
+        try
         {
-            getLog().debug( "Parser used: " + parser.getClass().getName() );
-        }
-
-        if ( input.getFile().isFile() )
-        {
-            parse( input.getFile(), output, parser );
-        }
-        else
-        {
-            List files;
+            Parser parser;
             try
             {
-                files = FileUtils.getFiles( input.getFile(), "**/*." + input.getFormat(), StringUtils.join( FileUtils
-                    .getDefaultExcludes(), ", " ) );
+                parser = getParser( plexus, input.getFormat() );
             }
-            catch ( IOException e )
+            catch ( ComponentLookupException e )
             {
-                throw new ConverterException( "IOException: " + e.getMessage(), e );
+                throw new ConverterException( "ComponentLookupException: " + e.getMessage(), e );
             }
 
-            for ( Iterator it = files.iterator(); it.hasNext(); )
+            if ( getLog().isDebugEnabled() )
             {
-                File f = (File) it.next();
-
-                parse( f, output, parser );
+                getLog().debug( "Parser used: " + parser.getClass().getName() );
             }
+
+            if ( input.getFile().isFile() )
+            {
+                parse( input.getFile(), output, parser );
+            }
+            else
+            {
+                List files;
+                try
+                {
+                    files = FileUtils.getFiles( input.getFile(), "**/*." + input.getFormat(), StringUtils
+                        .join( FileUtils.getDefaultExcludes(), ", " ) );
+                }
+                catch ( IOException e )
+                {
+                    throw new ConverterException( "IOException: " + e.getMessage(), e );
+                }
+
+                for ( Iterator it = files.iterator(); it.hasNext(); )
+                {
+                    File f = (File) it.next();
+
+                    parse( f, output, parser );
+                }
+            }
+        }
+        finally
+        {
+            stopPlexusContainer( plexus );
         }
     }
 
@@ -204,6 +237,16 @@ public class DefaultConverter
     public void convert( InputReaderWrapper input, OutputWriterWrapper output )
         throws UnsupportedFormatException, ConverterException
     {
+        PlexusContainer plexus;
+        try
+        {
+            plexus = startPlexusContainer();
+        }
+        catch ( PlexusContainerException e )
+        {
+            throw new ConverterException( "PlexusContainerException: " + e.getMessage(), e );
+        }
+
         if ( input == null )
         {
             throw new IllegalArgumentException( "input is required" );
@@ -213,34 +256,49 @@ public class DefaultConverter
             throw new IllegalArgumentException( "output is required" );
         }
 
-        Parser parser = getParser( input.getFormat() );
-
-        if ( getLog().isDebugEnabled() )
-        {
-            getLog().debug( "Parser used: " + parser.getClass().getName() );
-        }
-
-        Sink sink = getSink( output.getFormat(), output.getWriter() );
-
-        if ( getLog().isDebugEnabled() )
-        {
-            getLog().debug( "Sink used: " + sink.getClass().getName() );
-        }
-
         try
         {
-            parser.parse( input.getReader(), sink );
-        }
-        catch ( ParseException e )
-        {
-            throw new ConverterException( "ParseException: " + e.getMessage(), e );
+            Parser parser;
+            try
+            {
+                parser = getParser( plexus, input.getFormat() );
+            }
+            catch ( ComponentLookupException e )
+            {
+                throw new ConverterException( "ComponentLookupException: " + e.getMessage(), e );
+            }
+
+            if ( getLog().isDebugEnabled() )
+            {
+                getLog().debug( "Parser used: " + parser.getClass().getName() );
+            }
+
+            Sink sink = getSink( output.getFormat(), output.getWriter() );
+
+            if ( getLog().isDebugEnabled() )
+            {
+                getLog().debug( "Sink used: " + sink.getClass().getName() );
+            }
+
+            try
+            {
+                parser.parse( input.getReader(), sink );
+            }
+            catch ( ParseException e )
+            {
+                throw new ConverterException( "ParseException: " + e.getMessage(), e );
+            }
+            finally
+            {
+                IOUtil.close( input.getReader() );
+                sink.flush();
+                sink.close();
+                IOUtil.close( output.getWriter() );
+            }
         }
         finally
         {
-            IOUtil.close( input.getReader() );
-            sink.flush();
-            sink.close();
-            IOUtil.close( output.getWriter() );
+            stopPlexusContainer( plexus );
         }
     }
 
@@ -269,42 +327,51 @@ public class DefaultConverter
     }
 
     /**
+     * @param plexus
      * @param format
      * @return an instance of <code>Parser</code> depending the format.
+     * @throws ComponentLookupException if any
      * @throws IllegalArgumentException if any
      */
-    private static Parser getParser( String format )
+    private static Parser getParser( PlexusContainer plexus, String format )
+        throws ComponentLookupException
     {
+        Parser parser = null;
         if ( format.equals( APT_PARSER ) )
         {
-            return new AptParser();
+            parser = (Parser) plexus.lookup( Parser.ROLE, "apt" );
         }
         else if ( format.equals( CONFLUENCE_PARSER ) )
         {
-            return new ConfluenceParser();
+            parser = (Parser) plexus.lookup( Parser.ROLE, "confluence" );
         }
         else if ( format.equals( DOCBOOK_PARSER ) )
         {
-            return new DocBookParser();
+            parser = (Parser) plexus.lookup( Parser.ROLE, "doc-book" );
         }
         else if ( format.equals( FML_PARSER ) )
         {
-            return new FmlParser();
+            parser = (Parser) plexus.lookup( Parser.ROLE, "fml" );
         }
         else if ( format.equals( TWIKI_PARSER ) )
         {
-            return new TWikiParser();
+            parser = (Parser) plexus.lookup( Parser.ROLE, "twiki" );
         }
         else if ( format.equals( XDOC_PARSER ) )
         {
-            return new XdocParser();
+            parser = (Parser) plexus.lookup( Parser.ROLE, "xdoc" );
         }
         else if ( format.equals( XHTML_PARSER ) )
         {
-            return new XhtmlParser();
+            parser = (Parser) plexus.lookup( Parser.ROLE, "xhtml" );
         }
 
-        throw new IllegalArgumentException( "Parser not found for: " + format );
+        if ( parser == null )
+        {
+            throw new IllegalArgumentException( "Parser not found for: " + format );
+        }
+
+        return parser;
     }
 
     /**
@@ -430,5 +497,32 @@ public class DefaultConverter
             sink.close();
             IOUtil.close( writer );
         }
+    }
+
+    /**
+     * @return a new Plexus Container instance
+     * @throws PlexusContainerException if any
+     */
+    private PlexusContainer startPlexusContainer()
+        throws PlexusContainerException
+    {
+        Map context = new HashMap();
+        context.put( "basedir", new File( "" ).getAbsolutePath() );
+
+        ContainerConfiguration containerConfiguration = new DefaultContainerConfiguration();
+        containerConfiguration.setName( "Doxia" );
+        containerConfiguration.setContext( context );
+
+        return new DefaultPlexusContainer( containerConfiguration );
+    }
+
+    /**
+     * Stop the Plexus container.
+     *
+     * @param plexus the Plexus container instance.
+     */
+    private void stopPlexusContainer( PlexusContainer plexus )
+    {
+        plexus.dispose();
     }
 }
