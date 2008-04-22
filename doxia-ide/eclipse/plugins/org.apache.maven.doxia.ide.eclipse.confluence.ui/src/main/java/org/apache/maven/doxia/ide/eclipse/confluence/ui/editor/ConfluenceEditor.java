@@ -21,11 +21,10 @@ package org.apache.maven.doxia.ide.eclipse.confluence.ui.editor;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import org.apache.maven.doxia.ide.eclipse.common.ui.ColorManager;
 import org.apache.maven.doxia.ide.eclipse.common.ui.CommonPlugin;
 import org.apache.maven.doxia.ide.eclipse.common.ui.actions.AbstractBoldAction;
 import org.apache.maven.doxia.ide.eclipse.common.ui.actions.AbstractItalicAction;
@@ -49,7 +48,6 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.Region;
-import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.jface.text.contentassist.ContentAssistant;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.jface.text.contentassist.IContentAssistant;
@@ -58,7 +56,10 @@ import org.eclipse.jface.text.hyperlink.IHyperlinkDetector;
 import org.eclipse.jface.text.hyperlink.URLHyperlink;
 import org.eclipse.jface.text.hyperlink.URLHyperlinkDetector;
 import org.eclipse.jface.text.rules.EndOfLineRule;
+import org.eclipse.jface.text.rules.ICharacterScanner;
 import org.eclipse.jface.text.rules.IRule;
+import org.eclipse.jface.text.rules.IToken;
+import org.eclipse.jface.text.rules.MultiLineRule;
 import org.eclipse.jface.text.rules.RuleBasedScanner;
 import org.eclipse.jface.text.rules.SingleLineRule;
 import org.eclipse.jface.text.rules.Token;
@@ -143,8 +144,7 @@ public class ConfluenceEditor
                     return "[" + link.getURL() + "]";
                 }
 
-                return "[[" + link.getName() + "|" +
-                    link.getURL() + "]]";
+                return "[[" + link.getName() + "|" + link.getURL() + "]]";
             }
         } );
         editor.setAction( IActionConstants.TABLE_ACTION, new AbstractTableAction( editor )
@@ -204,6 +204,9 @@ public class ConfluenceEditor
     class ConfluenceSourceViewerConfiguration
         extends AbstractTextSourceViewerConfiguration
     {
+        /**
+         * Default constructor.
+         */
         public ConfluenceSourceViewerConfiguration()
         {
             super();
@@ -245,9 +248,12 @@ public class ConfluenceEditor
         class AptURLHyperlinkDetector
             extends URLHyperlinkDetector
         {
-
+            /**
+             * Default constructor.
+             */
             public AptURLHyperlinkDetector()
             {
+                super();
             }
 
             @Override
@@ -303,8 +309,8 @@ public class ConfluenceEditor
 
                     // Right to "://"
                     // APT FIX
-                    StringTokenizer tokenizer =
-                        new StringTokenizer( line.substring( urlSeparatorOffset + 3 ), " \t\n\r\f<>[]", false ); //$NON-NLS-1$
+                    StringTokenizer tokenizer = new StringTokenizer( line.substring( urlSeparatorOffset + 3 ),
+                                                                     " \t\n\r\f<>[]", false ); //$NON-NLS-1$
                     if ( !tokenizer.hasMoreTokens() )
                         return null;
 
@@ -354,6 +360,9 @@ public class ConfluenceEditor
     class ConfluenceScanner
         extends AbstractTextScanner
     {
+        /**
+         * Default constructor.
+         */
         public ConfluenceScanner()
         {
             super();
@@ -362,31 +371,187 @@ public class ConfluenceEditor
         @Override
         public List<IRule> getRules()
         {
-            List<IRule> rules = new ArrayList<IRule>();
+            List<IRule> rules = new LinkedList<IRule>();
 
-            // TODO add more rules and review color!
+            // sections title rule
+            rules.add( new SectionTitleEndOfLineRule() );
 
             // horizontal rule
-            rules.add( new EndOfLineRule(
-                                          "----",
-                                          new Token(
-                                                     new TextAttribute(
-                                                                        ColorManager.getInstance().getColor(
-                                                                                                             ColorManager.STRING ) ) ) ) );
+            rules.add( new EndOfLineRule( "----", SinkToken.HORIZONTALRULE_TOKEN ) );
 
             // monospaced rule
-            rules.add( new SingleLineRule( "{{", "}}", monospacedToken ) );
+            rules.add( new SingleLineRule( "{{", "}}", SinkToken.MONOSPACED_TOKEN ) );
 
-            // bold rule
-            rules.add( new SingleLineRule( "*", "*", boldToken ) );
+            // bold rule or list rule
+            rules.add( new SingleLineRule( "*", " ", SinkToken.BOLD_TOKEN ) );
 
             // italic rule
-            rules.add( new SingleLineRule( "_", "_", italicToken ) );
+            rules.add( new SingleLineRule( "_", "_", SinkToken.ITALIC_TOKEN ) );
 
             // link rule
-            rules.add( new SingleLineRule( "[[", "]]", linkToken ) );
+            rules.add( new SingleLineRule( "[", "]", SinkToken.LINK_TOKEN ) );
+
+            // numbered list rule
+            rules.add( new SingleLineRule( "#", " ", SinkToken.BOLD_TOKEN ) );
+
+            // definition list rule
+            rules.add( new MultiLineRule( "{note", "{note}", SinkToken.DEFINITION_TOKEN ) );
+            rules.add( new MultiLineRule( "{quote}", "{quote}", SinkToken.DEFINITION_TOKEN ) );
+            rules.add( new MultiLineRule( "{info", "{info}", SinkToken.DEFINITION_TOKEN ) );
+            rules.add( new MultiLineRule( "{tip", "{tip}", SinkToken.DEFINITION_TOKEN ) );
+
+            // verbatim rule
+            rules.add( new MultiLineRule( "{noformat}", "{noformat}", SinkToken.VERBATIM_TOKEN ) );
+            rules.add( new MultiLineRule( "{code", "{code}", SinkToken.VERBATIM_TOKEN ) );
+
+            // table rule
+            rules.add( new EndOfLineRule( "|", SinkToken.TABLE_TOKEN ) );
+
+            // TODO better unsupported
+            // some text effects unsupported by Doxia
+            rules.add( new SingleLineRule( "??", "??", UNSUPPORTED_TOKEN ) );
+            rules.add( new SingleLineRule( "-", "-", UNSUPPORTED_TOKEN ) );
+            rules.add( new SingleLineRule( "+", "+", UNSUPPORTED_TOKEN ) );
+            rules.add( new SingleLineRule( "^", "^", UNSUPPORTED_TOKEN ) );
+            rules.add( new SingleLineRule( "~", "~", UNSUPPORTED_TOKEN ) );
+
+            // some other advanced formatting unsupported by Doxia
+            rules.add( new MultiLineRule( "{color", "{color}", UNSUPPORTED_TOKEN ) );
+            rules.add( new MultiLineRule( "{panel", "{panel}", UNSUPPORTED_TOKEN ) );
+            rules.add( new MultiLineRule( "{warning", "{warning}", UNSUPPORTED_TOKEN ) );
+            rules.add( new MultiLineRule( "{composition-setup", "{composition-setup}", UNSUPPORTED_TOKEN ) );
+            rules.add( new MultiLineRule( "{float", "{float}", UNSUPPORTED_TOKEN ) );
+            rules.add( new MultiLineRule( "{cloak", "{cloak}", UNSUPPORTED_TOKEN ) );
+            rules.add( new MultiLineRule( "{deck", "{deck}", UNSUPPORTED_TOKEN ) );
+            rules.add( new MultiLineRule( "{card", "{card}", UNSUPPORTED_TOKEN ) );
+            rules.add( new MultiLineRule( "{show-card", "{show-card}", UNSUPPORTED_TOKEN ) );
+            rules.add( new MultiLineRule( "{cache", "{cache}", UNSUPPORTED_TOKEN ) );
+            rules.add( new MultiLineRule( "{beanshell", "{beanshell}", UNSUPPORTED_TOKEN ) );
+            rules.add( new MultiLineRule( "{sql", "{sql}", UNSUPPORTED_TOKEN ) );
+            rules.add( new MultiLineRule( "{slideshow", "{slideshow}", UNSUPPORTED_TOKEN ) );
+            rules.add( new MultiLineRule( "{slide", "{slide}", UNSUPPORTED_TOKEN ) );
+            rules.add( new MultiLineRule( "{rsvp", "{rsvp}", UNSUPPORTED_TOKEN ) );
+
+            // Other Misc unsupported by Doxia
+            rules.add( new MultiLineRule( "{vote", "{vote}", UNSUPPORTED_TOKEN ) );
+            rules.add( new MultiLineRule( "{survey", "{survey}", UNSUPPORTED_TOKEN ) );
+
+            // escaped character rule
+            rules.add( new EscapedCharacterRule( KEYWORD_TOKEN ) );
 
             return rules;
+        }
+
+        class SectionTitleEndOfLineRule
+            extends EndOfLineRule
+        {
+            /**
+             * Default constructor.
+             */
+            public SectionTitleEndOfLineRule()
+            {
+                super( "h", Token.UNDEFINED );
+            }
+
+            @Override
+            protected IToken doEvaluate( ICharacterScanner scanner, boolean resume )
+            {
+                if ( resume )
+                {
+                    if ( endSequenceDetected( scanner ) )
+                    {
+                        return fToken;
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        char c = (char) scanner.read();
+                        if ( c == 'h' )
+                        {
+                            // last line should be empty
+                            if ( ( isEmptyPrecedentLine( fDocument, fOffset ) ) )
+                            {
+                                c = (char) scanner.read();
+                                if ( Character.isDigit( c ) )
+                                {
+                                    if ( endSequenceDetected( scanner ) )
+                                    {
+                                        switch ( c )
+                                        {
+                                            case '1':
+                                                fToken = SinkToken.SECTIONTITLE1_TOKEN;
+                                                break;
+                                            case '2':
+                                                fToken = SinkToken.SECTIONTITLE2_TOKEN;
+                                                break;
+                                            case '3':
+                                                fToken = SinkToken.SECTIONTITLE3_TOKEN;
+                                                break;
+                                            case '4':
+                                                fToken = SinkToken.SECTIONTITLE4_TOKEN;
+                                                break;
+                                            case '5':
+                                                fToken = SinkToken.SECTIONTITLE5_TOKEN;
+                                                break;
+                                            default:
+                                                fToken = Token.UNDEFINED;
+                                                break;
+                                        }
+                                        return fToken;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch ( BadLocationException e )
+                    {
+                        // nop
+                    }
+                }
+
+                scanner.unread();
+                return Token.UNDEFINED;
+            }
+        }
+
+        class EscapedCharacterRule
+            implements IRule
+        {
+            private IToken token;
+
+            /**
+             * Constructor.
+             *
+             * @param token the associated token
+             */
+            public EscapedCharacterRule( IToken token )
+            {
+                this.token = token;
+            }
+
+            /** {@inheritDoc} */
+            public synchronized IToken evaluate( ICharacterScanner scanner )
+            {
+                char character = (char) scanner.read();
+                if ( character == '\\' )
+                {
+                    character = (char) scanner.read();
+                    if ( Character.isDefined( character ) )
+                    {
+                        return token;
+                    }
+
+                    scanner.unread();
+
+                    return Token.UNDEFINED;
+                }
+
+                scanner.unread();
+
+                return Token.UNDEFINED;
+            }
         }
     }
 
@@ -401,8 +566,10 @@ public class ConfluenceEditor
         @Override
         public Image[] getImageMarkups()
         {
-            return new Image[] { CommonPlugin.getImage( CommonPlugin.IMG_ITALIC ),
-                CommonPlugin.getImage( CommonPlugin.IMG_BOLD ), CommonPlugin.getImage( CommonPlugin.IMG_MONOSPACED ),
+            return new Image[] {
+                CommonPlugin.getImage( CommonPlugin.IMG_ITALIC ),
+                CommonPlugin.getImage( CommonPlugin.IMG_BOLD ),
+                CommonPlugin.getImage( CommonPlugin.IMG_MONOSPACED ),
                 CommonPlugin.getImage( CommonPlugin.IMG_LINK ) };
         }
 
