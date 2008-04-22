@@ -49,6 +49,11 @@ public class ConfluenceWizard
     class ConfluenceWizardPage
         extends AbstractWizardPage
     {
+        /**
+         * Default constructor.
+         *
+         * @param selection
+         */
         public ConfluenceWizardPage( ISelection selection )
         {
             super( selection );

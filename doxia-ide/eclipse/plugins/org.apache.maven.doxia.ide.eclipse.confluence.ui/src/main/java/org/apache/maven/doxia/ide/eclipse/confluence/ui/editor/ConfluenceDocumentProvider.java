@@ -46,6 +46,9 @@ public class ConfluenceDocumentProvider
     class ConfluencePartitionScanner
         extends AbstractTextPartitionScanner
     {
+        /**
+         * Default constructor.
+         */
         public ConfluencePartitionScanner()
         {
             super();

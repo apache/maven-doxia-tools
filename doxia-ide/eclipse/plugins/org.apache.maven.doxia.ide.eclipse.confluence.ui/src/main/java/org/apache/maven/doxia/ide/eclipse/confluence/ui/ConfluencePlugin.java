@@ -40,10 +40,12 @@ public class ConfluencePlugin
     private static ConfluencePlugin plugin;
 
     /**
-     * The constructor
+     * Default constructor.
      */
     public ConfluencePlugin()
     {
+        super();
+
         plugin = this;
     }
 
