@@ -70,8 +70,7 @@ public abstract class AbstractTextSourceViewerConfiguration
         reconciler.setDamager( dr, AbstractTextPartitionScanner.DOXIA_PARTITION_CONTENT );
         reconciler.setRepairer( dr, AbstractTextPartitionScanner.DOXIA_PARTITION_CONTENT );
 
-        dr = new DefaultDamagerRepairer( new SingleTokenScanner( new TextAttribute( ColorManager.getInstance()
-            .getColor( ColorManager.COMMENT ) ) ) );
+        dr = new DefaultDamagerRepairer( new SingleTokenScanner( new TextAttribute( ColorManager.SinkColor.COMMENT_COLOR ) ) );
         reconciler.setDamager( dr, AbstractTextPartitionScanner.DOXIA_PARTITION_COMMENT );
         reconciler.setRepairer( dr, AbstractTextPartitionScanner.DOXIA_PARTITION_COMMENT );
 

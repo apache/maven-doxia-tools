@@ -22,7 +22,6 @@ package org.apache.maven.doxia.ide.eclipse.common.ui.rules;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.maven.doxia.ide.eclipse.common.ui.editors.text.AbstractTextEditor;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.rules.IPredicateRule;
@@ -89,6 +88,6 @@ public abstract class AbstractTextPartitionScanner
             rules.addAll( getRules() );
         }
 
-        setPredicateRules( (IPredicateRule[]) rules.toArray( new IPredicateRule[rules.size()] ) );
+        setPredicateRules( rules.toArray( new IPredicateRule[rules.size()] ) );
     }
 }
