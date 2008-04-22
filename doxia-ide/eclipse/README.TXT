@@ -12,6 +12,9 @@ Required Prerequisites:
   - Need to build it 
   - Put apache-doxia-1.0-SNAPSHOT-jar-with-dependencies.jar in ./plugins/org.apache.maven.doxia.ide.eclipse.common.ui/lib - unneeded since r650510
 
+* needs java 5 to build (?)
+* M2_HOME needs to be set (?)
+
 Known Limitations:
 * Needs to bump to WSTP M6 due to:
   - https://bugs.eclipse.org/bugs/show_bug.cgi?id=212330
