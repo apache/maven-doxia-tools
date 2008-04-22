@@ -46,6 +46,9 @@ public class TWikiDocumentProvider
     class TWikiPartitionScanner
         extends AbstractTextPartitionScanner
     {
+        /**
+         * Default constructor.
+         */
         public TWikiPartitionScanner()
         {
             super();

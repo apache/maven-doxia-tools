@@ -40,10 +40,12 @@ public class TWikiPlugin
     private static TWikiPlugin plugin;
 
     /**
-     * The constructor
+     * Default constructor.
      */
     public TWikiPlugin()
     {
+        super();
+
         plugin = this;
     }
 

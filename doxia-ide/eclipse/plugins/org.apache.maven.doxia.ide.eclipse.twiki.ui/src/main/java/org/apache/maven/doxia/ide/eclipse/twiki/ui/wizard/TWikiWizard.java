@@ -49,6 +49,11 @@ public class TWikiWizard
     class TWikiWizardPage
         extends AbstractWizardPage
     {
+        /**
+         * Default constructor.
+         *
+         * @param selection
+         */
         public TWikiWizardPage( ISelection selection )
         {
             super( selection );
