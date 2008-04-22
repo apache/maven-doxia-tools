@@ -1,0 +1,520 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+
+<project
+  default="default"
+  basedir=".">
+
+  <description><![CDATA[
+    This Ant script downloads an Eclipse distribution depending your OS and the required Eclipse tools. You need around
+    500Mo space free.
+
+    Input properties:
+    * download.dir: if not set, an user interaction will be done by prompting for input.
+    * install.dir: if not set, an user interaction will be done by prompting for input.
+  ]]></description>
+
+  <!-- Eclipse SDK download URLs -->
+  <!-- @see http://www.eclipse.org/downloads/ -->
+  <property
+    name="eclipse.sdk.name"
+    value="eclipse-SDK-3.3.2" />
+  <property
+    name="eclipse.sdk.download.url"
+    value="http://download.eclipse.org/eclipse/downloads/drops/R-3.3.2-200802211800" />
+
+  <property
+    name="eclipse.sdk.download.win.url"
+    value="${eclipse.sdk.download.url}/${eclipse.sdk.name}-win32.zip" />
+  <property
+    name="eclipse.sdk.download.linux.url"
+    value="${eclipse.sdk.download.url}/${eclipse.sdk.name}-linux-gtk.tar.gz" />
+  <property
+    name="eclipse.sdk.download.mac.url"
+    value="${eclipse.sdk.download.url}/${eclipse.sdk.name}-macosx-carbon.tar.gz" />
+
+  <!-- Eclipse WTP download URLs -->
+  <!-- @see http://download.eclipse.org/webtools/downloads/ -->
+  <!-- Eclipse emf-sdo-xsd-SDK -->
+  <property
+    name="eclipse.emf-sdo-xsd-SDK.name"
+    value="emf-sdo-xsd-SDK-2.3.2" />
+  <property
+    name="eclipse.emf-sdo-xsd-SDK.download.url"
+    value="http://download.eclipse.org/modeling/emf/emf/downloads/drops/2.3.2/R200802051830/${eclipse.emf-sdo-xsd-SDK.name}.zip" />
+  <!-- Eclipse GEF-SDK -->
+  <property
+    name="eclipse.GEF-SDK.name"
+    value="GEF-SDK-3.3.2" />
+  <property
+    name="eclipse.GEF-SDK.download.url"
+    value="http://download.eclipse.org/tools/gef/downloads/drops/3.3.2/R200802211602/${eclipse.GEF-SDK.name}.zip" />
+  <!-- Eclipse dtp-sdk -->
+  <property
+    name="eclipse.dtp-sdk.name"
+    value="dtp-sdk_1.5.2_022008" />
+  <property
+    name="eclipse.dtp-sdk.download.url"
+    value="http://download.eclipse.org/datatools/downloads/1.5/${eclipse.dtp-sdk.name}.zip" />
+  <!-- Eclipse wtp-sdk -->
+  <property
+    name="eclipse.wtp-sdk.name"
+    value="wtp-sdk-R-2.0.2-20080223205547" />
+  <property
+    name="eclipse.wtp-sdk.download.url"
+    value="http://download.eclipse.org/webtools/downloads/drops/R2.0/R-2.0.2-20080223205547/${eclipse.wtp-sdk.name}.zip" />
+
+  <!-- Environment -->
+  <property environment="env" />
+
+  <!-- ====================================================================== -->
+  <!-- Init build properties targets                                          -->
+  <!-- ====================================================================== -->
+  <target
+    name="init.download.dir"
+    unless="download.dir">
+    <input
+      message="Please enter the wanted download dir:"
+      addproperty="download.dir"
+      defaultvalue="${java.io.tmpdir}" />
+  </target>
+  <target
+    name="init.install.dir"
+    unless="install.dir">
+    <input
+      message="Please enter the wanted install dir:"
+      addproperty="install.dir"
+      defaultvalue="${java.io.tmpdir}" />
+  </target>
+  <target
+    name="init.build.properties"
+    depends="init.download.dir, init.install.dir" />
+
+  <!-- ====================================================================== -->
+  <!-- Init plateform targets                                                 -->
+  <!-- ====================================================================== -->
+  <target
+    name="init"
+    description="Set OS properties">
+    <condition property="windows">
+      <os family="windows" />
+    </condition>
+    <condition property="linux">
+      <os name="Linux" />
+    </condition>
+    <condition property="mac">
+      <os name="Mac OS X" />
+    </condition>
+  </target>
+
+  <target
+    name="init.windows"
+    if="windows">
+    <property
+      name="eclipse.sdk.url"
+      value="${eclipse.sdk.download.win.url}" />
+    <property
+      name="eclipse.sdk.zip"
+      value="${eclipse.sdk.name}-win32.zip" />
+  </target>
+  <target
+    name="init.unix"
+    if="unix"
+    unless="mac">
+    <property
+      name="eclipse.sdk.url"
+      value="${eclipse.sdk.download.linux.url}" />
+    <property
+      name="eclipse.sdk.tar.gz"
+      value="${eclipse.sdk.name}-linux-gtk.tar.gz" />
+  </target>
+  <target
+    name="init.linux"
+    if="linux">
+    <property
+      name="eclipse.sdk.url"
+      value="${eclipse.sdk.download.linux.url}" />
+    <property
+      name="eclipse.sdk.tar.gz"
+      value="${eclipse.sdk.name}-linux-gtk.tar.gz" />
+  </target>
+  <target
+    name="init.mac"
+    if="mac">
+    <property
+      name="eclipse.sdk.url"
+      value="${eclipse.sdk.download.mac.url}" />
+    <property
+      name="eclipse.sdk.tar.gz"
+      value="${eclipse.sdk.name}-macosx-carbon.tar.gz" />
+  </target>
+
+  <target
+    name="init.platform"
+    depends="init, init.windows, init.unix, init.linux, init.mac" />
+
+  <!-- ====================================================================== -->
+  <!-- Download targets                                                       -->
+  <!-- ====================================================================== -->
+  <!-- Eclipse SDK -->
+  <target
+    name="already.eclipse.sdk.zip.downloaded"
+    depends="init.platform"
+    if="eclipse.sdk.zip">
+    <available
+      file="${download.dir}/${eclipse.sdk.zip}"
+      type="file"
+      property="already.eclipse.sdk.present" />
+  </target>
+  <target
+    name="already.sdk.tar.gz.downloaded"
+    depends="init.platform"
+    if="eclipse.sdk.tar.gz">
+    <available
+      file="${download.dir}/${eclipse.sdk.tar.gz}"
+      type="file"
+      property="already.eclipse.sdk.present" />
+  </target>
+  <target
+    name="download.eclipse.sdk.zip"
+    depends="already.eclipse.sdk.zip.downloaded"
+    unless="already.eclipse.sdk.present"
+    if="eclipse.sdk.zip">
+    <get
+      src="${eclipse.sdk.url}"
+      dest="${download.dir}/${eclipse.sdk.zip}" />
+  </target>
+  <target
+    name="download.eclipse.sdk.tar.gz"
+    depends="already.sdk.tar.gz.downloaded"
+    unless="already.eclipse.sdk.present"
+    if="eclipse.sdk.tar.gz">
+    <get
+      src="${eclipse.sdk.url}"
+      dest="${download.dir}/${eclipse.sdk.tar.gz}" />
+  </target>
+  <target
+    name="download.eclipse.sdk"
+    depends="download.eclipse.sdk.zip, download.eclipse.sdk.tar.gz" />
+
+  <!-- Eclipse emf-sdo-xsd-SDK -->
+  <target name="already.emf-sdo-xsd-SDK.downloaded">
+    <available
+      file="${download.dir}/${eclipse.emf-sdo-xsd-SDK.name}.zip"
+      type="file"
+      property="already.emf-sdo-xsd-SDK.present" />
+  </target>
+  <target
+    name="download.emf-sdo-xsd-SDK"
+    depends="already.emf-sdo-xsd-SDK.downloaded"
+    unless="already.emf-sdo-xsd-SDK.present">
+    <get
+      src="${eclipse.emf-sdo-xsd-SDK.download.url}"
+      dest="${download.dir}/${eclipse.emf-sdo-xsd-SDK.name}.zip" />
+  </target>
+
+  <!-- Eclipse GEF-SDK -->
+  <target name="already.GEF-SDK.downloaded">
+    <available
+      file="${download.dir}/${eclipse.GEF-SDK.name}.zip"
+      type="file"
+      property="already.GEF-SDK.present" />
+  </target>
+  <target
+    name="download.GEF-SDK"
+    depends="already.GEF-SDK.downloaded"
+    unless="already.GEF-SDK.present">
+    <get
+      src="${eclipse.GEF-SDK.download.url}"
+      dest="${download.dir}/${eclipse.GEF-SDK.name}.zip"
+      verbose="true" />
+  </target>
+
+  <!-- Eclipse dtp-sdk -->
+  <target name="already.dtp-sdk.downloaded">
+    <available
+      file="${download.dir}/${eclipse.dtp-sdk.name}.zip"
+      type="file"
+      property="already.dtp-sdk.present" />
+  </target>
+  <target
+    name="download.dtp-sdk"
+    depends="already.dtp-sdk.downloaded"
+    unless="already.dtp-sdk.present">
+    <get
+      src="${eclipse.dtp-sdk.download.url}"
+      dest="${download.dir}/${eclipse.dtp-sdk.name}.zip" />
+  </target>
+
+  <!-- Eclipse wtp-sdk -->
+  <target name="already.wtp-sdk.downloaded">
+    <available
+      file="${download.dir}/${eclipse.wtp-sdk.name}.zip"
+      type="file"
+      property="already.wtp-sdk.present" />
+  </target>
+  <target
+    name="download.wtp-sdk"
+    depends="already.wtp-sdk.downloaded"
+    unless="already.wtp-sdk.present">
+    <get
+      src="${eclipse.wtp-sdk.download.url}"
+      dest="${download.dir}/${eclipse.wtp-sdk.name}.zip" />
+  </target>
+
+  <!-- ====================================================================== -->
+  <!-- Uncompress targets                                                     -->
+  <!-- ====================================================================== -->
+  <!-- Eclipse SDK -->
+  <property
+    name="uncompress.eclipse.sdk.dir"
+    value="${eclipse.sdk.name}" />
+  <target name="already.eclipse.sdk.uncompress">
+    <available
+      file="${download.dir}/${uncompress.eclipse.sdk.dir}"
+      type="dir"
+      property="already.eclipse.sdk.uncompressed" />
+  </target>
+  <target
+    name="untar.eclipse.sdk"
+    depends="already.eclipse.sdk.uncompress, download.eclipse.sdk.tar.gz"
+    unless="already.eclipse.sdk.uncompressed"
+    if="eclipse.sdk.tar.gz">
+    <mkdir dir="${download.dir}/${uncompress.eclipse.sdk.dir}" />
+    <untar
+      src="${download.dir}/${eclipse.sdk.tar.gz}"
+      dest="${download.dir}/${uncompress.eclipse.sdk.dir}"
+      compression="gzip" />
+  </target>
+  <target
+    name="unzip.eclipse.sdk"
+    depends="already.eclipse.sdk.uncompress, download.eclipse.sdk.zip"
+    unless="already.eclipse.sdk.uncompressed"
+    if="eclipse.sdk.zip">
+    <mkdir dir="${download.dir}/${uncompress.eclipse.sdk.dir}" />
+    <unzip
+      src="${download.dir}/${eclipse.sdk.zip}"
+      dest="${download.dir}/${uncompress.eclipse.sdk.dir}" />
+  </target>
+  <target
+    name="uncompress.eclipse.sdk"
+    depends="already.eclipse.sdk.uncompress, untar.eclipse.sdk, unzip.eclipse.sdk"
+    unless="already.eclipse.sdk.uncompressed" />
+
+  <!-- Eclipse emf-sdo-xsd-SDK -->
+  <property
+    name="uncompress.emf-sdo-xsd-SDK.dir"
+    value="${eclipse.emf-sdo-xsd-SDK.name}" />
+  <target name="already.emf-sdo-xsd-SDK.uncompress">
+    <available
+      file="${download.dir}/${uncompress.emf-sdo-xsd-SDK.dir}"
+      type="dir"
+      property="already.emf-sdo-xsd-SDK.uncompressed" />
+  </target>
+  <target
+    name="uncompress.emf-sdo-xsd-SDK"
+    depends="already.emf-sdo-xsd-SDK.uncompress, download.emf-sdo-xsd-SDK"
+    unless="already.emf-sdo-xsd-SDK.uncompressed">
+    <mkdir dir="${download.dir}/${uncompress.emf-sdo-xsd-SDK.dir}" />
+    <unzip
+      src="${download.dir}/${eclipse.emf-sdo-xsd-SDK.name}.zip"
+      dest="${download.dir}/${uncompress.emf-sdo-xsd-SDK.dir}" />
+  </target>
+
+  <!-- Eclipse GEF-SDK -->
+  <property
+    name="uncompress.GEF-SDK.dir"
+    value="${eclipse.GEF-SDK.name}" />
+  <target name="already.GEF-SDK.uncompress">
+    <available
+      file="${download.dir}/${uncompress.GEF-SDK.dir}"
+      type="dir"
+      property="already.GEF-SDK.uncompressed" />
+  </target>
+  <target
+    name="uncompress.GEF-SDK"
+    depends="already.GEF-SDK.uncompress, download.GEF-SDK"
+    unless="already.GEF-SDK.uncompressed">
+    <mkdir dir="${download.dir}/${uncompress.GEF-SDK.dir}" />
+    <unzip
+      src="${download.dir}/${eclipse.GEF-SDK.name}.zip"
+      dest="${download.dir}/${uncompress.GEF-SDK.dir}" />
+  </target>
+
+  <!-- Eclipse dtp-sdk -->
+  <property
+    name="uncompress.dtp-sdk.dir"
+    value="${eclipse.dtp-sdk.name}" />
+  <target name="already.dtp-sdk.uncompress">
+    <available
+      file="${download.dir}/${uncompress.dtp-sdk.dir}"
+      type="dir"
+      property="already.dtp-sdk.uncompressed" />
+  </target>
+  <target
+    name="uncompress.dtp-sdk"
+    depends="already.dtp-sdk.uncompress, download.dtp-sdk"
+    unless="already.dtp-sdk.uncompressed">
+    <mkdir dir="${download.dir}/${uncompress.dtp-sdk.dir}" />
+    <unzip
+      src="${download.dir}/${eclipse.dtp-sdk.name}.zip"
+      dest="${download.dir}/${uncompress.dtp-sdk.dir}" />
+  </target>
+
+  <!-- Eclipse wtp-sdk -->
+  <property
+    name="uncompress.wtp-sdk.dir"
+    value="${eclipse.wtp-sdk.name}" />
+  <target name="already.wtp-sdk.uncompress">
+    <available
+      file="${download.dir}/${uncompress.wtp-sdk.dir}"
+      type="dir"
+      property="already.wtp-sdk.uncompressed" />
+  </target>
+  <target
+    name="uncompress.wtp-sdk"
+    depends="already.wtp-sdk.uncompress, download.wtp-sdk"
+    unless="already.wtp-sdk.uncompressed">
+    <mkdir dir="${download.dir}/${uncompress.wtp-sdk.dir}" />
+    <unzip
+      src="${download.dir}/${eclipse.wtp-sdk.name}.zip"
+      dest="${download.dir}/${uncompress.wtp-sdk.dir}" />
+  </target>
+
+  <!-- ====================================================================== -->
+  <!-- Install targets                                                        -->
+  <!-- ====================================================================== -->
+  <target
+    name="install.eclipse.sdk"
+    depends="download.eclipse.sdk, uncompress.eclipse.sdk" />
+  <target
+    name="install.eclipse.emf-sdo-xsd-SDK"
+    depends="download.emf-sdo-xsd-SDK, uncompress.emf-sdo-xsd-SDK" />
+  <target
+    name="install.eclipse.GEF-SDK"
+    depends="download.GEF-SDK, uncompress.GEF-SDK" />
+  <target
+    name="install.eclipse.dtp-sdk"
+    depends="download.dtp-sdk, uncompress.dtp-sdk" />
+  <target
+    name="install.eclipse.wtp-sdk"
+    depends="download.wtp-sdk, uncompress.wtp-sdk" />
+
+  <target
+    name="merge.eclipse.products"
+    depends="install.eclipse.sdk, install.eclipse.emf-sdo-xsd-SDK, install.eclipse.GEF-SDK, install.eclipse.dtp-sdk, install.eclipse.wtp-sdk">
+    <mkdir dir="${install.dir}/eclipse" />
+    <move
+      file="${download.dir}/${uncompress.eclipse.sdk.dir}/eclipse"
+      tofile="${install.dir}/eclipse" />
+    <move
+      file="${download.dir}/${uncompress.emf-sdo-xsd-SDK.dir}/eclipse"
+      tofile="${install.dir}/eclipse" />
+    <move
+      file="${download.dir}/${uncompress.GEF-SDK.dir}/eclipse"
+      tofile="${install.dir}/eclipse" />
+    <move
+      file="${download.dir}/${uncompress.dtp-sdk.dir}/eclipse"
+      tofile="${install.dir}/eclipse" />
+    <move
+      file="${download.dir}/${uncompress.wtp-sdk.dir}/eclipse"
+      tofile="${install.dir}/eclipse" />
+
+    <delete dir="${download.dir}/${uncompress.eclipse.sdk.dir}" />
+    <delete dir="${download.dir}/${uncompress.emf-sdo-xsd-SDK.dir}" />
+    <delete dir="${download.dir}/${uncompress.GEF-SDK.dir}" />
+    <delete dir="${download.dir}/${uncompress.dtp-sdk.dir}" />
+    <delete dir="${download.dir}/${uncompress.wtp-sdk.dir}" />
+  </target>
+
+  <target name="already.installed">
+    <available
+      file="${install.dir}/eclipse"
+      type="dir"
+      property="already.eclipse.installed" />
+  </target>
+  <target
+    name="install.all"
+    depends="already.installed"
+    unless="already.eclipse.installed">
+    <antcall target="merge.eclipse.products" />
+  </target>
+
+  <!-- ====================================================================== -->
+  <!-- To maven target                                                        -->
+  <!-- ====================================================================== -->
+  <target
+    name="already.maven.repo.installed"
+    description="Verify if some artifacts have been already deployed">
+    <condition property="already.maven.installed">
+      <and>
+        <available
+          file="${user.home}/.m2/repository/org/eclipse"
+          type="dir" />
+
+        <available
+          file="${user.home}/.m2/repository/org/eclipse/core/runtime/3.3.100/runtime-3.3.100.jar"
+          type="file" />
+        <available
+          file="${user.home}/.m2/repository/org/eclipse/ui/3.3.1/ui-3.3.1.jar"
+          type="file" />
+
+        <available
+          file="${user.home}/.m2/repository/org/eclipse/wst/sse/core/1.1.203/core-1.1.203.jar"
+          type="file" />
+        <available
+          file="${user.home}/.m2/repository/org/eclipse/wst/sse/ui/1.0.305/ui-1.0.305.jar"
+          type="file" />
+      </and>
+    </condition>
+  </target>
+  <target
+    name="eclipse.to.maven"
+    depends="already.maven.repo.installed"
+    unless="already.maven.installed">
+    <condition
+      property="maven.executable"
+      value="mvn.bat">
+      <os family="windows" />
+    </condition>
+    <property
+      name="maven.executable"
+      value="mvn.sh" />
+
+    <exec
+      failonerror="true"
+      executable="${env.M2_HOME}\bin\${maven.executable}">
+      <arg line="validate -f install-eclipse-repo.xml -N -Dinstall.dir=${install.dir}" />
+    </exec>
+  </target>
+
+  <!-- ====================================================================== -->
+  <!-- Default target                                                         -->
+  <!-- ====================================================================== -->
+  <target
+    name="default"
+    depends="init.build.properties">
+    <echo>Trying to download and install an Eclipse distribution in ${install.dir}/eclipse</echo>
+    <antcall target="install.all" />
+    <echo>Trying to install the Maven repository from the Eclipse distribution</echo>
+    <antcall target="eclipse.to.maven" />
+  </target>
+</project>

@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.apache.maven.doxia</groupId>
+    <artifactId>doxia-tools</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+
+  <groupId>org.apache.maven.doxia.ide</groupId>
+  <artifactId>eclipse</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>Doxia Tools :: Eclipse IDE - Parent POM</name>
+  <description>Parent POM for the defacto IDE for Doxia development</description>
+
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/doxia/doxia-tools/trunk/doxia-ide/eclipse/</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/doxia/doxia-tools/trunk/doxia-ide/eclipse/</developerConnection>
+    <url>http://svn.apache.org/viewcvs.cgi/maven/doxia/doxia-tools/trunk/doxia-ide/eclipse</url>
+  </scm>
+
+  <prerequisites>
+    <maven>2.0.9</maven>
+  </prerequisites>
+
+  <properties>
+    <libdir>${project.build.outputDirectory}/lib</libdir>
+    <manifestdir>${project.build.outputDirectory}/META-INF</manifestdir>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <!-- Doxia -->
+      <dependency>
+        <groupId>org.apache.maven.doxia</groupId>
+        <artifactId>doxia-converter</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <classifier>jar-with-dependencies</classifier>
+      </dependency>
+
+      <!-- Eclipse SDK: see MNG-3518 -->
+      <dependency>
+        <groupId>org.eclipse.core</groupId>
+        <artifactId>resources</artifactId>
+        <version>[3.2.0,4.0.0)</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.core</groupId>
+        <artifactId>runtime</artifactId>
+        <version>[3.2.0,4.0.0)</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse</groupId>
+        <artifactId>ui</artifactId>
+        <version>[3.2.0,4.0.0)</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.ui</groupId>
+        <artifactId>editors</artifactId>
+        <version>[3.2.0,4.0.0)</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.ui</groupId>
+        <artifactId>ide</artifactId>
+        <version>[3.2.0,4.0.0)</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.jface</groupId>
+        <artifactId>text</artifactId>
+        <version>[3.2.0,4.0.0)</version>
+      </dependency>
+
+      <!-- Eclipse WTP: see MNG-3518 -->
+      <dependency>
+        <groupId>org.eclipse.wst.sse</groupId>
+        <artifactId>core</artifactId>
+        <version>[1.1.0,1.2.0)</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.wst.sse</groupId>
+        <artifactId>ui</artifactId>
+        <version>[1.0.0,1.2.0)</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.wst.xml</groupId>
+        <artifactId>core</artifactId>
+        <version>[1.0.0,1.2.0)</version>
+        <exclusions>
+          <exclusion>
+            <groupId>org.apache</groupId>
+            <artifactId>xerces</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.wst.xml</groupId>
+        <artifactId>ui</artifactId>
+        <version>[1.0.0,1.2.0)</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.wst.common</groupId>
+        <artifactId>ui</artifactId>
+        <version>[1.1.0,1.2.0)</version>
+      </dependency>
+
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>2.2</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>2.0.2</version>
+          <configuration>
+            <source>1.5</source>
+            <target>1.5</target>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>2.2</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <version>2.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-eclipse-plugin</artifactId>
+          <version>2.5.1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.felix</groupId>
+          <artifactId>maven-bundle-plugin</artifactId>
+          <version>1.4.0</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
+    <plugins>
+      <!-- See MNG-3517 -->
+      <plugin>
+        <groupId>org.codehaus.plexus</groupId>
+        <artifactId>plexus-maven-plugin</artifactId>
+        <version>1.3.8</version>
+      </plugin>
+    </plugins>
+  </build>
+
+  <modules>
+    <module>plugins</module>
+    <module>features</module>
+  </modules>
+
+  <!-- Eclipse dependencyManagement OS specific -->
+  <profiles>
+    <profile>
+      <id>linux-x86</id>
+      <activation>
+        <os>
+          <arch>i386</arch>
+          <family>unix</family>
+          <name>linux</name>
+        </os>
+      </activation>
+      <dependencyManagement>
+        <dependencies>
+          <dependency>
+            <groupId>org.eclipse.swt.gtk.linux</groupId>
+            <artifactId>x86</artifactId>
+            <version>[3.2.0,4.0.0)</version>
+          </dependency>
+        </dependencies>
+      </dependencyManagement>
+    </profile>
+    <profile>
+      <id>linux-x86_64</id>
+      <activation>
+        <os>
+          <arch>amd64</arch>
+          <family>unix</family>
+          <name>linux</name>
+        </os>
+      </activation>
+      <dependencyManagement>
+        <dependencies>
+          <dependency>
+            <groupId>org.eclipse.swt.gtk.linux</groupId>
+            <artifactId>x86_64</artifactId>
+            <version>[3.2.0,4.0.0)</version>
+          </dependency>
+        </dependencies>
+      </dependencyManagement>
+    </profile>
+    <profile>
+      <id>solaris-sparc</id>
+      <activation>
+        <os>
+          <arch>sparc</arch>
+          <family>unix</family>
+          <name>SunOS</name>
+        </os>
+      </activation>
+      <dependencyManagement>
+        <dependencies>
+          <dependency>
+            <groupId>org.eclipse.swt.gtk.solaris</groupId>
+            <artifactId>sparc</artifactId>
+            <version>[3.2.0,4.0.0)</version>
+          </dependency>
+        </dependencies>
+      </dependencyManagement>
+    </profile>
+    <profile>
+      <id>macosx</id>
+      <activation>
+        <os>
+          <family>unix</family>
+          <name>mac os x</name>
+        </os>
+      </activation>
+      <dependencyManagement>
+        <dependencies>
+          <dependency>
+            <groupId>org.eclipse.swt.carbon</groupId>
+            <artifactId>macosx</artifactId>
+            <version>[3.2.0,4.0.0)</version>
+          </dependency>
+        </dependencies>
+      </dependencyManagement>
+    </profile>
+    <profile>
+      <id>win32</id>
+      <activation>
+        <os>
+          <arch>x86</arch>
+          <family>windows</family>
+        </os>
+      </activation>
+      <dependencyManagement>
+        <dependencies>
+          <dependency>
+            <groupId>org.eclipse.swt.win32.win32</groupId>
+            <artifactId>x86</artifactId>
+            <version>[3.2.0,4.0.0)</version>
+          </dependency>
+        </dependencies>
+      </dependencyManagement>
+    </profile>
+    <profile>
+      <id>win64</id>
+      <activation>
+        <os>
+          <arch>amd64</arch>
+          <family>windows</family>
+        </os>
+      </activation>
+      <dependencyManagement>
+        <dependencies>
+          <dependency>
+            <groupId>org.eclipse.swt.win32.win32</groupId>
+            <artifactId>x86_64</artifactId>
+            <version>[3.2.0,4.0.0)</version>
+          </dependency>
+        </dependencies>
+      </dependencyManagement>
+    </profile>
+    <profile>
+      <!-- MNG-3518 workaround -->
+      <id>download-eclipse</id>
+      <activation>
+        <file>
+          <!-- Be sure that eclipse:to-maven was already called with stripQualifier option -->
+          <missing>${user.home}/.m2/repository/org/eclipse/wst/sse/core/1.1.203/core-1.1.203.jar</missing>
+        </file>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <executions>
+              <execution>
+                <phase>validate</phase>
+                <configuration>
+                  <tasks>
+                    <subant target="">
+                      <property name="download.dir" value="${java.io.tmpdir}"/>
+                      <property name="install.dir" value="${java.io.tmpdir}"/>
+                      <fileset dir="${basedir}" includes="download-eclipse.xml"/>
+                    </subant>
+                  </tasks>
+                </configuration>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+</project>
