@@ -497,7 +497,7 @@
     </condition>
     <property
       name="maven.executable"
-      value="mvn.sh" />
+      value="mvn" />
 
     <exec
       failonerror="true"
