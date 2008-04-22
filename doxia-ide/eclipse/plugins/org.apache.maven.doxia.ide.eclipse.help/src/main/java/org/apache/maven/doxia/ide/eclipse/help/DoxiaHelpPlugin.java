@@ -40,10 +40,11 @@ public class DoxiaHelpPlugin
     private static DoxiaHelpPlugin plugin;
 
     /**
-     * The constructor
+     * Default constructor.
      */
     public DoxiaHelpPlugin()
     {
+        super();
     }
 
     @Override
