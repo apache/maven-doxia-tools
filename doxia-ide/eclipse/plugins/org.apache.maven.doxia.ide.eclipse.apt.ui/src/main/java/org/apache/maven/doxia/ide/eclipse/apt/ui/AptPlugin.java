@@ -40,10 +40,12 @@ public class AptPlugin
     private static AptPlugin plugin;
 
     /**
-     * The constructor
+     * Default constructor.
      */
     public AptPlugin()
     {
+        super();
+
         plugin = this;
     }
 

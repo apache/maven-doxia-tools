@@ -51,6 +51,9 @@ public class AptDocumentProvider
     class AptPartitionScanner
         extends AbstractTextPartitionScanner
     {
+        /**
+         * Default constructor.
+         */
         public AptPartitionScanner()
         {
             super();

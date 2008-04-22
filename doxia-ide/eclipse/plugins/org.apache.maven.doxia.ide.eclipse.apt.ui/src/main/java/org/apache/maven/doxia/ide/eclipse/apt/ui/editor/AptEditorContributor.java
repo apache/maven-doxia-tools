@@ -31,6 +31,9 @@ import org.apache.maven.doxia.ide.eclipse.common.ui.editors.AbstractEditorContri
 public class AptEditorContributor
     extends AbstractEditorContributor
 {
+    /**
+     * Default constructor.
+     */
     public AptEditorContributor()
     {
         super();

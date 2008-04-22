@@ -48,6 +48,11 @@ public class AptWizard
     class AptWizardPage
         extends AbstractWizardPage
     {
+        /**
+         * Default constructor.
+         *
+         * @param selection
+         */
         public AptWizardPage( ISelection selection )
         {
             super( selection );
