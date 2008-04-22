@@ -49,6 +49,11 @@ public class XhtmlWizard
     class XhtmlWizardPage
         extends AbstractWizardPage
     {
+        /**
+         * Default constructor.
+         *
+         * @param selection
+         */
         public XhtmlWizardPage( ISelection selection )
         {
             super( selection );

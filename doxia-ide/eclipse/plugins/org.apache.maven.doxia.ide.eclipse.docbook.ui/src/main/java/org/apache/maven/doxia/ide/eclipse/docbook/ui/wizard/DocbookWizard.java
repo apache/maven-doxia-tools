@@ -49,6 +49,11 @@ public class DocbookWizard
     class DocbookWizardPage
         extends AbstractWizardPage
     {
+        /**
+         * Default constructor.
+         *
+         * @param selection
+         */
         public DocbookWizardPage( ISelection selection )
         {
             super( selection );

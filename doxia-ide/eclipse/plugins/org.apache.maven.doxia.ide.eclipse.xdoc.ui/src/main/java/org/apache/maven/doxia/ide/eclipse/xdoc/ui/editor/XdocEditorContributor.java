@@ -31,6 +31,9 @@ import org.apache.maven.doxia.ide.eclipse.common.ui.editors.AbstractEditorContri
 public class XdocEditorContributor
     extends AbstractEditorContributor
 {
+    /**
+     * Default constructor.
+     */
     public XdocEditorContributor()
     {
         super();

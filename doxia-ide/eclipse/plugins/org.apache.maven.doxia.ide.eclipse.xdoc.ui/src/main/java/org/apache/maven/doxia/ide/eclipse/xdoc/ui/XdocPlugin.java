@@ -40,10 +40,12 @@ public class XdocPlugin
     private static XdocPlugin plugin;
 
     /**
-     * The constructor
+     * Default constructor.
      */
     public XdocPlugin()
     {
+        super();
+
         plugin = this;
     }
 

@@ -49,6 +49,11 @@ public class XdocWizard
     class XdocWizardPage
         extends AbstractWizardPage
     {
+        /**
+         * Default constructor.
+         *
+         * @param selection
+         */
         public XdocWizardPage( ISelection selection )
         {
             super( selection );

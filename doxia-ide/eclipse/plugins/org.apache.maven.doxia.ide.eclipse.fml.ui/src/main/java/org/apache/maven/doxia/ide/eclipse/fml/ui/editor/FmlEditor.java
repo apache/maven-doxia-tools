@@ -34,6 +34,9 @@ import org.apache.maven.doxia.ide.eclipse.fml.ui.FmlPlugin;
 public class FmlEditor
     extends AbstractXmlMultiPageEditorPart
 {
+    /**
+     * Default constructor.
+     */
     public FmlEditor()
     {
         super();

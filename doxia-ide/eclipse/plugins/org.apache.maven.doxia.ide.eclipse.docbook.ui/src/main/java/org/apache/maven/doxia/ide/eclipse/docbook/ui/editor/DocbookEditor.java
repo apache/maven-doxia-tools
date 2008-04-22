@@ -32,6 +32,9 @@ import org.apache.maven.doxia.ide.eclipse.docbook.ui.DocbookPlugin;
 public class DocbookEditor
     extends AbstractXmlMultiPageEditorPart
 {
+    /**
+     * Default constructor.
+     */
     public DocbookEditor()
     {
         super();

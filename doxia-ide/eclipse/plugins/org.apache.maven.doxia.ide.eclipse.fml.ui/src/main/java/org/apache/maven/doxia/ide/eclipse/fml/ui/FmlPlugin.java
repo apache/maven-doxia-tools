@@ -40,10 +40,12 @@ public class FmlPlugin
     private static FmlPlugin plugin;
 
     /**
-     * The constructor
+     * Default constructor.
      */
     public FmlPlugin()
     {
+        super();
+
         plugin = this;
     }
 

@@ -49,6 +49,11 @@ public class FmlWizard
     class FmlWizardPage
         extends AbstractWizardPage
     {
+        /**
+         * Default constructor.
+         *
+         * @param selection
+         */
         public FmlWizardPage( ISelection selection )
         {
             super( selection );

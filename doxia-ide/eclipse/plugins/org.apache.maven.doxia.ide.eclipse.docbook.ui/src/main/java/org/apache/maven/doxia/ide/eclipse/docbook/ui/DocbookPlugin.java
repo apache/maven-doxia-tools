@@ -40,10 +40,12 @@ public class DocbookPlugin
     private static DocbookPlugin plugin;
 
     /**
-     * The constructor
+     * Default constructor.
      */
     public DocbookPlugin()
     {
+        super();
+
         plugin = this;
     }
 

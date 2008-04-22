@@ -31,6 +31,9 @@ import org.apache.maven.doxia.ide.eclipse.common.ui.editors.AbstractEditorContri
 public class FmlEditorContributor
     extends AbstractEditorContributor
 {
+    /**
+     * Default constructor.
+     */
     public FmlEditorContributor()
     {
         super();

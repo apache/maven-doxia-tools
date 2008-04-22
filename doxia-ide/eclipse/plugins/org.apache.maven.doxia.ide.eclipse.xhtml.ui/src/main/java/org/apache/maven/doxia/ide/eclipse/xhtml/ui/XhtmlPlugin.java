@@ -40,10 +40,12 @@ public class XhtmlPlugin
     private static XhtmlPlugin plugin;
 
     /**
-     * The constructor
+     * Default constructor.
      */
     public XhtmlPlugin()
     {
+        super();
+
         plugin = this;
     }
 

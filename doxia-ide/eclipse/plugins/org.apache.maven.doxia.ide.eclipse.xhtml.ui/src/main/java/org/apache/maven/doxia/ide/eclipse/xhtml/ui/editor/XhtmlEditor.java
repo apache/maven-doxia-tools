@@ -32,6 +32,9 @@ import org.apache.maven.doxia.ide.eclipse.xhtml.ui.XhtmlPlugin;
 public class XhtmlEditor
     extends AbstractXmlMultiPageEditorPart
 {
+    /**
+     * Default constructor.
+     */
     public XhtmlEditor()
     {
         super();

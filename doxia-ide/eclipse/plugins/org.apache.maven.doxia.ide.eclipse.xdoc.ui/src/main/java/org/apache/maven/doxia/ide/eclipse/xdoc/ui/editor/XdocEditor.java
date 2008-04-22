@@ -34,6 +34,9 @@ import org.apache.maven.doxia.ide.eclipse.xdoc.ui.XdocPlugin;
 public class XdocEditor
     extends AbstractXmlMultiPageEditorPart
 {
+    /**
+     * Default constructor.
+     */
     public XdocEditor()
     {
         super();
