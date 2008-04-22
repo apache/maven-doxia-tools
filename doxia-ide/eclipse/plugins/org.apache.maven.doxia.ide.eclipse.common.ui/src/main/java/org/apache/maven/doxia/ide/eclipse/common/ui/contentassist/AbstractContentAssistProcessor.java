@@ -73,9 +73,6 @@ public abstract class AbstractContentAssistProcessor
         String startTag = getStartTag( document, offset, prefix );
         List<CompletionProposal> result = new ArrayList<CompletionProposal>();
 
-        System.out.println( "prefix" + prefix );
-        System.out.println( "startTag" + startTag );
-
         if ( startTag == null )
         {
             for ( int i = 0; i < getStartMarkups().length; i++ )
