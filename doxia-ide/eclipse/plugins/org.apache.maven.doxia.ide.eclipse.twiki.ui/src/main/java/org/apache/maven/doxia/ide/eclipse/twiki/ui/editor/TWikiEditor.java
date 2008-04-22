@@ -19,11 +19,15 @@ package org.apache.maven.doxia.ide.eclipse.twiki.ui.editor;
  * under the License.
  */
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
+
+import javax.swing.text.html.HTML.Tag;
 
 import org.apache.maven.doxia.ide.eclipse.common.ui.ColorManager;
 import org.apache.maven.doxia.ide.eclipse.common.ui.CommonPlugin;
@@ -64,7 +68,10 @@ import org.eclipse.jface.text.rules.RuleBasedScanner;
 import org.eclipse.jface.text.rules.SingleLineRule;
 import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.source.ISourceViewer;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.editors.text.TextSourceViewerConfiguration;
 import org.eclipse.ui.texteditor.IDocumentProvider;
@@ -204,6 +211,9 @@ public class TWikiEditor
     class TWikiSourceViewerConfiguration
         extends AbstractTextSourceViewerConfiguration
     {
+        /**
+         * Default constructor.
+         */
         public TWikiSourceViewerConfiguration()
         {
             super();
@@ -246,9 +256,12 @@ public class TWikiEditor
         class AptURLHyperlinkDetector
             extends URLHyperlinkDetector
         {
-
+            /**
+             * Default constructor.
+             */
             public AptURLHyperlinkDetector()
             {
+                super();
             }
 
             @Override
@@ -355,6 +368,9 @@ public class TWikiEditor
     class TWikiScanner
         extends AbstractTextScanner
     {
+        /**
+         * Default constructor.
+         */
         public TWikiScanner()
         {
             super();
@@ -363,29 +379,105 @@ public class TWikiEditor
         @Override
         public List<IRule> getRules()
         {
-            List<IRule> rules = new ArrayList<IRule>();
-
-            // TODO add more rules and review color!
+            List<IRule> rules = new LinkedList<IRule>();
 
             // horizontal rule
-            rules.add( new EndOfLineRule( "-------", new Token( new TextAttribute( ColorManager.getInstance()
-                .getColor( ColorManager.LINK ) ) ) ) );
+            rules.add( new EndOfLineRule( "-------", AbstractTextScanner.SinkToken.HORIZONTALRULE_TOKEN ) );
+
+            // sections title rule
+            rules.add( new EndOfLineRule( "---+++++", SinkToken.SECTIONTITLE5_TOKEN ) );
+            rules.add( new EndOfLineRule( "---++++", SinkToken.SECTIONTITLE4_TOKEN ) );
+            rules.add( new EndOfLineRule( "---+++", SinkToken.SECTIONTITLE3_TOKEN ) );
+            rules.add( new EndOfLineRule( "---++", SinkToken.SECTIONTITLE2_TOKEN ) );
+            rules.add( new EndOfLineRule( "---+", SinkToken.SECTIONTITLE1_TOKEN ) );
 
             // verbatim rules
-            rules.add( new MultiLineRule( "<verbatim>", "</verbatim>", new Token( new TextAttribute( ColorManager
-                .getInstance().getColor( ColorManager.STRING ) ) ) ) );
+            rules.add( new MultiLineRule( "<verbatim>", "</verbatim>", SinkToken.VERBATIM_TOKEN ) );
 
-            // monospaced rule
-            rules.add( new SingleLineRule( "=", "=", monospacedToken ) );
+            // bold rule or list
+            rules.add( new SingleLineRule( "*", " ", SinkToken.BOLD_TOKEN ) );
 
-            // bold rule
-            rules.add( new SingleLineRule( "*", "*", boldToken ) );
+            // bold + italic rule
+            rules.add( new SingleLineRule( "__", "__",
+                                           new Token( new TextAttribute( ColorManager.SinkColor.ITALIC_COLOR, null,
+                                                                         SWT.ITALIC + SWT.BOLD ) ) ) );
 
             // italic rule
-            rules.add( new SingleLineRule( "_", "_", italicToken ) );
+            rules.add( new SingleLineRule( "_", "_", SinkToken.ITALIC_TOKEN ) );
+
+            // bold + fixed rule
+            rules.add( new SingleLineRule( "==", "==",
+                                           new Token( new TextAttribute( ColorManager.SinkColor.MONOSPACED_COLOR, null,
+                                                                         SWT.NORMAL, new Font( Display.getDefault(),
+                                                                                               "Courier", Display
+                                                                                                   .getDefault()
+                                                                                                   .getSystemFont()
+                                                                                                   .getFontData()[0]
+                                                                                                   .getHeight(),
+                                                                                               SWT.BOLD ) ) ) ) );
+
+            // monospaced rule
+            rules.add( new SingleLineRule( "=", "=", SinkToken.MONOSPACED_TOKEN ) );
+
+            // numbered list rule
+            // Multiple of three spaces, a type character, a dot, and another space.
+            rules.add( new SingleLineRule( "   1", ". ", SinkToken.NUMBEREDLISTITEM_TOKEN ) );
+            // lower case
+            rules.add( new SingleLineRule( "   a", ". ", SinkToken.NUMBEREDLISTITEM_TOKEN ) );
+            // upper case
+            rules.add( new SingleLineRule( "   A", ". ", SinkToken.NUMBEREDLISTITEM_TOKEN ) );
+            // roman lower case
+            rules.add( new SingleLineRule( "   i", ". ", SinkToken.NUMBEREDLISTITEM_TOKEN ) );
+            // roman upper case
+            rules.add( new SingleLineRule( "   I", ". ", SinkToken.NUMBEREDLISTITEM_TOKEN ) );
+
+            // definition list rule
+            // Three spaces, a dollar sign, the term, a colon, a space, followed by the definition.
+            rules.add( new SingleLineRule( "   $", " ", SinkToken.DEFINITIONLIST_TOKEN ) );
+
+            // table rule
+            rules.add( new EndOfLineRule( "|", SinkToken.TABLE_TOKEN ) );
 
             // link rule
-            rules.add( new SingleLineRule( "[[", "]]", linkToken ) );
+            rules.add( new SingleLineRule( "![[", "]]", DEFAULT_TOKEN ) );
+            rules.add( new SingleLineRule( "[[", "]]", SinkToken.LINK_TOKEN ) );
+            // inline links
+            rules.add( new SingleLineRule( "http://", " ", SinkToken.LINK_TOKEN ) );
+            rules.add( new SingleLineRule( "https://", " ", SinkToken.LINK_TOKEN ) );
+            rules.add( new SingleLineRule( "ftp://", " ", SinkToken.LINK_TOKEN ) );
+            rules.add( new SingleLineRule( "gopher://", " ", SinkToken.LINK_TOKEN ) );
+            rules.add( new SingleLineRule( "news://", " ", SinkToken.LINK_TOKEN ) );
+            rules.add( new SingleLineRule( "file://", " ", SinkToken.LINK_TOKEN ) );
+            rules.add( new SingleLineRule( "telnet://", " ", SinkToken.LINK_TOKEN ) );
+            rules.add( new SingleLineRule( "mailto:", " ", SinkToken.LINK_TOKEN ) );
+
+            // anchor rule
+            rules.add( new SingleLineRule( "#", " ", SinkToken.ANCHOR_TOKEN ) );
+
+            // TODO better unsupported
+            // some other advanced formatting unsupported by Doxia
+            rules.add( new MultiLineRule( "<noautolink>", "</noautolink>", UNSUPPORTED_TOKEN ) );
+            // Unsupported HTML tags
+            try
+            {
+                Field[] fields = Tag.class.getDeclaredFields();
+                for ( int i = 0; i < fields.length; i++ )
+                {
+                    Field field = fields[i];
+                    if ( field.getModifiers() == ( Modifier.PUBLIC + Modifier.STATIC + Modifier.FINAL ) )
+                    {
+                        String fieldValue = field.get( null ).toString();
+                        rules.add( new MultiLineRule( "<" + fieldValue + ">", "</" + fieldValue + ">",
+                                                      UNSUPPORTED_TOKEN ) );
+                    }
+                }
+            }
+            catch ( Exception e )
+            {
+                // nop
+            }
+            // TWiki Variables
+            rules.add( new SingleLineRule( "%", "%", UNSUPPORTED_TOKEN ) );
 
             return rules;
         }
@@ -394,6 +486,9 @@ public class TWikiEditor
     class TWikiContentAssistProcessor
         extends AbstractContentAssistProcessor
     {
+        /**
+         * Default constructor.
+         */
         public TWikiContentAssistProcessor()
         {
             super();
