@@ -86,16 +86,6 @@ public abstract class AbstractDoxiaPlugin
         plugin = this;
     }
 
-    /**
-     * Returns the shared instance
-     *
-     * @return the shared instance
-     */
-    public static AbstractDoxiaPlugin getDefault()
-    {
-        return plugin;
-    }
-
     @Override
     protected void initializeImageRegistry( ImageRegistry registry )
     {
@@ -128,7 +118,7 @@ public abstract class AbstractDoxiaPlugin
      */
     public static String getPluginId()
     {
-        return getDefault().getBundle().getSymbolicName();
+        return plugin.getBundle().getSymbolicName();
     }
 
     public static Image getImage( String key )
