@@ -21,13 +21,12 @@ package org.apache.maven.doxia.ide.eclipse.apt.ui.editor;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
 import org.apache.maven.doxia.ide.eclipse.apt.ui.AptPlugin;
 import org.apache.maven.doxia.ide.eclipse.apt.ui.editor.AptDocumentProvider.AptPartitionScanner;
-import org.apache.maven.doxia.ide.eclipse.common.ui.ColorManager;
 import org.apache.maven.doxia.ide.eclipse.common.ui.CommonPlugin;
 import org.apache.maven.doxia.ide.eclipse.common.ui.actions.AbstractBoldAction;
 import org.apache.maven.doxia.ide.eclipse.common.ui.actions.AbstractItalicAction;
@@ -44,14 +43,12 @@ import org.apache.maven.doxia.ide.eclipse.common.ui.editors.text.AbstractTextSou
 import org.apache.maven.doxia.ide.eclipse.common.ui.rules.AbstractTextScanner;
 import org.apache.maven.doxia.markup.Markup;
 import org.apache.maven.doxia.module.apt.AptMarkup;
-import org.apache.maven.doxia.module.apt.AptSink;
 import org.codehaus.plexus.util.StringUtils;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.Region;
-import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.jface.text.contentassist.ContentAssistant;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.jface.text.contentassist.IContentAssistant;
@@ -79,7 +76,8 @@ import org.eclipse.ui.texteditor.IDocumentProvider;
  * @author <a href="mailto:vincent.siveton@gmail.com">Vincent Siveton</a>
  * @version $Id$
  * @since 1.0
- * @see <a href="http://maven.apache.org/doxia/references/apt-format.html">http://maven.apache.org/doxia/references/apt-format.html</a>
+ * @see <a href="http://maven.apache.org/doxia/references/apt-format.html">
+ * http://maven.apache.org/doxia/references/apt-format.html</a>
  */
 public class AptEditor
     extends AbstractTextMultiPageEditorPart
@@ -100,13 +98,13 @@ public class AptEditor
             @Override
             public String getStartMarkup()
             {
-                return AptSink.BOLD_START_MARKUP;
+                return AptMarkup.BOLD_START_MARKUP;
             }
 
             @Override
             public String getEndMarkup()
             {
-                return AptSink.BOLD_END_MARKUP;
+                return AptMarkup.BOLD_END_MARKUP;
             }
         } );
         editor.setAction( IActionConstants.ITALIC_ACTION, new AbstractItalicAction( editor )
@@ -114,13 +112,13 @@ public class AptEditor
             @Override
             public String getStartMarkup()
             {
-                return AptSink.ITALIC_START_MARKUP;
+                return AptMarkup.ITALIC_START_MARKUP;
             }
 
             @Override
             public String getEndMarkup()
             {
-                return AptSink.ITALIC_END_MARKUP;
+                return AptMarkup.ITALIC_END_MARKUP;
             }
         } );
         editor.setAction( IActionConstants.MONOSPACED_ACTION, new AbstractMonospacedAction( editor )
@@ -128,13 +126,13 @@ public class AptEditor
             @Override
             public String getStartMarkup()
             {
-                return AptSink.MONOSPACED_START_MARKUP;
+                return AptMarkup.MONOSPACED_START_MARKUP;
             }
 
             @Override
             public String getEndMarkup()
             {
-                return AptSink.MONOSPACED_END_MARKUP;
+                return AptMarkup.MONOSPACED_END_MARKUP;
             }
         } );
         editor.setAction( IActionConstants.LINK_ACTION, new AbstractLinkAction( editor )
@@ -279,6 +277,9 @@ public class AptEditor
     class AptSourceViewerConfiguration
         extends AbstractTextSourceViewerConfiguration
     {
+        /**
+         * Default constructor.
+         */
         public AptSourceViewerConfiguration()
         {
             super();
@@ -321,9 +322,12 @@ public class AptEditor
         class AptURLHyperlinkDetector
             extends URLHyperlinkDetector
         {
-
+            /**
+             * Default constructor.
+             */
             public AptURLHyperlinkDetector()
             {
+                super();
             }
 
             @Override
@@ -430,6 +434,9 @@ public class AptEditor
     class AptScanner
         extends AbstractTextScanner
     {
+        /**
+         * Default constructor.
+         */
         public AptScanner()
         {
             super();
@@ -438,54 +445,504 @@ public class AptEditor
         @Override
         public List<IRule> getRules()
         {
-            List<IRule> rules = new ArrayList<IRule>();
-
-            // TODO add more rules and review color!
+            List<IRule> rules = new LinkedList<IRule>();
 
             // comment rule
-            rules.add( new EndOfLineRule( AptMarkup.COMMENT + "" + AptMarkup.COMMENT, commentToken ) );
+            rules.add( new EndOfLineRule( AptMarkup.COMMENT + "" + AptMarkup.COMMENT, SinkToken.COMMENT_TOKEN ) );
+
+            // macro rule
+            rules.add( new EndOfLineRule( AptMarkup.PERCENT + "{", KEYWORD_TOKEN ) );
 
             // horizontal rule
-            rules.add( new EndOfLineRule( AptMarkup.HORIZONTAL_RULE_MARKUP, new Token( new TextAttribute( ColorManager
-                .getInstance().getColor( ColorManager.LINK ) ) ) ) );
+            rules.add( new EndOfLineRule( AptMarkup.HORIZONTAL_RULE_MARKUP, SinkToken.HORIZONTALRULE_TOKEN ) );
 
-            // verbatim rules
+            // header rules
+            rules.add( new HeaderMultiLineRule() );
+
+            // sections title rule
+            rules.add( new SectionTitleEndOfLineRule() );
+
+            // list rules
+            rules.add( new SingleLineRule( AptMarkup.SPACE + AptMarkup.LIST_START_MARKUP, String
+                .valueOf( AptMarkup.SPACE ), SinkToken.LISTITEM_TOKEN ) );
+
+            // numbered list rule
+            rules.add( new NumberedListSingleLineRule() );
+
+            // definition list rules
+            rules.add( new SingleLineRule( AptMarkup.SPACE + "" + AptMarkup.LEFT_SQUARE_BRACKET,
+                                           AptMarkup.RIGHT_SQUARE_BRACKET + "" + AptMarkup.SPACE,
+                                           SinkToken.DEFINITION_TOKEN ) );
+
+            // end of list rule
+            rules.add( new EndOfLineRule( AptMarkup.LIST_END_MARKUP, SinkToken.LISTITEM_TOKEN ) );
+
+            // figure graphics rule
+            rules.add( new FigureGraphicsSingleLineRule() );
+
+            // verbatim rule
             rules.add( new MultiLineRule( AptMarkup.BOXED_VERBATIM_START_MARKUP, AptMarkup.BOXED_VERBATIM_END_MARKUP,
-                                          new Token( new TextAttribute( ColorManager.getInstance()
-                                              .getColor( ColorManager.STRING ) ) ) ) );
+                                          SinkToken.VERBATIM_TOKEN ) );
             rules.add( new MultiLineRule( AptMarkup.NON_BOXED_VERBATIM_START_MARKUP,
-                                          AptMarkup.NON_BOXED_VERBATIM_END_MARKUP,
-                                          new Token( new TextAttribute( ColorManager.getInstance()
-                                              .getColor( ColorManager.STRING ) ) ) ) );
+                                          AptMarkup.NON_BOXED_VERBATIM_END_MARKUP, SinkToken.VERBATIM_TOKEN ) );
 
             // monospaced rule
             rules.add( new SingleLineRule( AptMarkup.MONOSPACED_START_MARKUP, AptMarkup.MONOSPACED_END_MARKUP,
-                                           monospacedToken ) );
+                                           SinkToken.MONOSPACED_TOKEN ) );
 
             // bold rule
-            rules.add( new SingleLineRule( AptMarkup.BOLD_START_MARKUP, AptMarkup.BOLD_END_MARKUP, boldToken ) );
+            rules
+                .add( new SingleLineRule( AptMarkup.BOLD_START_MARKUP, AptMarkup.BOLD_END_MARKUP, SinkToken.BOLD_TOKEN ) );
 
             // italic rule
-            rules.add( new SingleLineRule( AptMarkup.ITALIC_START_MARKUP, AptMarkup.ITALIC_END_MARKUP, italicToken ) );
+            rules.add( new SingleLineRule( AptMarkup.ITALIC_START_MARKUP, AptMarkup.ITALIC_END_MARKUP,
+                                           SinkToken.ITALIC_TOKEN ) );
+
+            // table rule
+            rules.add( new TableMultiLineRule() );
 
             // link rule
-            rules.add( new SingleLineRule( "{{{", "}}", linkToken ) );
-            rules.add( new SingleLineRule( "{{", "}}", linkToken ) );
-            rules.add( new SingleLineRule( "{", "}", linkToken ) );
+            rules.add( new SingleLineRule( "{{{", "}}", SinkToken.LINK_TOKEN ) );
+            rules.add( new SingleLineRule( "{{", "}}", SinkToken.LINK_TOKEN ) );
+            rules.add( new SingleLineRule( "{", "}", SinkToken.LINK_TOKEN ) );
 
-            // escaped character rule
-            rules.add( new EscapedCharacterRule( new Token( new TextAttribute( ColorManager.getInstance()
-                .getColor( ColorManager.STRING ) ) ) ) );
+            // escaped or unicode character rule
+            rules.add( new EscapedOrUnicodeCharacterRule( KEYWORD_TOKEN ) );
 
             return rules;
         }
 
-        class EscapedCharacterRule
-            implements IRule
+        class HeaderMultiLineRule
+            extends MultiLineRule
         {
             /**
-             * The associated token.
+             * Default constructor.
              */
+            public HeaderMultiLineRule()
+            {
+                super( AptMarkup.HEADER_START_MARKUP, AptMarkup.HEADER_START_MARKUP, SinkToken.HEAD_TOKEN );
+            }
+
+            @Override
+            protected IToken doEvaluate( ICharacterScanner scanner, boolean resume )
+            {
+                if ( resume )
+                {
+                    if ( endSequenceDetected( scanner ) )
+                    {
+                        return fToken;
+                    }
+                }
+                else
+                {
+                    int c = scanner.read();
+                    if ( c == AptMarkup.SPACE )
+                    {
+                        if ( sequenceDetected( scanner, fStartSequence, false ) )
+                        {
+                            for ( int i = 0; i < 3; i++ )
+                            {
+                                endSequenceDetected( scanner );
+                            }
+
+                            return fToken;
+                        }
+                    }
+                }
+
+                scanner.unread();
+                return Token.UNDEFINED;
+            }
+        }
+
+        class SectionTitleEndOfLineRule
+            extends EndOfLineRule
+        {
+            int sectionId = 0;
+
+            /**
+             * Default constructor.
+             */
+            public SectionTitleEndOfLineRule()
+            {
+                super( String.valueOf( AptMarkup.STAR ), Token.UNDEFINED );
+            }
+
+            @Override
+            protected boolean sequenceDetected( ICharacterScanner scanner, char[] sequence, boolean eofAllowed )
+            {
+                int docPos = fOffset - 1;
+                try
+                {
+                    // calculate the sectionId
+                    if ( sequence[0] == AptMarkup.STAR )
+                    {
+                        while ( docPos < fDocument.getLength() && ( fDocument.getChar( docPos ) == AptMarkup.STAR ) )
+                        {
+                            docPos++;
+                            sectionId++;
+                        }
+
+                        // every character but not a minus (ie a table) @see AptParser#nextBlock( boolean firstBlock )
+                        return Character.isDefined( fDocument.getChar( docPos ) )
+                            && ( fDocument.getChar( docPos ) != '-' );
+                    }
+                }
+                catch ( BadLocationException e )
+                {
+                    // nop
+                }
+
+                return super.sequenceDetected( scanner, sequence, eofAllowed );
+            }
+
+            @Override
+            protected IToken doEvaluate( ICharacterScanner scanner, boolean resume )
+            {
+                sectionId = 0;
+                if ( resume )
+                {
+                    if ( endSequenceDetected( scanner ) )
+                    {
+                        return fToken;
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        int c = scanner.read();
+                        if ( c == AptMarkup.STAR )
+                        {
+                            // last line should be empty
+                            if ( ( isEmptyPrecedentLine( fDocument, fOffset ) ) )
+                            {
+                                if ( sequenceDetected( scanner, fStartSequence, false ) )
+                                {
+                                    if ( endSequenceDetected( scanner ) )
+                                    {
+                                        switch ( sectionId )
+                                        {
+                                            case 1:
+                                                fToken = SinkToken.SECTIONTITLE1_TOKEN;
+                                                break;
+                                            case 2:
+                                                fToken = SinkToken.SECTIONTITLE2_TOKEN;
+                                                break;
+                                            case 3:
+                                                fToken = SinkToken.SECTIONTITLE3_TOKEN;
+                                                break;
+                                            case 4:
+                                                fToken = SinkToken.SECTIONTITLE4_TOKEN;
+                                                break;
+                                            case 5:
+                                                fToken = SinkToken.SECTIONTITLE5_TOKEN;
+                                                break;
+                                            default:
+                                                fToken = Token.UNDEFINED;
+                                                break;
+                                        }
+                                        return fToken;
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            // not a paragraph and last line should be empty
+                            if ( ( Character.isLetterOrDigit( fDocument.getChar( fOffset - 1 ) ) )
+                                && ( isEmptyPrecedentLine( fDocument, fOffset ) ) )
+                            {
+                                if ( endSequenceDetected( scanner ) )
+                                {
+                                    return SinkToken.SECTIONTITLE_TOKEN;
+                                }
+                            }
+                        }
+                    }
+                    catch ( BadLocationException e )
+                    {
+                        // nop
+                    }
+                }
+
+                scanner.unread();
+                return Token.UNDEFINED;
+            }
+        }
+
+        class NumberedListSingleLineRule
+            extends SingleLineRule
+        {
+            /**
+             * Default constructor.
+             */
+            public NumberedListSingleLineRule()
+            {
+                super( " [[", "]] ", SinkToken.NUMBEREDLISTITEM_TOKEN );
+            }
+
+            @Override
+            protected boolean sequenceDetected( ICharacterScanner scanner, char[] sequence, boolean eofAllowed )
+            {
+                int docPos = fOffset;
+                try
+                {
+                    if ( fDocument.getChar( docPos ) == AptMarkup.SPACE
+                        && fDocument.getChar( docPos + 1 ) == AptMarkup.LEFT_SQUARE_BRACKET
+                        && fDocument.getChar( docPos + 2 ) == AptMarkup.LEFT_SQUARE_BRACKET )
+                    {
+                        docPos = docPos + 3;
+
+                        // @see AptParser#nextBlock( boolean firstBlock )
+                        return Character.isDigit( fDocument.getChar( docPos ) )
+                            || Character.isUpperCase( fDocument.getChar( docPos ) )
+                            || Character.isLowerCase( fDocument.getChar( docPos ) );
+                    }
+                }
+                catch ( BadLocationException e )
+                {
+                    // nop
+                }
+
+                return super.sequenceDetected( scanner, sequence, eofAllowed );
+            }
+
+            @Override
+            protected IToken doEvaluate( ICharacterScanner scanner, boolean resume )
+            {
+                if ( resume )
+                {
+                    if ( endSequenceDetected( scanner ) )
+                    {
+                        return fToken;
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        int c = scanner.read();
+                        if ( c == AptMarkup.SPACE )
+                        {
+                            // last line should be empty
+                            if ( ( isEmptyPrecedentLine( fDocument, fOffset ) ) )
+                            {
+                                if ( sequenceDetected( scanner, fStartSequence, false ) )
+                                {
+                                    if ( endSequenceDetected( scanner ) )
+                                    {
+                                        return fToken;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch ( BadLocationException e )
+                    {
+                        // nop
+                    }
+                }
+
+                scanner.unread();
+                return Token.UNDEFINED;
+            }
+        }
+
+        class FigureGraphicsSingleLineRule
+            extends SingleLineRule
+        {
+            /**
+             * Default constructor.
+             */
+            public FigureGraphicsSingleLineRule()
+            {
+                super( AptMarkup.LEFT_SQUARE_BRACKET + "", AptMarkup.RIGHT_SQUARE_BRACKET + "" + AptMarkup.SPACE,
+                       SinkToken.FIGUREGRAPHICS_TOKEN );
+            }
+
+            @Override
+            protected boolean sequenceDetected( ICharacterScanner scanner, char[] sequence, boolean eofAllowed )
+            {
+                int docPos = fOffset - 1;
+                try
+                {
+                    if ( fDocument.getChar( docPos ) == AptMarkup.LEFT_SQUARE_BRACKET
+                        && fDocument.getChar( docPos + 1 ) != AptMarkup.LEFT_SQUARE_BRACKET )
+                    {
+                        docPos++;
+                        // @see AptParser#nextBlock( boolean firstBlock )
+                        return Character.isDefined( fDocument.getChar( docPos ) );
+                    }
+                }
+                catch ( BadLocationException e )
+                {
+                    // nop
+                }
+
+                return super.sequenceDetected( scanner, sequence, eofAllowed );
+            }
+
+            @Override
+            protected IToken doEvaluate( ICharacterScanner scanner, boolean resume )
+            {
+                if ( resume )
+                {
+                    if ( endSequenceDetected( scanner ) )
+                    {
+                        return fToken;
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        int c = scanner.read();
+                        if ( c == AptMarkup.LEFT_SQUARE_BRACKET )
+                        {
+                            // last line should be empty
+                            if ( ( isEmptyPrecedentLine( fDocument, fOffset ) ) )
+                            {
+                                if ( sequenceDetected( scanner, fStartSequence, false ) )
+                                {
+                                    if ( endSequenceDetected( scanner ) )
+                                    {
+                                        return fToken;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch ( BadLocationException e )
+                    {
+                        // nop
+                    }
+                }
+
+                scanner.unread();
+                return Token.UNDEFINED;
+            }
+        }
+
+        class TableMultiLineRule
+            extends MultiLineRule
+        {
+            /**
+             * Default constructor.
+             */
+            public TableMultiLineRule()
+            {
+                // don't care of endSequence at this point @see #endSequenceDetected(ICharacterScanner)
+                super( AptMarkup.TABLE_ROW_START_MARKUP, "", SinkToken.TABLE_TOKEN );
+            }
+
+            @Override
+            protected boolean endSequenceDetected( ICharacterScanner scanner )
+            {
+                int readCount = 1;
+                int c;
+                while ( ( c = scanner.read() ) != ICharacterScanner.EOF )
+                {
+                    if ( c == '-'
+                        && sequenceDetected( scanner, AptMarkup.TABLE_COL_CENTERED_ALIGNED_MARKUP.toCharArray(), true ) )
+                    {
+                        scanner.unread();
+                        return super.endSequenceDetected( scanner );
+                    }
+
+                    if ( c == '-'
+                        && sequenceDetected( scanner, AptMarkup.TABLE_COL_LEFT_ALIGNED_MARKUP.toCharArray(), true ) )
+                    {
+                        scanner.unread();
+                        return super.endSequenceDetected( scanner );
+                    }
+
+                    if ( c == '-'
+                        && sequenceDetected( scanner, AptMarkup.TABLE_COL_RIGHT_ALIGNED_MARKUP.toCharArray(), true ) )
+                    {
+                        scanner.unread();
+                        return super.endSequenceDetected( scanner );
+                    }
+                    for ( ; readCount > 0; readCount-- )
+                    {
+                        scanner.unread();
+                    }
+                }
+                return super.endSequenceDetected( scanner );
+            }
+
+            @Override
+            protected boolean sequenceDetected( ICharacterScanner scanner, char[] sequence, boolean eofAllowed )
+            {
+                try
+                {
+                    // found the sequence or the line is a row line
+                    return super.sequenceDetected( scanner, sequence, eofAllowed ) || isRowLine();
+                }
+                catch ( BadLocationException e )
+                {
+                    // nop
+                }
+                return super.sequenceDetected( scanner, sequence, eofAllowed );
+            }
+
+            @Override
+            protected IToken doEvaluate( ICharacterScanner scanner, boolean resume )
+            {
+                if ( resume )
+                {
+                    if ( endSequenceDetected( scanner ) )
+                    {
+                        return fToken;
+                    }
+                }
+                else
+                {
+                    scanner.read(); // start read
+                    if ( sequenceDetected( scanner, fStartSequence, true ) )
+                    {
+                        fBreaksOnEOL = true; // take the entire line
+                        if ( endSequenceDetected( scanner ) )
+                        {
+                            return fToken;
+                        }
+                    }
+                }
+
+                scanner.unread();
+                return Token.UNDEFINED;
+            }
+
+            /**
+             * @param fDocument the document, not null
+             * @param fOffset the current offset
+             * @return true if the line from contains <code>|</code> separator, false otherwise.
+             * @throws BadLocationException if any
+             */
+            private boolean isRowLine()
+                throws BadLocationException
+            {
+                int currentLine = fDocument.getLineOfOffset( fOffset );
+                int startLineOffset = fDocument.getLineInformation( currentLine ).getOffset();
+                if ( fDocument.getLineInformationOfOffset( startLineOffset ).getLength() == 0
+                    || StringUtils.isEmpty( fDocument.get( startLineOffset, fDocument
+                        .getLineInformationOfOffset( startLineOffset ).getLength() ) ) )
+                {
+                    return false;
+                }
+
+                if ( fDocument.get( startLineOffset,
+                                    fDocument.getLineInformationOfOffset( startLineOffset ).getLength() ).indexOf( '|' ) == -1 )
+                {
+                    return false;
+                }
+                return true;
+            }
+        }
+
+        class EscapedOrUnicodeCharacterRule
+            implements IRule
+        {
             private IToken token;
 
             /**
@@ -493,7 +950,7 @@ public class AptEditor
              *
              * @param token the associated token
              */
-            public EscapedCharacterRule( IToken token )
+            public EscapedOrUnicodeCharacterRule( IToken token )
             {
                 this.token = token;
             }
@@ -537,12 +994,22 @@ public class AptEditor
 
                         return token;
                     }
-                    else
+                    else if ( Character.isUnicodeIdentifierStart( character ) )
                     {
+                        do
+                        {
+                            character = (char) scanner.read();
+                        }
+                        while ( Character.isUnicodeIdentifierPart( character ) );
+
                         scanner.unread();
 
-                        return Token.UNDEFINED;
+                        return token;
                     }
+
+                    scanner.unread();
+
+                    return Token.UNDEFINED;
                 }
 
                 scanner.unread();
@@ -555,6 +1022,9 @@ public class AptEditor
     class AptContentAssistProcessor
         extends AbstractContentAssistProcessor
     {
+        /**
+         * Default constructor.
+         */
         public AptContentAssistProcessor()
         {
             super();
