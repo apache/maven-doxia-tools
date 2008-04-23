@@ -499,9 +499,50 @@
       name="maven.executable"
       value="mvn" />
 
+    <!-- Try to find mvn in the path or in the M2_HOME variable -->
+    <condition property="mvn.found">
+      <or>
+        <available
+          file="mvn.bat"
+          filepath="${env.M2_HOME}${file.separator}bin${path.separator}${env.Path}" />
+        <available
+          file="mvn.bat"
+          filepath="${env.M2_HOME}${file.separator}bin${path.separator}${env.PATH}" />
+        <available
+          file="mvn"
+          filepath="${env.M2_HOME}${file.separator}bin${path.separator}${env.PATH}" />
+      </or>
+    </condition>
+
+    <fail
+      unless="mvn.found"
+      message="You need to add the Maven executable in your PATH or add the M2_HOME env property." />
+
+    <!-- try to see if M2_HOME is set -->
+    <condition
+      property="mvn.bin.path"
+      value="${env.M2_HOME}${file.separator}bin${file.separator}">
+      <or>
+        <available
+          file="${env.M2_HOME}${file.separator}bin"
+          type="dir" />
+      </or>
+    </condition>
+    <!-- mvn is in the path -->
+    <property
+      name="mvn.bin.path"
+      value="" />
+
     <exec
-      failonerror="true"
-      executable="${env.M2_HOME}\bin\${maven.executable}">
+      failonerror="false"
+      executable="${mvn.bin.path}${maven.executable}">
+      <env
+        key="PATH"
+        path="${env.PATH}" />
+      <!-- windows -->
+      <env
+        key="Path"
+        path="${env.Path}" />
       <arg line="validate -f install-eclipse-repo.xml -N -Dinstall.dir=${install.dir}" />
     </exec>
   </target>
