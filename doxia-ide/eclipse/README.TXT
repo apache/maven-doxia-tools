@@ -11,9 +11,8 @@ Required Prerequisites:
 * doxia-converter (https://svn.apache.org/repos/asf/maven/doxia/doxia-tools/trunk/doxia-converter)
   - Need to build it 
   - Put apache-doxia-1.0-SNAPSHOT-jar-with-dependencies.jar in ./plugins/org.apache.maven.doxia.ide.eclipse.common.ui/lib - unneeded since r650510
-
-* needs java 5 to build (?)
-* M2_HOME needs to be set (?)
+* needs Java 5 to build since Eclipse uses Java 5
+* M2_HOME needs to be set - unneeded since r651102
 
 Known Limitations:
 * Needs to bump to WSTP M6 due to:
