@@ -299,11 +299,11 @@ public final class OnlineHTTPLinkValidator extends HTTPLinkValidator
 
         HttpMethod hm;
 
-        if ( HEAD_METHOD.equals( this.http.getMethod().toLowerCase() ) )
+        if ( HEAD_METHOD.equalsIgnoreCase( this.http.getMethod() ) )
         {
             hm = new HeadMethod( link );
         }
-        else if ( GET_METHOD.equals( this.http.getMethod().toLowerCase() ) )
+        else if ( GET_METHOD.equalsIgnoreCase( this.http.getMethod() ) )
         {
             hm = new GetMethod( link );
         }

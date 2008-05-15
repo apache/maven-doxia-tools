@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Locale;
 import java.util.Set;
 
 import org.apache.commons.logging.Log;
@@ -675,7 +676,7 @@ public final class DefaultLinkCheck
                 return true;
             }
 
-            if ( name.toLowerCase().endsWith( ".html" ) || name.toLowerCase().endsWith( ".htm" ) )
+            if ( name.toLowerCase( Locale.ENGLISH ).endsWith( ".html" ) || name.toLowerCase( Locale.ENGLISH ).endsWith( ".htm" ) )
             {
                 return true;
             }

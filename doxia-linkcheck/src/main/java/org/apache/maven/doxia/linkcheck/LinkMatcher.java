@@ -23,6 +23,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
@@ -111,11 +112,12 @@ class LinkMatcher
             {
                 continue;
             }
-            else if ( link.toLowerCase().indexOf( "javascript" ) != -1 )
+            else if ( link.toLowerCase( Locale.ENGLISH ).indexOf( "javascript" ) != -1 )
             {
                 continue;
             }
-            // else if (link.toLowerCase().indexOf("mailto:") != -1) {
+            // TODO: Review dead code and delete if not needed
+            // else if (link.toLowerCase( Locale.ENGLISH ).indexOf("mailto:") != -1) {
             // continue;
             // }
 

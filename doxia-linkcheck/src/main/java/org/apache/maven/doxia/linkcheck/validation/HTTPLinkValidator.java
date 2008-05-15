@@ -19,6 +19,8 @@ package org.apache.maven.doxia.linkcheck.validation;
  * under the License.
  */
 
+import java.util.Locale;
+
 /**
  * Checks links which are normal URLs.
  *
@@ -33,7 +35,7 @@ public abstract class HTTPLinkValidator implements LinkValidator
     {
         String link = lvi.getLink();
 
-        if ( !link.toLowerCase().startsWith( "http://" ) && !link.toLowerCase().startsWith( "https://" )
+        if ( !link.toLowerCase( Locale.ENGLISH ).startsWith( "http://" ) && !link.toLowerCase( Locale.ENGLISH ).startsWith( "https://" )
             && !link.startsWith( "/" ) )
         {
             return null;

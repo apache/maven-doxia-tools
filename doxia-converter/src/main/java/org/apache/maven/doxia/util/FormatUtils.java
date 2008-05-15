@@ -19,6 +19,8 @@ package org.apache.maven.doxia.util;
  * under the License.
  */
 
+import java.util.Locale;
+
 import org.apache.maven.doxia.UnsupportedFormatException;
 import org.codehaus.plexus.util.SelectorUtils;
 import org.codehaus.plexus.util.StringUtils;
@@ -53,12 +55,12 @@ public class FormatUtils
 
         String fromFormat = from;
         String supportedString = StringUtils.join( supportedFormat, ", " );
-        if ( supportedString.indexOf( fromFormat.toLowerCase() ) == -1 )
+        if ( supportedString.indexOf( fromFormat.toLowerCase( Locale.ENGLISH ) ) == -1 )
         {
             throw new UnsupportedFormatException( fromFormat, supportedFormat );
         }
 
-        return fromFormat.toLowerCase();
+        return fromFormat.toLowerCase( Locale.ENGLISH );
     }
 
     /**
@@ -101,11 +103,11 @@ public class FormatUtils
         }
 
         String supportedString = StringUtils.join( supportedFormat, ", " );
-        if ( supportedString.indexOf( fromFormat.toLowerCase() ) == -1 )
+        if ( supportedString.indexOf( fromFormat.toLowerCase( Locale.ENGLISH ) ) == -1 )
         {
             throw new UnsupportedFormatException( fromFormat, supportedFormat );
         }
 
-        return fromFormat.toLowerCase();
+        return fromFormat.toLowerCase( Locale.ENGLISH );
     }
 }

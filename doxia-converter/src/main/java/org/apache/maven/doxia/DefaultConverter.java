@@ -28,6 +28,7 @@ import java.io.Writer;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.lang.ClassUtils;
@@ -313,7 +314,7 @@ public class DefaultConverter
      */
     private static String getParserFormat( Class clazz )
     {
-        return StringUtils.replace( ClassUtils.getShortClassName( clazz ).toLowerCase(), "parser", "" );
+        return StringUtils.replace( ClassUtils.getShortClassName( clazz ).toLowerCase( Locale.ENGLISH ), "parser", "" );
     }
 
     /**
@@ -323,7 +324,7 @@ public class DefaultConverter
      */
     private static String getSinkFormat( Class clazz )
     {
-        return StringUtils.replace( ClassUtils.getShortClassName( clazz ).toLowerCase(), "sink", "" );
+        return StringUtils.replace( ClassUtils.getShortClassName( clazz ).toLowerCase( Locale.ENGLISH ), "sink", "" );
     }
 
     /**
