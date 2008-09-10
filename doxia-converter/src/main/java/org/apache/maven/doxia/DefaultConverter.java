@@ -460,24 +460,44 @@ public class DefaultConverter
             }
         }
 
-        String detectedInputEncoding;
         Reader reader;
+        FileInputStream is = null;
         try
         {
-            detectedInputEncoding = getEncoding( inputFile );
+            is = new FileInputStream( inputFile );
 
-            if ( detectedInputEncoding != null )
+            StringWriter w = new StringWriter();
+            IOUtil.copy( is, w );
+            String content = w.toString();
+
+            if ( content.startsWith( "<?xml" ) )
             {
-                reader = ReaderFactory.newReader( inputFile, detectedInputEncoding );
+                reader = ReaderFactory.newXmlReader( inputFile );
             }
             else
             {
-                reader = ReaderFactory.newPlatformReader( inputFile );
+                CharsetDetector detector = new CharsetDetector();
+                detector.setText( content.getBytes() );
+                CharsetMatch match = detector.detect();
+
+                String detectedInputEncoding = match.getName().toUpperCase( Locale.ENGLISH );
+                if ( detectedInputEncoding != null )
+                {
+                    reader = ReaderFactory.newReader( inputFile, detectedInputEncoding );
+                }
+                else
+                {
+                    reader = ReaderFactory.newPlatformReader( inputFile );
+                }
             }
         }
         catch ( IOException e )
         {
             throw new ConverterException( "IOException: " + e.getMessage(), e );
+        }
+        finally
+        {
+            IOUtil.close( is );
         }
 
         Writer writer;
@@ -546,34 +566,5 @@ public class DefaultConverter
     private void stopPlexusContainer( PlexusContainer plexus )
     {
         plexus.dispose();
-    }
-
-    /**
-     * @param f not null and should exist
-     * @return the detected encoding from f
-     * @throws IOException if any
-     */
-    private String getEncoding( File f )
-        throws IOException
-    {
-        FileInputStream is = null;
-        try
-        {
-            is = new FileInputStream( f );
-
-            StringWriter w = new StringWriter();
-            IOUtil.copy( is, w );
-            String content = w.toString();
-
-            CharsetDetector detector = new CharsetDetector();
-            detector.setText( content.getBytes() );
-            CharsetMatch match = detector.detect();
-
-            return match.getName().toUpperCase( Locale.ENGLISH );
-        }
-        finally
-        {
-            IOUtil.close( is );
-        }
     }
 }
