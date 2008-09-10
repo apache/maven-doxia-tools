@@ -25,6 +25,8 @@ import org.apache.maven.doxia.UnsupportedFormatException;
 import org.apache.maven.doxia.util.FormatUtils;
 import org.codehaus.plexus.util.StringUtils;
 
+import com.ibm.icu.text.CharsetDetector;
+
 /**
  * Wrapper for an output file.
  *
@@ -42,35 +44,51 @@ public class OutputFileWrapper
      *
      * @param file
      * @param format
+     * @param charsetName could be null
      * @param supportedFormat
      */
-    private OutputFileWrapper( File file, String format, String[] supportedFormat )
+    private OutputFileWrapper( File file, String format, String charsetName, String[] supportedFormat )
     {
         setFile( file );
         setFormat( format );
+        setEncoding( charsetName );
         setSupportedFormat( supportedFormat );
     }
 
     /**
      * @param absolutePath not null
      * @param format not null
+     * @param charsetName could be null
      * @param supportedFormat not null
      * @return a type safe output writer
      * @throws IllegalArgumentException if any
      * @throws UnsupportedFormatException if any
      * @see FormatUtils#getSupportedFormat(String, String, String[])
      */
-    public static OutputFileWrapper valueOf( String absolutePath, String format, String[] supportedFormat )
+    public static OutputFileWrapper valueOf( String absolutePath, String format, String charsetName, String[] supportedFormat )
         throws UnsupportedFormatException
     {
         if ( StringUtils.isEmpty( absolutePath ) )
         {
             throw new IllegalArgumentException( "absolutePath is required" );
         }
+        if ( StringUtils.isNotEmpty( charsetName ) && !validateEncoding( charsetName ) )
+        {
+            StringBuffer msg = new StringBuffer();
+            msg.append( "The encoding '" + charsetName + "' is not a valid. The supported charsets are: " );
+            msg.append( StringUtils.join( CharsetDetector.getAllDetectableCharsets(), ", " ) );
+            throw new IllegalArgumentException( msg.toString() );
+        }
 
         File file = new File( absolutePath );
 
+        if ( !file.isAbsolute() )
+        {
+            file = new File( new File( "" ).getAbsolutePath(), absolutePath );
+        }
+
         return new OutputFileWrapper( file, FormatUtils.getSupportedFormat( file.getAbsolutePath(), format,
-                                                                            supportedFormat ), supportedFormat );
+                                                                            supportedFormat ), charsetName,
+                                      supportedFormat );
     }
 }

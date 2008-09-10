@@ -57,6 +57,12 @@ class CLIManager
     /** to String */
     public static final String TO = "to";
 
+    /** inEncoding String */
+    public static final String INENCODING = "inEncoding";
+
+    /** outEncoding String */
+    public static final String OUTENCODING = "outEncoding";
+
     /** X character */
     public static final char DEBUG = 'X';
 
@@ -76,10 +82,16 @@ class CLIManager
 
         options.addOption( OptionBuilder.withLongOpt( "input" ).withDescription( "Input file or directory" ).hasArg()
             .create( IN ) );
-        options.addOption( OptionBuilder.withLongOpt( "output" ).withDescription( "Output directory" ).hasArg()
+        options.addOption( OptionBuilder.withLongOpt( "output" ).withDescription( "Output file or directory" ).hasArg()
             .create( OUT ) );
         options.addOption( OptionBuilder.withDescription( "From format" ).hasArg().create( FROM ) );
         options.addOption( OptionBuilder.withDescription( "To format" ).hasArg().create( TO ) );
+        options.addOption( OptionBuilder.withLongOpt( "inputEncoding" ).withDescription( "Input file encoding. " +
+                "If not specified, autodetect the input encoding." )
+            .hasArg().create( INENCODING ) );
+        options.addOption( OptionBuilder.withLongOpt( "outputEncoding" ).withDescription( "Output file encoding. " +
+                "If not specified, use the input encoding (or detected)." )
+            .hasArg().create( OUTENCODING ) );
 
         options.addOption( OptionBuilder.withLongOpt( "debug" ).withDescription( "Produce execution debug output" )
             .create( DEBUG ) );
@@ -107,8 +119,8 @@ class CLIManager
         System.out.println();
 
         HelpFormatter formatter = new HelpFormatter();
-        formatter.printHelp( "doxia [options] [-in <arg>] [-from <arg>] [-out <arg>] [-to <arg>]\n", "\nOptions:",
-                             options, getSupportedFormat() );
+        formatter.printHelp( "doxia [options] [-in <arg>] [-from <arg>] [-inEncoding <arg>] [-out <arg>] "
+            + "[-to <arg>] [-outEncoding <arg>]\n", "\nOptions:", options, getSupportedFormat() );
     }
 
     protected static void displaySupportedFormat()

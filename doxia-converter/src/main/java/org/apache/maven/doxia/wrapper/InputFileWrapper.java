@@ -25,6 +25,8 @@ import org.apache.maven.doxia.UnsupportedFormatException;
 import org.apache.maven.doxia.util.FormatUtils;
 import org.codehaus.plexus.util.StringUtils;
 
+import com.ibm.icu.text.CharsetDetector;
+
 /**
  * Wrapper for an input file.
  *
@@ -40,37 +42,61 @@ public class InputFileWrapper
     /**
      * Private constructor.
      *
-     * @param file
-     * @param format
-     * @param supportedFormat
+     * @param file not null
+     * @param format not null
+     * @param charsetName could be null
+     * @param supportedFormat not null
      */
-    private InputFileWrapper( File file, String format, String[] supportedFormat )
+    private InputFileWrapper( File file, String format, String charsetName, String[] supportedFormat )
     {
         setFile( file );
         setFormat( format );
+        setEncoding( charsetName );
         setSupportedFormat( supportedFormat );
     }
 
     /**
      * @param absolutePath not null
      * @param format not null
+     * @param charsetName could be null
      * @param supportedFormat not null
      * @return a type safe input reader
      * @throws IllegalArgumentException if any
      * @throws UnsupportedFormatException if any
      * @see FormatUtils#getSupportedFormat(String, String, String[])
      */
-    public static InputFileWrapper valueOf( String absolutePath, String format, String[] supportedFormat )
+    public static InputFileWrapper valueOf( String absolutePath, String format, String charsetName, String[] supportedFormat )
         throws UnsupportedFormatException
     {
         if ( StringUtils.isEmpty( absolutePath ) )
         {
             throw new IllegalArgumentException( "absolutePath is required" );
         }
+        if ( StringUtils.isNotEmpty( charsetName ) && !validateEncoding( charsetName ) )
+        {
+            StringBuffer msg = new StringBuffer();
+            msg.append( "The encoding '" + charsetName + "' is not a valid. The supported charsets are: " );
+            msg.append( StringUtils.join( CharsetDetector.getAllDetectableCharsets(), ", " ) );
+            throw new IllegalArgumentException( msg.toString() );
+        }
 
         File file = new File( absolutePath );
+        if ( !file.isAbsolute() )
+        {
+            file = new File( new File( "" ).getAbsolutePath(), absolutePath );
+        }
+
+        String encoding;
+        if ( StringUtils.isNotEmpty( charsetName ) )
+        {
+            encoding = charsetName;
+        }
+        else
+        {
+            encoding = autoDetectEncoding( file );
+        }
 
         return new InputFileWrapper( file, FormatUtils.getSupportedFormat( file.getAbsolutePath(), format,
-                                                                           supportedFormat ), supportedFormat );
+                                                                           supportedFormat ), encoding, supportedFormat );
     }
 }

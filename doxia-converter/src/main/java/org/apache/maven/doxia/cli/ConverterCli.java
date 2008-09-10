@@ -129,9 +129,11 @@ public class ConverterCli
         try
         {
             input = InputFileWrapper.valueOf( commandLine.getOptionValue( CLIManager.IN ), commandLine
-                .getOptionValue( CLIManager.FROM ), converter.getInputFormats() );
+                .getOptionValue( CLIManager.FROM ), commandLine.getOptionValue( CLIManager.INENCODING ), converter
+                .getInputFormats() );
             output = OutputFileWrapper.valueOf( commandLine.getOptionValue( CLIManager.OUT ), commandLine
-                .getOptionValue( CLIManager.TO ), converter.getOutputFormats() );
+                .getOptionValue( CLIManager.TO ), commandLine.getOptionValue( CLIManager.OUTENCODING ), converter
+                .getOutputFormats() );
         }
         catch ( IllegalArgumentException e )
         {

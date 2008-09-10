@@ -31,6 +31,8 @@ import org.apache.maven.doxia.wrapper.OutputWriterWrapper;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
+import org.codehaus.plexus.util.ReaderFactory;
+import org.codehaus.plexus.util.WriterFactory;
 
 /**
  * Tests Doxia converter.
@@ -91,8 +93,8 @@ public class ConverterTest
         String out = getBasedir() + "/target/unit/";
         String to = "apt";
 
-        InputFileWrapper input = InputFileWrapper.valueOf( in, from, converter.getInputFormats() );
-        OutputFileWrapper output = OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
+        InputFileWrapper input = InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
+        OutputFileWrapper output = OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
 
         converter.convert( input, output );
         assertTrue( new File( out, "Doxia.htm.apt" ).exists() );
@@ -114,8 +116,8 @@ public class ConverterTest
         String out = getBasedir() + "/target/unit/Doxia.apt";
         String to = "apt";
 
-        InputFileWrapper input = InputFileWrapper.valueOf( in, from, converter.getInputFormats() );
-        OutputFileWrapper output = OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
+        InputFileWrapper input = InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
+        OutputFileWrapper output = OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
 
         converter.convert( input, output );
         assertTrue( new File( out ).exists() );
@@ -137,8 +139,8 @@ public class ConverterTest
         String out = getBasedir() + "/target/unit/file/apt/test.apt.xhtml";
         String to = "xhtml";
 
-        InputFileWrapper input = InputFileWrapper.valueOf( in, from, converter.getInputFormats() );
-        OutputFileWrapper output = OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
+        InputFileWrapper input = InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
+        OutputFileWrapper output = OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
 
         converter.convert( input, output );
         assertTrue( new File( out ).exists() );
@@ -148,8 +150,8 @@ public class ConverterTest
         out = getBasedir() + "/target/unit/file/apt/test.apt";
         to = "apt";
 
-        input = InputFileWrapper.valueOf( in, from, converter.getInputFormats() );
-        output = OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
+        input = InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
+        output = OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
 
         converter.convert( input, output );
         assertTrue( new File( out ).exists() );
@@ -169,8 +171,8 @@ public class ConverterTest
         String out = getBasedir() + "/target/unit/file/confluence/test.confluence.xhtml";
         String to = "xhtml";
 
-        InputFileWrapper input = InputFileWrapper.valueOf( in, from, converter.getInputFormats() );
-        OutputFileWrapper output = OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
+        InputFileWrapper input = InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
+        OutputFileWrapper output = OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
 
         converter.convert( input, output );
         assertTrue( new File( out ).exists() );
@@ -182,8 +184,8 @@ public class ConverterTest
 
         try
         {
-            input = InputFileWrapper.valueOf( in, from, converter.getInputFormats() );
-            output = OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
+            input = InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
+            output = OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
 
             converter.convert( input, output );
 
@@ -209,8 +211,8 @@ public class ConverterTest
         String out = getBasedir() + "/target/unit/file/docbook/test.docbook.xhtml";
         String to = "xhtml";
 
-        InputFileWrapper input = InputFileWrapper.valueOf( in, from, converter.getInputFormats() );
-        OutputFileWrapper output = OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
+        InputFileWrapper input = InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
+        OutputFileWrapper output = OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
 
         converter.convert( input, output );
         assertTrue( new File( out ).exists() );
@@ -242,8 +244,8 @@ public class ConverterTest
         String out = getBasedir() + "/target/unit/file/fml/test.fml.xhtml";
         String to = "xhtml";
 
-        InputFileWrapper input = InputFileWrapper.valueOf( in, from, converter.getInputFormats() );
-        OutputFileWrapper output = OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
+        InputFileWrapper input = InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
+        OutputFileWrapper output = OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
 
         converter.convert( input, output );
         assertTrue( new File( out ).exists() );
@@ -255,8 +257,8 @@ public class ConverterTest
 
         try
         {
-            input = InputFileWrapper.valueOf( in, from, converter.getInputFormats() );
-            output = OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
+            input = InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
+            output = OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
 
             converter.convert( input, output );
 
@@ -282,8 +284,8 @@ public class ConverterTest
         String out = getBasedir() + "/target/unit/file/twiki/test.twiki.xhtml";
         String to = "xhtml";
 
-        InputFileWrapper input = InputFileWrapper.valueOf( in, from, converter.getInputFormats() );
-        OutputFileWrapper output = OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
+        InputFileWrapper input = InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
+        OutputFileWrapper output = OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
 
         converter.convert( input, output );
         assertTrue( new File( out ).exists() );
@@ -295,8 +297,8 @@ public class ConverterTest
 
         try
         {
-            input = InputFileWrapper.valueOf( in, from, converter.getInputFormats() );
-            output = OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
+            input = InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
+            output = OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
 
             converter.convert( input, output );
 
@@ -322,8 +324,8 @@ public class ConverterTest
         String out = getBasedir() + "/target/unit/file/xdoc/test.xdoc.xhtml";
         String to = "xhtml";
 
-        InputFileWrapper input = InputFileWrapper.valueOf( in, from, converter.getInputFormats() );
-        OutputFileWrapper output = OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
+        InputFileWrapper input = InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
+        OutputFileWrapper output = OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
 
         converter.convert( input, output );
         assertTrue( new File( out ).exists() );
@@ -333,8 +335,8 @@ public class ConverterTest
         out = getBasedir() + "/target/unit/file/xdoc/test.xdoc";
         to = "xdoc";
 
-        input = InputFileWrapper.valueOf( in, from, converter.getInputFormats() );
-        output = OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
+        input = InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
+        output = OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
 
         converter.convert( input, output );
         assertTrue( new File( out ).exists() );
@@ -354,8 +356,8 @@ public class ConverterTest
         String out = getBasedir() + "/target/unit/file/xhtml/test.xhtml.xhtml";
         String to = "xhtml";
 
-        InputFileWrapper input = InputFileWrapper.valueOf( in, from, converter.getInputFormats() );
-        OutputFileWrapper output = OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
+        InputFileWrapper input = InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
+        OutputFileWrapper output = OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
 
         converter.convert( input, output );
         assertTrue( new File( out ).exists() );
@@ -365,8 +367,8 @@ public class ConverterTest
         out = getBasedir() + "/target/unit/file/xhtml/test.xhtml";
         to = "xhtml";
 
-        input = InputFileWrapper.valueOf( in, from, converter.getInputFormats() );
-        output = OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
+        input = InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
+        output = OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
 
         converter.convert( input, output );
         assertTrue( new File( out ).exists() );

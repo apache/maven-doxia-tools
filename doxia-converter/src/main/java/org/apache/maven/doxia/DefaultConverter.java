@@ -22,7 +22,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.Reader;
-import java.io.StringWriter;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -67,9 +66,6 @@ import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.SelectorUtils;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.WriterFactory;
-
-import com.ibm.icu.text.CharsetDetector;
-import com.ibm.icu.text.CharsetMatch;
 
 /**
  * Default implementation of <code>Converter</code>
@@ -209,7 +205,7 @@ public class DefaultConverter
 
             if ( input.getFile().isFile() )
             {
-                parse( input.getFile(), output, parser );
+                parse( input.getFile(), input.getEncoding(), output, parser );
             }
             else
             {
@@ -228,7 +224,7 @@ public class DefaultConverter
                 {
                     File f = (File) it.next();
 
-                    parse( f, output, parser );
+                    parse( f, input.getEncoding(), output, parser );
                 }
             }
         }
@@ -425,19 +421,21 @@ public class DefaultConverter
     }
 
     /**
-     * @param inputFile
-     * @param output
-     * @param parser
+     * @param inputFile not null
+     * @param inputEncoding could be null
+     * @param output not null
+     * @param parser not null
      * @throws ConverterException if any
      */
-    private void parse( File inputFile, OutputFileWrapper output, Parser parser )
+    private void parse( File inputFile, String inputEncoding, OutputFileWrapper output, Parser parser )
         throws ConverterException
     {
         if ( getLog().isDebugEnabled() )
         {
             getLog().debug(
-                            "Parsing file from '" + inputFile.getAbsolutePath() + "' to '"
-                                + output.getFile().getAbsolutePath() + "'" );
+                            "Parsing file from '" + inputFile.getAbsolutePath() + "' with the encoding '"
+                                + inputEncoding + "' to '" + output.getFile().getAbsolutePath()
+                                + "' with the encoding '" + output.getEncoding() + "'" );
         }
 
         File outputFile;
@@ -466,29 +464,13 @@ public class DefaultConverter
         {
             is = new FileInputStream( inputFile );
 
-            StringWriter w = new StringWriter();
-            IOUtil.copy( is, w );
-            String content = w.toString();
-
-            if ( content.startsWith( "<?xml" ) )
+            if ( inputEncoding != null )
             {
-                reader = ReaderFactory.newXmlReader( inputFile );
+                reader = ReaderFactory.newReader( inputFile, inputEncoding );
             }
             else
             {
-                CharsetDetector detector = new CharsetDetector();
-                detector.setText( content.getBytes() );
-                CharsetMatch match = detector.detect();
-
-                String detectedInputEncoding = match.getName().toUpperCase( Locale.ENGLISH );
-                if ( detectedInputEncoding != null )
-                {
-                    reader = ReaderFactory.newReader( inputFile, detectedInputEncoding );
-                }
-                else
-                {
-                    reader = ReaderFactory.newPlatformReader( inputFile );
-                }
+                reader = ReaderFactory.newPlatformReader( inputFile );
             }
         }
         catch ( IOException e )
@@ -503,13 +485,23 @@ public class DefaultConverter
         Writer writer;
         try
         {
+            String outputEncoding;
+            if ( StringUtils.isEmpty( output.getEncoding() ) )
+            {
+                outputEncoding = inputEncoding;
+            }
+            else
+            {
+                outputEncoding = output.getEncoding();
+            }
+
             if ( parser.getType() == Parser.XML_TYPE )
             {
                 writer = WriterFactory.newXmlWriter( outputFile );
             }
             else
             {
-                writer = WriterFactory.newPlatformWriter( outputFile );
+                writer = WriterFactory.newWriter( outputFile, outputEncoding );
             }
         }
         catch ( IOException e )
