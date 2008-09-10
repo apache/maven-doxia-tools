@@ -117,6 +117,11 @@ under the License.
       <artifactId>commons-lang</artifactId>
       <version>2.3</version>
     </dependency>
+    <dependency>
+      <groupId>com.ibm.icu</groupId>
+      <artifactId>icu4j</artifactId>
+      <version>3.8</version>
+    </dependency>
 
     <!-- Plexus -->
     <dependency>

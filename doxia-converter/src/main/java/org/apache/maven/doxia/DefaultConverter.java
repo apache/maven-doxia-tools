@@ -19,11 +19,10 @@
 package org.apache.maven.doxia;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.Reader;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -64,8 +63,13 @@ import org.codehaus.plexus.PlexusContainerException;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
+import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.SelectorUtils;
 import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.plexus.util.WriterFactory;
+
+import com.ibm.icu.text.CharsetDetector;
+import com.ibm.icu.text.CharsetMatch;
 
 /**
  * Default implementation of <code>Converter</code>
@@ -456,10 +460,37 @@ public class DefaultConverter
             }
         }
 
+        String detectedInputEncoding;
+        Reader reader;
+        try
+        {
+            detectedInputEncoding = getEncoding( inputFile );
+
+            if ( detectedInputEncoding != null )
+            {
+                reader = ReaderFactory.newReader( inputFile, detectedInputEncoding );
+            }
+            else
+            {
+                reader = ReaderFactory.newPlatformReader( inputFile );
+            }
+        }
+        catch ( IOException e )
+        {
+            throw new ConverterException( "IOException: " + e.getMessage(), e );
+        }
+
         Writer writer;
         try
         {
-            writer = new FileWriter( outputFile );
+            if ( parser.getType() == Parser.XML_TYPE )
+            {
+                writer = WriterFactory.newXmlWriter( outputFile );
+            }
+            else
+            {
+                writer = WriterFactory.newPlatformWriter( outputFile );
+            }
         }
         catch ( IOException e )
         {
@@ -471,16 +502,6 @@ public class DefaultConverter
         if ( getLog().isDebugEnabled() )
         {
             getLog().debug( "Sink used: " + sink.getClass().getName() );
-        }
-
-        Reader reader;
-        try
-        {
-            reader = new FileReader( inputFile );
-        }
-        catch ( FileNotFoundException e )
-        {
-            throw new ConverterException( "IOException: " + e.getMessage(), e );
         }
 
         try
@@ -525,5 +546,34 @@ public class DefaultConverter
     private void stopPlexusContainer( PlexusContainer plexus )
     {
         plexus.dispose();
+    }
+
+    /**
+     * @param f not null and should exist
+     * @return the detected encoding from f
+     * @throws IOException if any
+     */
+    private String getEncoding( File f )
+        throws IOException
+    {
+        FileInputStream is = null;
+        try
+        {
+            is = new FileInputStream( f );
+
+            StringWriter w = new StringWriter();
+            IOUtil.copy( is, w );
+            String content = w.toString();
+
+            CharsetDetector detector = new CharsetDetector();
+            detector.setText( content.getBytes() );
+            CharsetMatch match = detector.detect();
+
+            return match.getName().toUpperCase( Locale.ENGLISH );
+        }
+        finally
+        {
+            IOUtil.close( is );
+        }
     }
 }
