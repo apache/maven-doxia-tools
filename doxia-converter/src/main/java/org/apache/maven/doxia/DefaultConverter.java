@@ -192,6 +192,7 @@ public class DefaultConverter
             try
             {
                 parser = getParser( plexus, input.getFormat() );
+                parser.enableLogging( log );
             }
             catch ( ComponentLookupException e )
             {
@@ -263,6 +264,7 @@ public class DefaultConverter
             try
             {
                 parser = getParser( plexus, input.getFormat() );
+                parser.enableLogging( log );
             }
             catch ( ComponentLookupException e )
             {
@@ -275,6 +277,7 @@ public class DefaultConverter
             }
 
             Sink sink = getSink( output.getFormat(), output.getWriter() );
+            sink.enableLogging( log );
 
             if ( getLog().isDebugEnabled() )
             {
@@ -466,7 +469,14 @@ public class DefaultConverter
 
             if ( inputEncoding != null )
             {
-                reader = ReaderFactory.newReader( inputFile, inputEncoding );
+                if ( parser.getType() == Parser.XML_TYPE )
+                {
+                    reader = ReaderFactory.newXmlReader( inputFile );
+                }
+                else
+                {
+                    reader = ReaderFactory.newReader( inputFile, inputEncoding );
+                }
             }
             else
             {
@@ -495,14 +505,7 @@ public class DefaultConverter
                 outputEncoding = output.getEncoding();
             }
 
-            if ( parser.getType() == Parser.XML_TYPE )
-            {
-                writer = WriterFactory.newXmlWriter( outputFile );
-            }
-            else
-            {
-                writer = WriterFactory.newWriter( outputFile, outputEncoding );
-            }
+            writer = WriterFactory.newWriter( outputFile, outputEncoding );
         }
         catch ( IOException e )
         {
@@ -510,6 +513,7 @@ public class DefaultConverter
         }
 
         Sink sink = getSink( output.getFormat(), writer );
+        sink.enableLogging( log );
 
         if ( getLog().isDebugEnabled() )
         {
