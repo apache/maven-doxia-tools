@@ -30,6 +30,9 @@ import java.io.Serializable;
 public abstract class AbstractWrapper
     implements Serializable
 {
+    /** serialVersionUID */
+    static final long serialVersionUID = -1150854786311626411L;
+
     private String format;
 
     private String[] supportedFormat;

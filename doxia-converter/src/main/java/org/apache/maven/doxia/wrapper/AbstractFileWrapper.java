@@ -47,6 +47,9 @@ import com.ibm.icu.text.CharsetMatch;
 public abstract class AbstractFileWrapper
     extends AbstractWrapper
 {
+    /** serialVersionUID */
+    static final long serialVersionUID = 6072685230076158590L;
+
     private File file;
 
     private String encoding;
