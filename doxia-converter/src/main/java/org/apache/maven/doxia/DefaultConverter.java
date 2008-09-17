@@ -26,30 +26,14 @@ import java.io.Writer;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
-import org.apache.commons.lang.ClassUtils;
 import org.apache.maven.doxia.logging.Log;
 import org.apache.maven.doxia.logging.SystemStreamLog;
-import org.apache.maven.doxia.module.apt.AptParser;
-import org.apache.maven.doxia.module.apt.AptSink;
-import org.apache.maven.doxia.module.confluence.ConfluenceParser;
-import org.apache.maven.doxia.module.docbook.DocBookParser;
-import org.apache.maven.doxia.module.docbook.DocBookSink;
-import org.apache.maven.doxia.module.fml.FmlParser;
-import org.apache.maven.doxia.module.fo.FoSink;
-import org.apache.maven.doxia.module.itext.ITextSink;
-import org.apache.maven.doxia.module.latex.LatexSink;
-import org.apache.maven.doxia.module.rtf.RtfSink;
-import org.apache.maven.doxia.module.twiki.TWikiParser;
-import org.apache.maven.doxia.module.xdoc.XdocParser;
-import org.apache.maven.doxia.module.xdoc.XdocSink;
-import org.apache.maven.doxia.module.xhtml.XhtmlParser;
-import org.apache.maven.doxia.module.xhtml.XhtmlSink;
 import org.apache.maven.doxia.parser.ParseException;
 import org.apache.maven.doxia.parser.Parser;
 import org.apache.maven.doxia.sink.Sink;
+import org.apache.maven.doxia.sink.SinkFactory;
 import org.apache.maven.doxia.wrapper.InputFileWrapper;
 import org.apache.maven.doxia.wrapper.InputReaderWrapper;
 import org.apache.maven.doxia.wrapper.OutputFileWrapper;
@@ -76,57 +60,48 @@ import org.codehaus.plexus.util.WriterFactory;
 public class DefaultConverter
     implements Converter
 {
-    private static final String APT_PARSER = getParserFormat( AptParser.class );
+    private static final String APT_PARSER = "apt";
 
-    private static final String CONFLUENCE_PARSER = getParserFormat( ConfluenceParser.class );
+    private static final String CONFLUENCE_PARSER = "confluence";
 
-    private static final String DOCBOOK_PARSER = getParserFormat( DocBookParser.class );
+    private static final String DOCBOOK_PARSER = "docbook";
 
-    private static final String FML_PARSER = getParserFormat( FmlParser.class );
+    private static final String FML_PARSER = "fml";
 
-    private static final String TWIKI_PARSER = getParserFormat( TWikiParser.class );
+    private static final String TWIKI_PARSER = "twiki";
 
-    private static final String XDOC_PARSER = getParserFormat( XdocParser.class );
+    private static final String XDOC_PARSER = "xdoc";
 
-    private static final String XHTML_PARSER = getParserFormat( XhtmlParser.class );
+    private static final String XHTML_PARSER = "xhtml";
 
     /** Supported input format, i.e. supported Doxia parser */
-    public static final String[] SUPPORTED_FROM_FORMAT = {
-        APT_PARSER,
-        CONFLUENCE_PARSER,
-        DOCBOOK_PARSER,
-        FML_PARSER,
-        TWIKI_PARSER,
-        XDOC_PARSER,
-        XHTML_PARSER };
+    public static final String[] SUPPORTED_FROM_FORMAT =
+        { APT_PARSER, CONFLUENCE_PARSER, DOCBOOK_PARSER, FML_PARSER, TWIKI_PARSER, XDOC_PARSER, XHTML_PARSER };
 
-    private static final String APT_SINK = getSinkFormat( AptSink.class );
+    private static final String APT_SINK = "apt";
 
-    private static final String DOCBOOK_SINK = getSinkFormat( DocBookSink.class );
+    private static final String DOCBOOK_SINK = "docbook";
 
-    private static final String FO_SINK = getSinkFormat( FoSink.class );
+    private static final String FO_SINK = "fo";
 
-    private static final String ITEXT_SINK = getSinkFormat( ITextSink.class );
+    private static final String ITEXT_SINK = "itext";
 
-    private static final String LATEX_SINK = getSinkFormat( LatexSink.class );
+    private static final String LATEX_SINK = "latex";
 
-    private static final String RTF_SINK = getSinkFormat( RtfSink.class );
+    private static final String RTF_SINK = "rtf";
 
-    private static final String XDOC_SINK = getSinkFormat( XdocSink.class );
+    private static final String XDOC_SINK = "xdoc";
 
-    private static final String XHTML_SINK = getSinkFormat( XhtmlSink.class );
+    private static final String XHTML_SINK = "xhtml";
 
     /** Supported output format, i.e. supported Doxia Sink */
-    public static final String[] SUPPORTED_TO_FORMAT = {
-        APT_SINK,
-        DOCBOOK_SINK,
-        FO_SINK,
-        ITEXT_SINK,
-        LATEX_SINK,
-        RTF_SINK,
-        XDOC_SINK,
-        XHTML_SINK };
+    public static final String[] SUPPORTED_TO_FORMAT =
+        { APT_SINK, DOCBOOK_SINK, FO_SINK, ITEXT_SINK, LATEX_SINK, RTF_SINK, XDOC_SINK, XHTML_SINK };
 
+    /** Plexus container */
+    private PlexusContainer plexus;
+
+    /** Doxia logger */
     private Log log;
 
     /** {@inheritDoc} */
@@ -167,10 +142,9 @@ public class DefaultConverter
     public void convert( InputFileWrapper input, OutputFileWrapper output )
         throws UnsupportedFormatException, ConverterException
     {
-        PlexusContainer plexus;
         try
         {
-            plexus = startPlexusContainer();
+            startPlexusContainer();
         }
         catch ( PlexusContainerException e )
         {
@@ -213,8 +187,9 @@ public class DefaultConverter
                 List files;
                 try
                 {
-                    files = FileUtils.getFiles( input.getFile(), "**/*." + input.getFormat(), StringUtils
-                        .join( FileUtils.getDefaultExcludes(), ", " ) );
+                    files =
+                        FileUtils.getFiles( input.getFile(), "**/*." + input.getFormat(),
+                                            StringUtils.join( FileUtils.getDefaultExcludes(), ", " ) );
                 }
                 catch ( IOException e )
                 {
@@ -231,7 +206,7 @@ public class DefaultConverter
         }
         finally
         {
-            stopPlexusContainer( plexus );
+            stopPlexusContainer();
         }
     }
 
@@ -239,10 +214,9 @@ public class DefaultConverter
     public void convert( InputReaderWrapper input, OutputWriterWrapper output )
         throws UnsupportedFormatException, ConverterException
     {
-        PlexusContainer plexus;
         try
         {
-            plexus = startPlexusContainer();
+            startPlexusContainer();
         }
         catch ( PlexusContainerException e )
         {
@@ -276,7 +250,15 @@ public class DefaultConverter
                 getLog().debug( "Parser used: " + parser.getClass().getName() );
             }
 
-            Sink sink = getSink( output.getFormat(), output.getWriter() );
+            Sink sink;
+            try
+            {
+                sink = getSink( plexus, output.getFormat(), output.getWriter() );
+            }
+            catch ( ComponentLookupException e )
+            {
+                throw new ConverterException( "ComponentLookupException: " + e.getMessage(), e );
+            }
             sink.enableLogging( log );
 
             if ( getLog().isDebugEnabled() )
@@ -302,33 +284,13 @@ public class DefaultConverter
         }
         finally
         {
-            stopPlexusContainer( plexus );
+            stopPlexusContainer();
         }
     }
 
     // ----------------------------------------------------------------------
     // Private methods
     // ----------------------------------------------------------------------
-
-    /**
-     * @param clazz an implementation of <code>Parser</code> with the pattern <code>&lt;format&gt;Parser</code>
-     * @return the parser format in lower case.
-     * @see Parser implementations
-     */
-    private static String getParserFormat( Class clazz )
-    {
-        return StringUtils.replace( ClassUtils.getShortClassName( clazz ).toLowerCase( Locale.ENGLISH ), "parser", "" );
-    }
-
-    /**
-     * @param clazz an implementation of <code>Sink</code> with the pattern <code>&lt;format&gt;Sink</code>
-     * @return the sink format in lower case.
-     * @see Sink implementations
-     */
-    private static String getSinkFormat( Class clazz )
-    {
-        return StringUtils.replace( ClassUtils.getShortClassName( clazz ).toLowerCase( Locale.ENGLISH ), "sink", "" );
-    }
 
     /**
      * @param plexus
@@ -382,45 +344,27 @@ public class DefaultConverter
      * @param format
      * @param writer
      * @return an instance of <code>Sink</code> depending the format.
+        throws ComponentLookupException if any
      * @throws IllegalArgumentException if any
      */
-    private static Sink getSink( String format, Writer writer )
+    private static Sink getSink( PlexusContainer plexus, String format, Writer writer )
+        throws ComponentLookupException
     {
-        if ( format.equals( APT_SINK ) )
+        SinkFactory factory = (SinkFactory) plexus.lookup( SinkFactory.ROLE, format );
+
+        if ( factory == null )
         {
-            return new AptSink( writer );
-        }
-        else if ( format.equals( DOCBOOK_SINK ) )
-        {
-            return new DocBookSink( writer );
-        }
-        else if ( format.equals( FO_SINK ) )
-        {
-            return new FoSink( writer );
-        }
-        else if ( format.equals( ITEXT_SINK ) )
-        {
-            return new ITextSink( writer );
-        }
-        else if ( format.equals( LATEX_SINK ) )
-        {
-            return new LatexSink( writer );
-        }
-        else if ( format.equals( RTF_SINK ) )
-        {
-            // TODO
-            //return  new RtfSink( s );
-        }
-        else if ( format.equals( XDOC_SINK ) )
-        {
-            return new XdocSink( writer );
-        }
-        else if ( format.equals( XHTML_SINK ) )
-        {
-            return new XhtmlSink( writer );
+            throw new IllegalArgumentException( "SinkFactory not found for: " + format );
         }
 
-        throw new IllegalArgumentException( "Sink not found for: " + format );
+        Sink sink = factory.createSink( writer );
+
+        if ( sink == null )
+        {
+            throw new IllegalArgumentException( "Sink was not instanciated: " + format );
+        }
+
+        return sink;
     }
 
     /**
@@ -512,7 +456,15 @@ public class DefaultConverter
             throw new ConverterException( "IOException: " + e.getMessage(), e );
         }
 
-        Sink sink = getSink( output.getFormat(), writer );
+        Sink sink;
+        try
+        {
+            sink = getSink( plexus, output.getFormat(), writer );
+        }
+        catch ( ComponentLookupException e )
+        {
+            throw new ConverterException( "ComponentLookupException: " + e.getMessage(), e );
+        }
         sink.enableLogging( log );
 
         if ( getLog().isDebugEnabled() )
@@ -538,12 +490,18 @@ public class DefaultConverter
     }
 
     /**
-     * @return a new Plexus Container instance
+     * Start the Plexus container.
+     *
      * @throws PlexusContainerException if any
      */
-    private PlexusContainer startPlexusContainer()
+    private void startPlexusContainer()
         throws PlexusContainerException
     {
+        if ( plexus != null )
+        {
+            return;
+        }
+
         Map context = new HashMap();
         context.put( "basedir", new File( "" ).getAbsolutePath() );
 
@@ -551,16 +509,20 @@ public class DefaultConverter
         containerConfiguration.setName( "Doxia" );
         containerConfiguration.setContext( context );
 
-        return new DefaultPlexusContainer( containerConfiguration );
+        plexus = new DefaultPlexusContainer( containerConfiguration );
     }
 
     /**
      * Stop the Plexus container.
-     *
-     * @param plexus the Plexus container instance.
      */
-    private void stopPlexusContainer( PlexusContainer plexus )
+    private void stopPlexusContainer()
     {
+        if ( plexus == null )
+        {
+            return;
+        }
+
         plexus.dispose();
+        plexus = null;
     }
 }
