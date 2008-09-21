@@ -21,21 +21,40 @@ package org.apache.maven.doxia.wrapper;
 
 import java.io.Serializable;
 
+import org.codehaus.plexus.util.StringUtils;
+
 /**
  * Abstract wrapper for Doxia converter.
  *
  * @author <a href="mailto:vincent.siveton@gmail.com">Vincent Siveton</a>
  * @version $Id$
  */
-public abstract class AbstractWrapper
+abstract class AbstractWrapper
     implements Serializable
 {
+    public static final String AUTO_FORMAT = "auto";
+
     /** serialVersionUID */
     static final long serialVersionUID = -1150854786311626411L;
 
     private String format;
 
     private String[] supportedFormat;
+
+    /**
+     * @param format could be null.
+     * @param supportedFormat not null.
+     * @throws IllegalArgumentException if supportedFormat is null.
+     */
+    AbstractWrapper( String format, String[] supportedFormat )
+    {
+        this.format = ( StringUtils.isNotEmpty( format ) ? format : AUTO_FORMAT );
+        if ( supportedFormat == null )
+        {
+            throw new IllegalArgumentException( "supportedFormat is required" );
+        }
+        this.supportedFormat = supportedFormat;
+    }
 
     /**
      * @return the wanted format.
@@ -84,7 +103,8 @@ public abstract class AbstractWrapper
 
         AbstractWrapper that = (AbstractWrapper) other;
         boolean result = true;
-        result = result && ( getFormat() == null ? that.getFormat() == null : getFormat().equals( that.getFormat() ) );
+        result =
+            result && ( getFormat() == null ? that.getFormat() == null : getFormat().equals( that.getFormat() ) );
         return result;
     }
 

@@ -18,22 +18,29 @@
  */
 package org.apache.maven.doxia;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.maven.doxia.logging.Log;
 import org.apache.maven.doxia.logging.SystemStreamLog;
 import org.apache.maven.doxia.parser.ParseException;
 import org.apache.maven.doxia.parser.Parser;
 import org.apache.maven.doxia.sink.Sink;
-import org.apache.maven.doxia.sink.SinkFactory;
+import org.apache.maven.doxia.util.ConverterUtil;
 import org.apache.maven.doxia.wrapper.InputFileWrapper;
 import org.apache.maven.doxia.wrapper.InputReaderWrapper;
 import org.apache.maven.doxia.wrapper.OutputFileWrapper;
@@ -50,6 +57,13 @@ import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.SelectorUtils;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.WriterFactory;
+import org.codehaus.plexus.util.xml.XmlStreamReader;
+import org.codehaus.plexus.util.xml.pull.MXParser;
+import org.codehaus.plexus.util.xml.pull.XmlPullParser;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
+
+import com.ibm.icu.text.CharsetDetector;
+import com.ibm.icu.text.CharsetMatch;
 
 /**
  * Default implementation of <code>Converter</code>
@@ -162,25 +176,9 @@ public class DefaultConverter
 
         try
         {
-            Parser parser;
-            try
-            {
-                parser = getParser( plexus, input.getFormat() );
-                parser.enableLogging( log );
-            }
-            catch ( ComponentLookupException e )
-            {
-                throw new ConverterException( "ComponentLookupException: " + e.getMessage(), e );
-            }
-
-            if ( getLog().isDebugEnabled() )
-            {
-                getLog().debug( "Parser used: " + parser.getClass().getName() );
-            }
-
             if ( input.getFile().isFile() )
             {
-                parse( input.getFile(), input.getEncoding(), output, parser );
+                parse( input.getFile(), input.getEncoding(), input.getFormat(), output );
             }
             else
             {
@@ -195,12 +193,16 @@ public class DefaultConverter
                 {
                     throw new ConverterException( "IOException: " + e.getMessage(), e );
                 }
+                catch ( IllegalStateException e )
+                {
+                    throw new ConverterException( "IllegalStateException: " + e.getMessage(), e );
+                }
 
                 for ( Iterator it = files.iterator(); it.hasNext(); )
                 {
                     File f = (File) it.next();
 
-                    parse( f, input.getEncoding(), output, parser );
+                    parse( f, input.getEncoding(), input.getFormat(), output );
                 }
             }
         }
@@ -237,7 +239,7 @@ public class DefaultConverter
             Parser parser;
             try
             {
-                parser = getParser( plexus, input.getFormat() );
+                parser = ConverterUtil.getParser( plexus, input.getFormat(), SUPPORTED_FROM_FORMAT );
                 parser.enableLogging( log );
             }
             catch ( ComponentLookupException e )
@@ -253,7 +255,7 @@ public class DefaultConverter
             Sink sink;
             try
             {
-                sink = getSink( plexus, output.getFormat(), output.getWriter() );
+                sink = ConverterUtil.getSink( plexus, output.getFormat(), output.getWriter(), SUPPORTED_TO_FORMAT );
             }
             catch ( ComponentLookupException e )
             {
@@ -293,89 +295,15 @@ public class DefaultConverter
     // ----------------------------------------------------------------------
 
     /**
-     * @param plexus
-     * @param format
-     * @return an instance of <code>Parser</code> depending the format.
-     * @throws ComponentLookupException if any
-     * @throws IllegalArgumentException if any
-     */
-    private static Parser getParser( PlexusContainer plexus, String format )
-        throws ComponentLookupException
-    {
-        Parser parser = null;
-        if ( format.equals( APT_PARSER ) )
-        {
-            parser = (Parser) plexus.lookup( Parser.ROLE, "apt" );
-        }
-        else if ( format.equals( CONFLUENCE_PARSER ) )
-        {
-            parser = (Parser) plexus.lookup( Parser.ROLE, "confluence" );
-        }
-        else if ( format.equals( DOCBOOK_PARSER ) )
-        {
-            parser = (Parser) plexus.lookup( Parser.ROLE, "doc-book" );
-        }
-        else if ( format.equals( FML_PARSER ) )
-        {
-            parser = (Parser) plexus.lookup( Parser.ROLE, "fml" );
-        }
-        else if ( format.equals( TWIKI_PARSER ) )
-        {
-            parser = (Parser) plexus.lookup( Parser.ROLE, "twiki" );
-        }
-        else if ( format.equals( XDOC_PARSER ) )
-        {
-            parser = (Parser) plexus.lookup( Parser.ROLE, "xdoc" );
-        }
-        else if ( format.equals( XHTML_PARSER ) )
-        {
-            parser = (Parser) plexus.lookup( Parser.ROLE, "xhtml" );
-        }
-
-        if ( parser == null )
-        {
-            throw new IllegalArgumentException( "Parser not found for: " + format );
-        }
-
-        return parser;
-    }
-
-    /**
-     * @param format
-     * @param writer
-     * @return an instance of <code>Sink</code> depending the format.
-        throws ComponentLookupException if any
-     * @throws IllegalArgumentException if any
-     */
-    private static Sink getSink( PlexusContainer plexus, String format, Writer writer )
-        throws ComponentLookupException
-    {
-        SinkFactory factory = (SinkFactory) plexus.lookup( SinkFactory.ROLE, format );
-
-        if ( factory == null )
-        {
-            throw new IllegalArgumentException( "SinkFactory not found for: " + format );
-        }
-
-        Sink sink = factory.createSink( writer );
-
-        if ( sink == null )
-        {
-            throw new IllegalArgumentException( "Sink was not instanciated: " + format );
-        }
-
-        return sink;
-    }
-
-    /**
-     * @param inputFile not null
-     * @param inputEncoding could be null
-     * @param output not null
-     * @param parser not null
+     * @param inputFile a not null existing file.
+     * @param inputEncoding a not null supported encoding or {@link InputFileWrapper#AUTO_ENCODING}
+     * @param inputFormat  a not null supported format or {@link InputFileWrapper#AUTO_FORMAT}
+     * @param output not null OutputFileWrapper object
      * @throws ConverterException if any
+     * @throws UnsupportedFormatException if any
      */
-    private void parse( File inputFile, String inputEncoding, OutputFileWrapper output, Parser parser )
-        throws ConverterException
+    private void parse( File inputFile, String inputEncoding, String inputFormat, OutputFileWrapper output )
+        throws ConverterException, UnsupportedFormatException
     {
         if ( getLog().isDebugEnabled() )
         {
@@ -383,6 +311,35 @@ public class DefaultConverter
                             "Parsing file from '" + inputFile.getAbsolutePath() + "' with the encoding '"
                                 + inputEncoding + "' to '" + output.getFile().getAbsolutePath()
                                 + "' with the encoding '" + output.getEncoding() + "'" );
+        }
+
+        if ( inputEncoding.equals( InputFileWrapper.AUTO_ENCODING ) )
+        {
+            inputEncoding = autoDetectEncoding( inputFile );
+            if ( getLog().isDebugEnabled() )
+            {
+                getLog().debug( "Auto detect encoding: " + inputEncoding );
+            }
+        }
+
+        if ( inputFormat.equals( InputFileWrapper.AUTO_FORMAT ) )
+        {
+            inputFormat = autoDetectFormat( inputFile, inputEncoding );
+            if ( getLog().isDebugEnabled() )
+            {
+                getLog().debug( "Auto detect input format: " + inputFormat );
+            }
+        }
+
+        Parser parser;
+        try
+        {
+            parser = ConverterUtil.getParser( plexus, inputFormat, SUPPORTED_FROM_FORMAT );
+            parser.enableLogging( log );
+        }
+        catch ( ComponentLookupException e )
+        {
+            throw new ConverterException( "ComponentLookupException: " + e.getMessage(), e );
         }
 
         File outputFile;
@@ -440,7 +397,8 @@ public class DefaultConverter
         try
         {
             String outputEncoding;
-            if ( StringUtils.isEmpty( output.getEncoding() ) )
+            if ( StringUtils.isEmpty( output.getEncoding() )
+                || output.getEncoding().equals( OutputFileWrapper.AUTO_ENCODING ) )
             {
                 outputEncoding = inputEncoding;
             }
@@ -459,7 +417,7 @@ public class DefaultConverter
         Sink sink;
         try
         {
-            sink = getSink( plexus, output.getFormat(), writer );
+            sink = ConverterUtil.getSink( plexus, output.getFormat(), writer, SUPPORTED_TO_FORMAT );
         }
         catch ( ComponentLookupException e )
         {
@@ -524,5 +482,226 @@ public class DefaultConverter
 
         plexus.dispose();
         plexus = null;
+    }
+
+    /**
+     * @param f not null file
+     * @return the detected encoding for f or <code>null</code> if not able to detect it.
+     * @throws IllegalArgumentException if f is not a file.
+     * @throws UnsupportedOperationException if could not detect the file encoding.
+     * @see {@link XmlStreamReader#getEncoding()} for xml files
+     * @see {@link CharsetDetector#detect()} for text files
+     */
+    private static String autoDetectEncoding( File f )
+    {
+        if ( !f.isFile() )
+        {
+            throw new IllegalArgumentException( "The file '" + f.getAbsolutePath()
+                + "' is not a file, could not detect encoding." );
+        }
+
+        Reader reader = null;
+        InputStream is = null;
+        try
+        {
+            is = new BufferedInputStream( new FileInputStream( f ) );
+
+            if ( isXML( f ) )
+            {
+                reader = ReaderFactory.newXmlReader( f );
+                return ( (XmlStreamReader) reader ).getEncoding();
+            }
+
+            CharsetDetector detector = new CharsetDetector();
+            detector.setText( is );
+            CharsetMatch match = detector.detect();
+
+            return match.getName().toUpperCase( Locale.ENGLISH );
+        }
+        catch ( IOException e )
+        {
+            // nop
+        }
+        finally
+        {
+            IOUtil.close( reader );
+            IOUtil.close( is );
+        }
+
+        StringBuffer msg = new StringBuffer();
+        msg.append( "Could not detect the encoding for file: " );
+        msg.append( f.getAbsolutePath() );
+        msg.append( "\n Specify explicitly the encoding." );
+        throw new UnsupportedOperationException( msg.toString() );
+    }
+
+    /**
+     * Determines if a given File shall be handled as XML.
+     *
+     * @param f not null file
+     * @return <code>true</code> if the given file has XML content, <code>fale</code> otherwise.
+     */
+    private static boolean isXML( File f )
+    {
+        if ( !f.isFile() )
+        {
+            throw new IllegalArgumentException( "The file '" + f.getAbsolutePath() + "' is not a file." );
+        }
+
+        try
+        {
+            XmlPullParser parser = new MXParser();
+            parser.setInput( new FileReader( f ) );
+            parser.nextToken();
+
+            return true;
+        }
+        catch ( Exception e )
+        {
+            return false;
+        }
+    }
+
+    /**
+     * Auto detect Doxia format for the given file depending:
+     * <ul>
+     * <li>the file name for TextMarkup based Doxia files</li>
+     * <li>the file content for XMLMarkup based Doxia files</li>
+     * </ul>
+     *
+     * @param f not null file
+     * @param encoding a not null encoding.
+     * @return the detected encoding from f.
+     * @throws IllegalArgumentException if f is not a file.
+     * @throws UnsupportedOperationException if could not detect the Doxia format.
+     */
+    private static String autoDetectFormat( File f, String encoding )
+    {
+        if ( !f.isFile() )
+        {
+            throw new IllegalArgumentException( "The file '" + f.getAbsolutePath()
+                + "' is not a file, could not detect format." );
+        }
+
+        for ( int i = 0; i < SUPPORTED_FROM_FORMAT.length; i++ )
+        {
+            // Handle Doxia text files
+            if ( SUPPORTED_FROM_FORMAT[i].equalsIgnoreCase( APT_PARSER ) && isDoxiaFormat( f, SUPPORTED_FROM_FORMAT[i] ) )
+            {
+                return SUPPORTED_FROM_FORMAT[i];
+            }
+            else if ( SUPPORTED_FROM_FORMAT[i].equalsIgnoreCase( CONFLUENCE_PARSER )
+                && isDoxiaFormat( f, SUPPORTED_FROM_FORMAT[i] ) )
+            {
+                return SUPPORTED_FROM_FORMAT[i];
+            }
+            else if ( SUPPORTED_FROM_FORMAT[i].equalsIgnoreCase( TWIKI_PARSER )
+                && isDoxiaFormat( f, SUPPORTED_FROM_FORMAT[i] ) )
+            {
+                return SUPPORTED_FROM_FORMAT[i];
+            }
+
+            // Handle Doxia xml files
+            String firstTag = getFirstTag( f );
+            if ( firstTag == null )
+            {
+                continue;
+            }
+            else if ( firstTag.equalsIgnoreCase( "article" )
+                && SUPPORTED_FROM_FORMAT[i].equalsIgnoreCase( DOCBOOK_PARSER ) )
+            {
+                return SUPPORTED_FROM_FORMAT[i];
+            }
+            else if ( firstTag.equalsIgnoreCase( "faqs" )
+                && SUPPORTED_FROM_FORMAT[i].equalsIgnoreCase( FML_PARSER ) )
+            {
+                return SUPPORTED_FROM_FORMAT[i];
+            }
+            else if ( firstTag.equalsIgnoreCase( "document" )
+                && SUPPORTED_FROM_FORMAT[i].equalsIgnoreCase( XDOC_PARSER ) )
+            {
+                return SUPPORTED_FROM_FORMAT[i];
+            }
+            else if ( firstTag.equalsIgnoreCase( "html" )
+                && SUPPORTED_FROM_FORMAT[i].equalsIgnoreCase( XHTML_PARSER ) )
+            {
+                return SUPPORTED_FROM_FORMAT[i];
+            }
+        }
+
+        StringBuffer msg = new StringBuffer();
+        msg.append( "Could not detect the Doxia format for file: " );
+        msg.append( f.getAbsolutePath() );
+        msg.append( "\n Specify explicitly the Doxia format." );
+        throw new UnsupportedOperationException( msg.toString() );
+    }
+
+    /**
+     * @param f not null
+     * @param format could be null
+     * @return <code>true</code> if the file name computes the format.
+     */
+    private static boolean isDoxiaFormat( File f, String format )
+    {
+        if ( f == null )
+        {
+            throw new IllegalArgumentException( "f is required." );
+        }
+
+        Pattern pattern = Pattern.compile( "(.*?)\\." + format.toLowerCase( Locale.ENGLISH ) + "$" );
+        Matcher matcher = pattern.matcher( f.getName().toLowerCase( Locale.ENGLISH ) );
+
+        return matcher.matches();
+    }
+
+    /**
+     * @param xmlFile not null and should be a file.
+     * @return the first tag name if found, <code>null</code> in other case.
+     */
+    private static String getFirstTag( File xmlFile )
+    {
+        if ( xmlFile == null )
+        {
+            throw new IllegalArgumentException( "f is required." );
+        }
+        if ( !xmlFile.isFile() )
+        {
+            throw new IllegalArgumentException( "The file '" + xmlFile.getAbsolutePath() + "' is not a file." );
+        }
+
+        Reader reader = null;
+        try
+        {
+            reader = ReaderFactory.newXmlReader( xmlFile );
+            XmlPullParser parser = new MXParser();
+            parser.setInput( reader );
+            int eventType = parser.getEventType();
+            while ( eventType != XmlPullParser.END_DOCUMENT )
+            {
+                if ( eventType == XmlPullParser.START_TAG )
+                {
+                    return parser.getName();
+                }
+                eventType = parser.nextToken();
+            }
+        }
+        catch ( FileNotFoundException e )
+        {
+            return null;
+        }
+        catch ( XmlPullParserException e )
+        {
+            return null;
+        }
+        catch ( IOException e )
+        {
+            return null;
+        }
+        finally
+        {
+            IOUtil.close( reader );
+        }
+
+        return null;
     }
 }

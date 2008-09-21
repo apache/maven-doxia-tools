@@ -21,22 +21,14 @@ package org.apache.maven.doxia.wrapper;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.Reader;
-import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.Locale;
 
 import org.codehaus.plexus.util.IOUtil;
-import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.StringUtils;
-import org.codehaus.plexus.util.xml.XmlStreamReader;
 
 import com.ibm.icu.text.CharsetDetector;
-import com.ibm.icu.text.CharsetMatch;
 
 /**
  * Abstract File wrapper for Doxia converter.
@@ -44,15 +36,54 @@ import com.ibm.icu.text.CharsetMatch;
  * @author <a href="mailto:vincent.siveton@gmail.com">Vincent Siveton</a>
  * @version $Id$
  */
-public abstract class AbstractFileWrapper
+abstract class AbstractFileWrapper
     extends AbstractWrapper
 {
+    public static final String AUTO_ENCODING = "auto";
+
     /** serialVersionUID */
     static final long serialVersionUID = 6072685230076158590L;
 
     private File file;
 
     private String encoding;
+
+    /**
+     *
+     * @param absolutePath not null
+     * @param format could be null
+     * @param encoding could be null
+     * @param supportedFormat not null
+     * @throws UnsupportedEncodingException if the encoding is unsupported.
+     * @throws IllegalArgumentException if any
+     */
+    AbstractFileWrapper( String absolutePath, String format, String encoding, String[] supportedFormat )
+        throws UnsupportedEncodingException
+    {
+        super( format, supportedFormat );
+
+        if ( StringUtils.isEmpty( absolutePath ) )
+        {
+            throw new IllegalArgumentException( "absolutePath is required" );
+        }
+
+        File file = new File( absolutePath );
+        if ( !file.isAbsolute() )
+        {
+            file = new File( new File( "" ).getAbsolutePath(), absolutePath );
+        }
+        this.file = file;
+
+        if ( StringUtils.isNotEmpty( encoding ) && !encoding.equalsIgnoreCase( encoding )
+            && !validateEncoding( encoding ) )
+        {
+            StringBuffer msg = new StringBuffer();
+            msg.append( "The encoding '" + encoding + "' is not a valid one. The supported charsets are: " );
+            msg.append( StringUtils.join( CharsetDetector.getAllDetectableCharsets(), ", " ) );
+            throw new UnsupportedEncodingException( msg.toString() );
+        }
+        this.encoding = ( StringUtils.isNotEmpty( encoding ) ? encoding : AUTO_ENCODING );
+    }
 
     /**
      * @return the file
@@ -114,45 +145,6 @@ public abstract class AbstractFileWrapper
             IOUtil.close( osw );
         }
         return true;
-    }
-
-    /**
-     * @param f not null
-     * @return the detected encoding from f or <code>null</code> if an IOException occurred.
-     */
-    static String autoDetectEncoding( File f )
-    {
-        Reader reader = null;
-        FileInputStream is = null;
-        try
-        {
-            is = new FileInputStream( f );
-
-            StringWriter w = new StringWriter();
-            IOUtil.copy( is, w );
-            String content = w.toString();
-
-            if ( content.startsWith( "<?xml" ) )
-            {
-                reader = ReaderFactory.newXmlReader( f );
-                return ((XmlStreamReader)reader).getEncoding();
-            }
-
-            CharsetDetector detector = new CharsetDetector();
-            detector.setText( w.toString().getBytes() );
-            CharsetMatch match = detector.detect();
-
-            return match.getName().toUpperCase( Locale.ENGLISH );
-        }
-        catch ( IOException e )
-        {
-            return null;
-        }
-        finally
-        {
-            IOUtil.close( reader );
-            IOUtil.close( is );
-        }
     }
 
     /** {@inheritDoc} */

@@ -19,13 +19,8 @@ package org.apache.maven.doxia.wrapper;
  * under the License.
  */
 
-import java.io.File;
-
-import org.apache.maven.doxia.UnsupportedFormatException;
-import org.apache.maven.doxia.util.FormatUtils;
-import org.codehaus.plexus.util.StringUtils;
-
-import com.ibm.icu.text.CharsetDetector;
+import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
 
 /**
  * Wrapper for an input file.
@@ -43,60 +38,55 @@ public class InputFileWrapper
      * Private constructor.
      *
      * @param file not null
-     * @param format not null
+     * @param format could be null
      * @param charsetName could be null
      * @param supportedFormat not null
+     * @throws IllegalArgumentException if the file doesn't exist.
+     * @throws UnsupportedEncodingException if the encoding is unsupported.
+     * @throws FileNotFoundException if the file for absolutePath is not found.
      */
-    private InputFileWrapper( File file, String format, String charsetName, String[] supportedFormat )
+    private InputFileWrapper( String absolutePath, String format, String charsetName, String[] supportedFormat )
+        throws IllegalArgumentException, UnsupportedEncodingException, FileNotFoundException
     {
-        setFile( file );
-        setFormat( format );
-        setEncoding( charsetName );
-        setSupportedFormat( supportedFormat );
+        super( absolutePath, format, charsetName, supportedFormat );
+
+        if ( !getFile().exists() )
+        {
+            throw new FileNotFoundException( "The file '" + getFile().getAbsolutePath() + "' doesn't exist." );
+        }
     }
 
     /**
-     * @param absolutePath not null
-     * @param format not null
+     * @param absolutePath for a file or a directory not null.
+     * @param format could be null
      * @param charsetName could be null
      * @param supportedFormat not null
      * @return a type safe input reader
-     * @throws IllegalArgumentException if any
-     * @throws UnsupportedFormatException if any
-     * @see FormatUtils#getSupportedFormat(String, String, String[])
+     * @throws IllegalArgumentException if the file doesn't exist.
+     * @throws UnsupportedEncodingException if the encoding is unsupported.
+     * @throws FileNotFoundException if the file for absolutePath is not found.
+     * @see #valueOf(String, String, String, String[]) using AUTO_FORMAT
      */
-    public static InputFileWrapper valueOf( String absolutePath, String format, String charsetName, String[] supportedFormat )
-        throws UnsupportedFormatException
+    public static InputFileWrapper valueOf( String absolutePath, String format, String[] supportedFormat )
+        throws IllegalArgumentException, UnsupportedEncodingException, FileNotFoundException
     {
-        if ( StringUtils.isEmpty( absolutePath ) )
-        {
-            throw new IllegalArgumentException( "absolutePath is required" );
-        }
-        if ( StringUtils.isNotEmpty( charsetName ) && !validateEncoding( charsetName ) )
-        {
-            StringBuffer msg = new StringBuffer();
-            msg.append( "The encoding '" + charsetName + "' is not a valid. The supported charsets are: " );
-            msg.append( StringUtils.join( CharsetDetector.getAllDetectableCharsets(), ", " ) );
-            throw new IllegalArgumentException( msg.toString() );
-        }
+        return valueOf( absolutePath, format, AUTO_FORMAT, supportedFormat );
+    }
 
-        File file = new File( absolutePath );
-        if ( !file.isAbsolute() )
-        {
-            file = new File( new File( "" ).getAbsolutePath(), absolutePath );
-        }
-
-        String encoding;
-        if ( StringUtils.isNotEmpty( charsetName ) )
-        {
-            encoding = charsetName;
-        }
-        else
-        {
-            encoding = autoDetectEncoding( file );
-        }
-
-        return new InputFileWrapper( file, FormatUtils.getSupportedFormat( file.getAbsolutePath(), format,
-                                                                           supportedFormat ), encoding, supportedFormat );
+    /**
+     * @param absolutePath for a wanted file or a wanted directory, not null.
+     * @param format could be null
+     * @param charsetName could be null
+     * @param supportedFormat not null
+     * @return a type safe input reader
+     * @throws IllegalArgumentException if the file doesn't exist.
+     * @throws UnsupportedEncodingException if the encoding is unsupported.
+     * @throws FileNotFoundException if the file for absolutePath is not found.
+     */
+    public static InputFileWrapper valueOf( String absolutePath, String format, String charsetName,
+                                            String[] supportedFormat )
+        throws IllegalArgumentException, UnsupportedEncodingException, FileNotFoundException
+    {
+        return new InputFileWrapper( absolutePath, format, charsetName, supportedFormat );
     }
 }

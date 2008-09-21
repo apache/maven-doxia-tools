@@ -19,13 +19,10 @@ package org.apache.maven.doxia.wrapper;
  * under the License.
  */
 
-import java.io.File;
+import java.io.UnsupportedEncodingException;
 
-import org.apache.maven.doxia.UnsupportedFormatException;
-import org.apache.maven.doxia.util.FormatUtils;
 import org.codehaus.plexus.util.StringUtils;
-
-import com.ibm.icu.text.CharsetDetector;
+import org.codehaus.plexus.util.WriterFactory;
 
 /**
  * Wrapper for an output file.
@@ -42,17 +39,22 @@ public class OutputFileWrapper
     /**
      * Private constructor.
      *
-     * @param file
-     * @param format
+     * @param file not null
+     * @param format not null
      * @param charsetName could be null
-     * @param supportedFormat
+     * @param supportedFormat not null.
+     * @throws IllegalArgumentException if any.
+     * @throws UnsupportedEncodingException if the encoding is unsupported.
      */
-    private OutputFileWrapper( File file, String format, String charsetName, String[] supportedFormat )
+    private OutputFileWrapper( String absolutePath, String format, String charsetName, String[] supportedFormat )
+        throws UnsupportedEncodingException
     {
-        setFile( file );
-        setFormat( format );
-        setEncoding( charsetName );
-        setSupportedFormat( supportedFormat );
+        super( absolutePath, format, charsetName, supportedFormat );
+
+        if ( getFormat().equalsIgnoreCase( AUTO_FORMAT ) )
+        {
+            throw new IllegalArgumentException( "output format could not be " + AUTO_FORMAT );
+        }
     }
 
     /**
@@ -61,34 +63,32 @@ public class OutputFileWrapper
      * @param charsetName could be null
      * @param supportedFormat not null
      * @return a type safe output writer
-     * @throws IllegalArgumentException if any
-     * @throws UnsupportedFormatException if any
-     * @see FormatUtils#getSupportedFormat(String, String, String[])
+     * @throws IllegalArgumentException if any.
+     * @throws UnsupportedEncodingException if the encoding is unsupported.
      */
-    public static OutputFileWrapper valueOf( String absolutePath, String format, String charsetName, String[] supportedFormat )
-        throws UnsupportedFormatException
+    public static OutputFileWrapper valueOf( String absolutePath, String format, String[] supportedFormat )
+        throws IllegalArgumentException, UnsupportedEncodingException
     {
-        if ( StringUtils.isEmpty( absolutePath ) )
-        {
-            throw new IllegalArgumentException( "absolutePath is required" );
-        }
-        if ( StringUtils.isNotEmpty( charsetName ) && !validateEncoding( charsetName ) )
-        {
-            StringBuffer msg = new StringBuffer();
-            msg.append( "The encoding '" + charsetName + "' is not a valid. The supported charsets are: " );
-            msg.append( StringUtils.join( CharsetDetector.getAllDetectableCharsets(), ", " ) );
-            throw new IllegalArgumentException( msg.toString() );
-        }
+        return valueOf( absolutePath, format, WriterFactory.UTF_8, supportedFormat );
+    }
 
-        File file = new File( absolutePath );
-
-        if ( !file.isAbsolute() )
+    /**
+     * @param absolutePath not null
+     * @param format not null
+     * @param charsetName could be null
+     * @param supportedFormat not null
+     * @return a type safe output writer
+     * @throws IllegalArgumentException if any.
+     * @throws UnsupportedEncodingException if the encoding is unsupported.
+     */
+    public static OutputFileWrapper valueOf( String absolutePath, String format, String charsetName,
+                                             String[] supportedFormat )
+        throws IllegalArgumentException, UnsupportedEncodingException
+    {
+        if ( StringUtils.isEmpty( format ) )
         {
-            file = new File( new File( "" ).getAbsolutePath(), absolutePath );
+            throw new IllegalArgumentException( "output format is required" );
         }
-
-        return new OutputFileWrapper( file, FormatUtils.getSupportedFormat( file.getAbsolutePath(), format,
-                                                                            supportedFormat ), charsetName,
-                                      supportedFormat );
+        return new OutputFileWrapper( absolutePath, format, charsetName, supportedFormat );
     }
 }

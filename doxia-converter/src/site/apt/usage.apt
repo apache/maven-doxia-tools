@@ -3,7 +3,7 @@
  ------
  Vincent Siveton
  ------
- March 2007
+ 2008-09-21
  ------
 
 ~~ Licensed to the Apache Software Foundation (ASF) under one
@@ -35,23 +35,34 @@ Usage
 +-----+
 # java -jar target/apache-doxia-1.0-SNAPSHOT-jar-with-dependencies.jar -h
 
-usage: doxia [options] [-in <arg>] [-from <arg>] [-out <arg>] [-to <arg>]
-
+usage: doxia [options] -in <arg> [-from <arg>] [-inEncoding <arg>] -out
+             <arg> -to <arg> [-outEncoding <arg>]
 
 Options:
- -e,--errors           Produce execution error messages
- -from <arg>           From format
- -h,--help             Display help information
- -in,--input <arg>     Input file or directory
- -out,--output <arg>   Output directory
- -to <arg>             To format
- -v,--version          Display version information
- -X,--debug            Produce execution debug output
+ -e,--errors                           Produce execution error messages
+ -from <arg>                           From format
+ -h,--help                             Display help information
+ -in,--input <arg>                     Input file or directory
+ -inEncoding,--inputEncoding <arg>     Input file encoding. If not
+                                       specified, autodetect the input encoding.
+ -out,--output <arg>                   Output file or directory
+ -outEncoding,--outputEncoding <arg>   Output file encoding. If not
+                                       specified, use the input encoding (or detected).
+ -to <arg>                             To format
+ -v,--version                          Display version information
+ -X,--debug                            Produce execution debug output
 
-Supported Format:
-from: apt, confluence, docbook, fml, twiki, xdoc, xhtml
+Supported Formats:
+from: apt, confluence, docbook, fml, twiki, xdoc, xhtml or autodetect
 out: apt, docbook, fo, itext, latex, rtf, xdoc, xhtml
+Supported Encoding:
+UTF-8, UTF-16BE, UTF-16LE, UTF-32BE, UTF-32LE, Shift_JIS, ISO-2022-JP,
+ISO-2022-CN, ISO-2022-KR, GB18030, EUC-JP, EUC-KR, Big5, ISO-8859-1,
+ISO-8859-2, ISO-8859-5, ISO-8859-6, ISO-8859-7, ISO-8859-8, windows-1251,
+windows-1256, KOI8-R, ISO-8859-9
 +-----+
+
+ <<Note>>: The input parameters (i.e. encoding and format) could be auto detected.
 
 * Command Line Execution
 

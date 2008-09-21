@@ -31,6 +31,8 @@ import org.apache.commons.cli.ParseException;
 import org.apache.maven.doxia.DefaultConverter;
 import org.codehaus.plexus.util.StringUtils;
 
+import com.ibm.icu.text.CharsetDetector;
+
 /**
  * Manager for Doxia converter CLI options.
  *
@@ -40,34 +42,34 @@ import org.codehaus.plexus.util.StringUtils;
 class CLIManager
 {
     /** h character */
-    public static final char HELP = 'h';
+    static final char HELP = 'h';
 
     /** v character */
-    public static final char VERSION = 'v';
+    static final char VERSION = 'v';
 
     /** in String */
-    public static final String IN = "in";
+    static final String IN = "in";
 
     /** out String */
-    public static final String OUT = "out";
+    static final String OUT = "out";
 
     /** from String */
-    public static final String FROM = "from";
+    static final String FROM = "from";
 
     /** to String */
-    public static final String TO = "to";
+    static final String TO = "to";
 
     /** inEncoding String */
-    public static final String INENCODING = "inEncoding";
+    static final String INENCODING = "inEncoding";
 
     /** outEncoding String */
-    public static final String OUTENCODING = "outEncoding";
+    static final String OUTENCODING = "outEncoding";
 
     /** X character */
-    public static final char DEBUG = 'X';
+    static final char DEBUG = 'X';
 
     /** e character */
-    public static final char ERRORS = 'e';
+    static final char ERRORS = 'e';
 
     private static final Options options;
 
@@ -75,38 +77,49 @@ class CLIManager
     {
         options = new Options();
 
-        options.addOption( OptionBuilder.withLongOpt( "help" ).withDescription( "Display help information" )
-            .create( HELP ) );
-        options.addOption( OptionBuilder.withLongOpt( "version" ).withDescription( "Display version information" )
-            .create( VERSION ) );
+        options.addOption( OptionBuilder.withLongOpt( "help" ).withDescription( "Display help information." )
+                                        .create( HELP ) );
+        options.addOption( OptionBuilder.withLongOpt( "version" ).withDescription( "Display version information." )
+                                        .create( VERSION ) );
 
-        options.addOption( OptionBuilder.withLongOpt( "input" ).withDescription( "Input file or directory" ).hasArg()
-            .create( IN ) );
-        options.addOption( OptionBuilder.withLongOpt( "output" ).withDescription( "Output file or directory" ).hasArg()
-            .create( OUT ) );
-        options.addOption( OptionBuilder.withDescription( "From format" ).hasArg().create( FROM ) );
-        options.addOption( OptionBuilder.withDescription( "To format" ).hasArg().create( TO ) );
-        options.addOption( OptionBuilder.withLongOpt( "inputEncoding" ).withDescription( "Input file encoding. " +
-                "If not specified, autodetect the input encoding." )
-            .hasArg().create( INENCODING ) );
-        options.addOption( OptionBuilder.withLongOpt( "outputEncoding" ).withDescription( "Output file encoding. " +
-                "If not specified, use the input encoding (or detected)." )
-            .hasArg().create( OUTENCODING ) );
+        options.addOption( OptionBuilder.withLongOpt( "input" ).withDescription( "Input file or directory." )
+                                        .hasArg().create( IN ) );
+        options.addOption( OptionBuilder.withLongOpt( "output" ).withDescription( "Output file or directory." )
+                                        .hasArg().create( OUT ) );
+        options.addOption( OptionBuilder.withDescription( "From format. If not specified, try to autodetect it." )
+                                        .hasArg().create( FROM ) );
+        options.addOption( OptionBuilder.withDescription( "To format." ).hasArg().create( TO ) );
+        options.addOption( OptionBuilder.withLongOpt( "inputEncoding" )
+                                        .withDescription(
+                                                          "Input file encoding. "
+                                                              + "If not specified, try to autodetect it." )
+                                        .hasArg().create( INENCODING ) );
+        options.addOption( OptionBuilder.withLongOpt( "outputEncoding" )
+                                        .withDescription(
+                                                          "Output file encoding. If not specified, use the "
+                                                              + "input encoding (or autodetected)." ).hasArg()
+                                        .create( OUTENCODING ) );
 
-        options.addOption( OptionBuilder.withLongOpt( "debug" ).withDescription( "Produce execution debug output" )
-            .create( DEBUG ) );
-        options.addOption( OptionBuilder.withLongOpt( "errors" ).withDescription( "Produce execution error messages" )
-            .create( ERRORS ) );
+        options.addOption( OptionBuilder.withLongOpt( "debug" )
+                                        .withDescription( "Produce execution debug output." ).create( DEBUG ) );
+        options.addOption( OptionBuilder.withLongOpt( "errors" )
+                                        .withDescription( "Produce execution error messages." ).create( ERRORS ) );
     }
 
     /**
-     * @param args
-     * @return
-     * @throws ParseException
+     * @param args not null.
+     * @return a not null command line.
+     * @throws ParseException if any
+     * @throws IllegalArgumentException is args is null
      */
-    public CommandLine parse( String[] args )
+    CommandLine parse( String[] args )
         throws ParseException
     {
+        if ( args == null )
+        {
+            throw new IllegalArgumentException( "args is required." );
+        }
+
         // We need to eat any quotes surrounding arguments...
         String[] cleanArgs = cleanArgs( args );
 
@@ -114,24 +127,30 @@ class CLIManager
         return parser.parse( options, cleanArgs );
     }
 
-    protected static void displayHelp()
+    static void displayHelp()
     {
         System.out.println();
 
         HelpFormatter formatter = new HelpFormatter();
-        formatter.printHelp( "doxia [options] [-in <arg>] [-from <arg>] [-inEncoding <arg>] [-out <arg>] "
-            + "[-to <arg>] [-outEncoding <arg>]\n", "\nOptions:", options, getSupportedFormat() );
+        formatter.printHelp( "doxia [options] -in <arg> [-from <arg>] [-inEncoding <arg>] -out <arg> "
+            + "-to <arg> [-outEncoding <arg>]\n", "\nOptions:", options, getSupportedFormatAndEncoding() );
     }
 
-    protected static void displaySupportedFormat()
+    private static String getSupportedFormatAndEncoding()
     {
-        System.out.println( getSupportedFormat() );
+        return getSupportedFormat() + "\n" + getSupportedEncoding();
     }
 
     private static String getSupportedFormat()
     {
         return "\nSupported Formats:\n from: " + StringUtils.join( DefaultConverter.SUPPORTED_FROM_FORMAT, ", " )
-            + "\n out: " + StringUtils.join( DefaultConverter.SUPPORTED_TO_FORMAT, ", " ) + "\n";
+            + " or autodetect" + "\n out: " + StringUtils.join( DefaultConverter.SUPPORTED_TO_FORMAT, ", " )
+            + "\n";
+    }
+
+    private static String getSupportedEncoding()
+    {
+        return "\nSupported Encoding:\n " + StringUtils.join( CharsetDetector.getAllDetectableCharsets(), ", " );
     }
 
     private String[] cleanArgs( String[] args )

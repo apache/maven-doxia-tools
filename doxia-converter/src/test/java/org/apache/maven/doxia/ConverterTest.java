@@ -24,6 +24,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.StringWriter;
 
+import junitx.util.PrivateAccessor;
+
 import org.apache.maven.doxia.wrapper.InputFileWrapper;
 import org.apache.maven.doxia.wrapper.InputReaderWrapper;
 import org.apache.maven.doxia.wrapper.OutputFileWrapper;
@@ -93,8 +95,10 @@ public class ConverterTest
         String out = getBasedir() + "/target/unit/";
         String to = "apt";
 
-        InputFileWrapper input = InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
-        OutputFileWrapper output = OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
+        InputFileWrapper input =
+            InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
+        OutputFileWrapper output =
+            OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
 
         converter.convert( input, output );
         assertTrue( new File( out, "Doxia.htm.apt" ).exists() );
@@ -116,8 +120,10 @@ public class ConverterTest
         String out = getBasedir() + "/target/unit/Doxia.apt";
         String to = "apt";
 
-        InputFileWrapper input = InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
-        OutputFileWrapper output = OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
+        InputFileWrapper input =
+            InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
+        OutputFileWrapper output =
+            OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
 
         converter.convert( input, output );
         assertTrue( new File( out ).exists() );
@@ -139,8 +145,10 @@ public class ConverterTest
         String out = getBasedir() + "/target/unit/file/apt/test.apt.xhtml";
         String to = "xhtml";
 
-        InputFileWrapper input = InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
-        OutputFileWrapper output = OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
+        InputFileWrapper input =
+            InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
+        OutputFileWrapper output =
+            OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
 
         converter.convert( input, output );
         assertTrue( new File( out ).exists() );
@@ -171,8 +179,10 @@ public class ConverterTest
         String out = getBasedir() + "/target/unit/file/confluence/test.confluence.xhtml";
         String to = "xhtml";
 
-        InputFileWrapper input = InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
-        OutputFileWrapper output = OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
+        InputFileWrapper input =
+            InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
+        OutputFileWrapper output =
+            OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
 
         converter.convert( input, output );
         assertTrue( new File( out ).exists() );
@@ -211,23 +221,25 @@ public class ConverterTest
         String out = getBasedir() + "/target/unit/file/docbook/test.docbook.xhtml";
         String to = "xhtml";
 
-        InputFileWrapper input = InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
-        OutputFileWrapper output = OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
+        InputFileWrapper input =
+            InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
+        OutputFileWrapper output =
+            OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
 
         converter.convert( input, output );
         assertTrue( new File( out ).exists() );
 
         // TODO: docbook output is still crap, see DOXIA-184
-        //        in = getBasedir() + "/target/unit/file/docbook/test.docbook.xhtml";
-        //        from = "xhtml";
-        //        out = getBasedir() + "/target/unit/file/docbook/test.docbook";
-        //        to = "docbook";
+        // in = getBasedir() + "/target/unit/file/docbook/test.docbook.xhtml";
+        // from = "xhtml";
+        // out = getBasedir() + "/target/unit/file/docbook/test.docbook";
+        // to = "docbook";
         //
-        //        input = InputFileWrapper.valueOf( in, from, converter.getInputFormats() );
-        //        output = OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
+        // input = InputFileWrapper.valueOf( in, from, converter.getInputFormats() );
+        // output = OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
         //
-        //        converter.convert( input, output );
-        //        assertTrue( new File( out ).exists() );
+        // converter.convert( input, output );
+        // assertTrue( new File( out ).exists() );
     }
 
     /**
@@ -244,8 +256,10 @@ public class ConverterTest
         String out = getBasedir() + "/target/unit/file/fml/test.fml.xhtml";
         String to = "xhtml";
 
-        InputFileWrapper input = InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
-        OutputFileWrapper output = OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
+        InputFileWrapper input =
+            InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
+        OutputFileWrapper output =
+            OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
 
         converter.convert( input, output );
         assertTrue( new File( out ).exists() );
@@ -284,8 +298,10 @@ public class ConverterTest
         String out = getBasedir() + "/target/unit/file/twiki/test.twiki.xhtml";
         String to = "xhtml";
 
-        InputFileWrapper input = InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
-        OutputFileWrapper output = OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
+        InputFileWrapper input =
+            InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
+        OutputFileWrapper output =
+            OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
 
         converter.convert( input, output );
         assertTrue( new File( out ).exists() );
@@ -324,8 +340,10 @@ public class ConverterTest
         String out = getBasedir() + "/target/unit/file/xdoc/test.xdoc.xhtml";
         String to = "xhtml";
 
-        InputFileWrapper input = InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
-        OutputFileWrapper output = OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
+        InputFileWrapper input =
+            InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
+        OutputFileWrapper output =
+            OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
 
         converter.convert( input, output );
         assertTrue( new File( out ).exists() );
@@ -356,8 +374,10 @@ public class ConverterTest
         String out = getBasedir() + "/target/unit/file/xhtml/test.xhtml.xhtml";
         String to = "xhtml";
 
-        InputFileWrapper input = InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
-        OutputFileWrapper output = OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
+        InputFileWrapper input =
+            InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
+        OutputFileWrapper output =
+            OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
 
         converter.convert( input, output );
         assertTrue( new File( out ).exists() );
@@ -391,21 +411,28 @@ public class ConverterTest
         File inFile = new File( in );
         File outFile = new File( out );
         outFile.getParentFile().mkdirs();
-        FileWriter fw = new FileWriter( outFile );
 
-        StringWriter writer = new StringWriter();
+        FileWriter fw = null;
+        try
+        {
+            fw = new FileWriter( outFile );
 
-        InputReaderWrapper input = InputReaderWrapper.valueOf( new FileReader( inFile ), from, converter
-            .getInputFormats() );
-        OutputWriterWrapper output = OutputWriterWrapper.valueOf( writer, to, converter
-            .getOutputFormats() );
+            StringWriter writer = new StringWriter();
 
-        converter.convert( input, output );
+            InputReaderWrapper input =
+                InputReaderWrapper.valueOf( new FileReader( inFile ), from, converter.getInputFormats() );
+            OutputWriterWrapper output = OutputWriterWrapper.valueOf( writer, to, converter.getOutputFormats() );
 
-        IOUtil.copy( writer.toString(), fw );
-        IOUtil.close( fw );
+            converter.convert( input, output );
 
-        assertTrue( outFile.exists() );
+            IOUtil.copy( writer.toString(), fw );
+
+            assertTrue( outFile.exists() );
+        }
+        finally
+        {
+            IOUtil.close( fw );
+        }
     }
 
     /**
@@ -425,20 +452,300 @@ public class ConverterTest
         File inFile = new File( in );
         File outFile = new File( out );
         outFile.getParentFile().mkdirs();
-        FileWriter fw = new FileWriter( outFile );
 
-        StringWriter writer = new StringWriter();
+        FileWriter fw = null;
+        try
+        {
+            fw = new FileWriter( outFile );
 
-        InputReaderWrapper input = InputReaderWrapper.valueOf( new FileReader( inFile ), from, converter
-            .getInputFormats() );
-        OutputWriterWrapper output = OutputWriterWrapper.valueOf( new FileWriter( outFile ), to, converter
-            .getOutputFormats() );
+            StringWriter writer = new StringWriter();
 
-        converter.convert( input, output );
+            InputReaderWrapper input =
+                InputReaderWrapper.valueOf( new FileReader( inFile ), from, converter.getInputFormats() );
+            OutputWriterWrapper output =
+                OutputWriterWrapper.valueOf( new FileWriter( outFile ), to, converter.getOutputFormats() );
 
-        IOUtil.copy( writer.toString(), fw );
-        IOUtil.close( fw );
+            converter.convert( input, output );
 
-        assertTrue( outFile.exists() );
+            IOUtil.copy( writer.toString(), fw );
+
+            assertTrue( outFile.exists() );
+        }
+        finally
+        {
+            IOUtil.close( fw );
+        }
+    }
+
+    /**
+     * Input xdoc (autodetect) reader / output writer
+     *
+     * @see Converter#convert(InputReaderWrapper, OutputWriterWrapper)
+     * @throws Exception if any
+     */
+    public void testAutoDetectConverter()
+        throws Exception
+    {
+        String in = getBasedir() + "/src/test/resources/unit/xdoc/test.xml";
+        String from = null;
+        String out = getBasedir() + "/target/unit/writer/apt/test.xdoc.apt";
+        String to = "xhtml";
+
+        File inFile = new File( in );
+        File outFile = new File( out );
+        outFile.getParentFile().mkdirs();
+
+        FileWriter fw = null;
+        try
+        {
+            fw = new FileWriter( outFile );
+
+            StringWriter writer = new StringWriter();
+
+            InputFileWrapper input =
+                InputFileWrapper.valueOf( inFile.getAbsolutePath(), from, converter.getInputFormats() );
+            OutputFileWrapper output =
+                OutputFileWrapper.valueOf( outFile.getAbsolutePath(), to, converter.getOutputFormats() );
+
+            converter.convert( input, output );
+
+            IOUtil.copy( writer.toString(), fw );
+
+            assertTrue( outFile.exists() );
+        }
+        finally
+        {
+            IOUtil.close( fw );
+        }
+
+        in = getBasedir() + "/src/test/resources/unit/apt/test.apt";
+        from = null;
+        out = getBasedir() + "/target/unit/writer/apt/test.apt.xhtml";
+        to = "xhtml";
+
+        inFile = new File( in );
+        outFile = new File( out );
+        outFile.getParentFile().mkdirs();
+
+        try
+        {
+            fw = new FileWriter( outFile );
+
+            StringWriter writer = new StringWriter();
+
+            InputFileWrapper input =
+                InputFileWrapper.valueOf( inFile.getAbsolutePath(), from, converter.getInputFormats() );
+            OutputFileWrapper output =
+                OutputFileWrapper.valueOf( outFile.getAbsolutePath(), to, converter.getOutputFormats() );
+
+            converter.convert( input, output );
+
+            IOUtil.copy( writer.toString(), fw );
+
+            assertTrue( outFile.exists() );
+        }
+        finally
+        {
+            IOUtil.close( fw );
+        }
+
+        in = getBasedir() + "/src/test/resources/unit/apt/test.unknown";
+        from = null;
+        out = getBasedir() + "/target/unit/writer/apt/test.apt.xhtml";
+        to = "xhtml";
+
+        inFile = new File( in );
+        outFile = new File( out );
+        outFile.getParentFile().mkdirs();
+
+        try
+        {
+            fw = new FileWriter( outFile );
+
+            InputFileWrapper input =
+                InputFileWrapper.valueOf( inFile.getAbsolutePath(), from, converter.getInputFormats() );
+            OutputFileWrapper output =
+                OutputFileWrapper.valueOf( outFile.getAbsolutePath(), to, converter.getOutputFormats() );
+
+            converter.convert( input, output );
+
+            assertFalse( true );
+        }
+        catch ( UnsupportedOperationException e )
+        {
+            assertTrue( true );
+        }
+        finally
+        {
+            IOUtil.close( fw );
+        }
+    }
+
+    /**
+     * Test {@link DefaultConverter#autoDetectEncoding( f )}
+     *
+     * @throws Throwable
+     */
+    public void testAutodetectEncoding()
+        throws Throwable
+    {
+        String in = getBasedir() + "/src/test/resources/unit/apt/test.apt";
+        File f = new File( in );
+        String result =
+            (String) PrivateAccessor.invoke( DefaultConverter.class, "autoDetectEncoding",
+                                             new Class[] { File.class }, new Object[] { f } );
+        assertEquals( result, "ISO-8859-1" );
+
+        in = getBasedir() + "/src/test/resources/unit/confluence/test.confluence";
+        f = new File( in );
+        result =
+            (String) PrivateAccessor.invoke( DefaultConverter.class, "autoDetectEncoding",
+                                             new Class[] { File.class }, new Object[] { f } );
+        assertEquals( result, "ISO-8859-1" );
+
+        in = getBasedir() + "/src/test/resources/unit/docbook/test.xml";
+        f = new File( in );
+        result =
+            (String) PrivateAccessor.invoke( DefaultConverter.class, "autoDetectEncoding",
+                                             new Class[] { File.class }, new Object[] { f } );
+        assertEquals( result, "UTF-8" );
+
+        in = getBasedir() + "/src/test/resources/unit/fml/test.fml";
+        f = new File( in );
+        result =
+            (String) PrivateAccessor.invoke( DefaultConverter.class, "autoDetectEncoding",
+                                             new Class[] { File.class }, new Object[] { f } );
+        assertEquals( result, "ISO-8859-1" );
+
+        in = getBasedir() + "/src/test/resources/unit/twiki/test.twiki";
+        f = new File( in );
+        result =
+            (String) PrivateAccessor.invoke( DefaultConverter.class, "autoDetectEncoding",
+                                             new Class[] { File.class }, new Object[] { f } );
+        assertEquals( result, "ISO-8859-1" );
+
+        in = getBasedir() + "/src/test/resources/unit/xhtml/test.xhtml";
+        f = new File( in );
+        result =
+            (String) PrivateAccessor.invoke( DefaultConverter.class, "autoDetectEncoding",
+                                             new Class[] { File.class }, new Object[] { f } );
+        assertEquals( result, "UTF-8" );
+    }
+
+    /**
+     * Test {@link DefaultConverter#isXML( f )}
+     *
+     * @throws Throwable
+     */
+    public void testIsXML()
+        throws Throwable
+    {
+        String in = getBasedir() + "/src/test/resources/unit/apt/test.apt";
+        File f = new File( in );
+        Boolean result =
+            (Boolean) PrivateAccessor.invoke( DefaultConverter.class, "isXML", new Class[] { File.class },
+                                              new Object[] { f } );
+        assertEquals( result, Boolean.FALSE );
+
+        in = getBasedir() + "/src/test/resources/unit/confluence/test.confluence";
+        f = new File( in );
+        result =
+            (Boolean) PrivateAccessor.invoke( DefaultConverter.class, "isXML", new Class[] { File.class },
+                                              new Object[] { f } );
+        assertEquals( result, Boolean.FALSE );
+
+        in = getBasedir() + "/src/test/resources/unit/docbook/test.xml";
+        f = new File( in );
+        result =
+            (Boolean) PrivateAccessor.invoke( DefaultConverter.class, "isXML", new Class[] { File.class },
+                                              new Object[] { f } );
+        assertEquals( result, Boolean.TRUE );
+
+        in = getBasedir() + "/src/test/resources/unit/fml/test.fml";
+        f = new File( in );
+        result =
+            (Boolean) PrivateAccessor.invoke( DefaultConverter.class, "isXML", new Class[] { File.class },
+                                              new Object[] { f } );
+        assertEquals( result, Boolean.TRUE );
+
+        in = getBasedir() + "/src/test/resources/unit/twiki/test.twiki";
+        f = new File( in );
+        result =
+            (Boolean) PrivateAccessor.invoke( DefaultConverter.class, "isXML", new Class[] { File.class },
+                                              new Object[] { f } );
+        assertEquals( result, Boolean.FALSE );
+
+        in = getBasedir() + "/src/test/resources/unit/xhtml/test.xhtml";
+        f = new File( in );
+        result =
+            (Boolean) PrivateAccessor.invoke( DefaultConverter.class, "isXML", new Class[] { File.class },
+                                              new Object[] { f } );
+        assertEquals( result, Boolean.TRUE );
+    }
+
+    /**
+     * Test {@link DefaultConverter#autoDetectFormat( f, encoding )}
+     *
+     * @throws Throwable
+     */
+    public void testAutodetectFormat()
+        throws Throwable
+    {
+        String in = getBasedir() + "/src/test/resources/unit/apt/test.apt";
+        File f = new File( in );
+        String result =
+            (String) PrivateAccessor.invoke( DefaultConverter.class, "autoDetectFormat", new Class[] { File.class,
+                String.class }, new Object[] { f, "UTF-8" } );
+        assertEquals( result, "apt" );
+
+        in = getBasedir() + "/src/test/resources/unit/apt/test.unknown";
+        f = new File( in );
+        try
+        {
+            result =
+                (String) PrivateAccessor.invoke( DefaultConverter.class, "autoDetectFormat", new Class[] { File.class,
+                    String.class }, new Object[] { f, "UTF-8" } );
+
+            assertFalse( true );
+        }
+        catch ( UnsupportedOperationException e )
+        {
+            assertTrue( true );
+        }
+
+        in = getBasedir() + "/src/test/resources/unit/confluence/test.confluence";
+        f = new File( in );
+        result =
+            (String) PrivateAccessor.invoke( DefaultConverter.class, "autoDetectFormat", new Class[] { File.class,
+                String.class }, new Object[] { f, "UTF-8" } );
+        assertEquals( result, "confluence" );
+
+        in = getBasedir() + "/src/test/resources/unit/docbook/test.xml";
+        f = new File( in );
+        result =
+            (String) PrivateAccessor.invoke( DefaultConverter.class, "autoDetectFormat", new Class[] { File.class,
+                String.class }, new Object[] { f, "UTF-8" } );
+        assertEquals( result, "docbook" );
+
+        in = getBasedir() + "/src/test/resources/unit/fml/test.fml";
+        f = new File( in );
+        result =
+            (String) PrivateAccessor.invoke( DefaultConverter.class, "autoDetectFormat", new Class[] { File.class,
+                String.class }, new Object[] { f, "UTF-8" } );
+        assertEquals( result, "fml" );
+
+        in = getBasedir() + "/src/test/resources/unit/twiki/test.twiki";
+        f = new File( in );
+        result =
+            (String) PrivateAccessor.invoke( DefaultConverter.class, "autoDetectFormat", new Class[] { File.class,
+                String.class }, new Object[] { f, "UTF-8" } );
+        assertEquals( result, "twiki" );
+
+        in = getBasedir() + "/src/test/resources/unit/xhtml/test.xhtml";
+        f = new File( in );
+        result =
+            (String) PrivateAccessor.invoke( DefaultConverter.class, "autoDetectFormat", new Class[] { File.class,
+                String.class }, new Object[] { f, "UTF-8" } );
+        assertEquals( result, "xhtml" );
     }
 }

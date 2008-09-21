@@ -1,7 +1,5 @@
 package org.apache.maven.doxia;
 
-import org.codehaus.plexus.util.StringUtils;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -21,6 +19,8 @@ import org.codehaus.plexus.util.StringUtils;
  * under the License.
  */
 
+import org.codehaus.plexus.util.StringUtils;
+
 /**
  * Wrap an exception that occurs if a format is not supported.
  *
@@ -37,8 +37,8 @@ public class UnsupportedFormatException
      * Constructs an UnsupportedFormatException with the specified
      * detail message.
      *
-     * @param format the unsupported format
-     * @param supportedFormat the supported formats
+     * @param format the unsupported format, not null
+     * @param supportedFormat the supported formats, not null
      */
     public UnsupportedFormatException( String format, String[] supportedFormat )
     {
@@ -50,8 +50,8 @@ public class UnsupportedFormatException
      * Construct a new UnsupportedFormatException with the specified
      * detail message and cause.
      *
-     * @param format the unsupported format
-     * @param supportedFormat the supported formats
+     * @param format the unsupported format, not null
+     * @param supportedFormat the supported formats, not null
      * This can later be retrieved by the Throwable.getMessage() method.
      * @param cause the cause. This can be retrieved later by the
      * Throwable.getCause() method. (A null value is permitted, and indicates

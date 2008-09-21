@@ -21,9 +21,6 @@ package org.apache.maven.doxia.wrapper;
 
 import java.io.Reader;
 
-import org.apache.maven.doxia.UnsupportedFormatException;
-import org.apache.maven.doxia.util.FormatUtils;
-
 /**
  * Wrapper for an input reader.
  *
@@ -31,7 +28,7 @@ import org.apache.maven.doxia.util.FormatUtils;
  * @version $Id$
  */
 public class InputReaderWrapper
-    extends AbstractFileWrapper
+    extends AbstractWrapper
 {
     /** serialVersionUID */
     static final long serialVersionUID = 3260213754615748766L;
@@ -41,13 +38,24 @@ public class InputReaderWrapper
     /**
      * Private constructor.
      *
-     * @param format
-     * @param supportedFormat
+     * @param format not null
+     * @param supportedFormat not null
+     * @throws IllegalArgumentException if the format equals AUTO_FORMAT.
      */
-    private InputReaderWrapper( String format, String[] supportedFormat )
+    private InputReaderWrapper( Reader reader, String format, String[] supportedFormat )
     {
-        setFormat( format );
-        setSupportedFormat( supportedFormat );
+        super( format, supportedFormat );
+
+        if ( getFormat().equalsIgnoreCase( AUTO_FORMAT ) )
+        {
+            throw new IllegalArgumentException( "input format is required" );
+        }
+
+        if ( reader == null )
+        {
+            throw new IllegalArgumentException( "input reader is required" );
+        }
+        this.reader = reader;
     }
 
     /**
@@ -64,21 +72,10 @@ public class InputReaderWrapper
      * @param supportedFormat not null
      * @return a type safe input reader
      * @throws IllegalArgumentException if any
-     * @throws UnsupportedFormatException if any
-     * @see FormatUtils#getSupportedFormat(String, String[])
      */
     public static InputReaderWrapper valueOf( Reader reader, String format, String[] supportedFormat )
-        throws UnsupportedFormatException
+        throws IllegalArgumentException
     {
-        if ( reader == null )
-        {
-            throw new IllegalArgumentException( "reader is required" );
-        }
-
-        InputReaderWrapper input = new InputReaderWrapper( FormatUtils.getSupportedFormat( format, supportedFormat ),
-                                                           supportedFormat );
-        input.reader = reader;
-
-        return input;
+        return new InputReaderWrapper( reader, format, supportedFormat );
     }
 }

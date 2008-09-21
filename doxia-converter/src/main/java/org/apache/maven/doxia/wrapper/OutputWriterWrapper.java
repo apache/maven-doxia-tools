@@ -19,10 +19,10 @@ package org.apache.maven.doxia.wrapper;
  * under the License.
  */
 
+import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 
-import org.apache.maven.doxia.UnsupportedFormatException;
-import org.apache.maven.doxia.util.FormatUtils;
+import org.codehaus.plexus.util.StringUtils;
 
 /**
  * Wrapper for an output writer.
@@ -31,7 +31,7 @@ import org.apache.maven.doxia.util.FormatUtils;
  * @version $Id$
  */
 public class OutputWriterWrapper
-    extends AbstractFileWrapper
+    extends AbstractWrapper
 {
     /** serialVersionUID */
     static final long serialVersionUID = 3329037527245430610L;
@@ -41,13 +41,20 @@ public class OutputWriterWrapper
     /**
      * Private constructor.
      *
-     * @param format
-     * @param supportedFormat
+     * @param format not null
+     * @param supportedFormat not null
+     * @throws IllegalArgumentException if any.
      */
-    private OutputWriterWrapper( String format, String[] supportedFormat )
+    private OutputWriterWrapper( Writer writer, String format, String[] supportedFormat )
     {
-        setFormat( format );
-        setSupportedFormat( supportedFormat );
+        super( format, supportedFormat );
+
+        if ( getFormat().equalsIgnoreCase( AUTO_FORMAT ) )
+        {
+            throw new IllegalArgumentException( "output format is required" );
+        }
+
+        this.writer = writer;
     }
 
     /**
@@ -63,23 +70,21 @@ public class OutputWriterWrapper
      * @param format not null
      * @param supportedFormat not null
      * @return a type safe output writer
-     * @throws IllegalArgumentException if any
-     * @throws UnsupportedFormatException if any
-     * @see FormatUtils#getSupportedFormat(String, String[])
+     * @throws IllegalArgumentException if any.
+     * @throws UnsupportedEncodingException if the encoding is unsupported.
      */
     public static OutputWriterWrapper valueOf( Writer writer, String format, String[] supportedFormat )
-        throws UnsupportedFormatException
+        throws IllegalArgumentException
     {
         if ( writer == null )
         {
-            throw new IllegalArgumentException( "writer is required" );
+            throw new IllegalArgumentException( "output writer is required" );
+        }
+        if ( StringUtils.isEmpty( format ) )
+        {
+            throw new IllegalArgumentException( "output format is required" );
         }
 
-        OutputWriterWrapper output = new OutputWriterWrapper(
-                                                              FormatUtils.getSupportedFormat( format, supportedFormat ),
-                                                              supportedFormat );
-        output.writer = writer;
-
-        return output;
+        return new OutputWriterWrapper( writer, format, supportedFormat );
     }
 }

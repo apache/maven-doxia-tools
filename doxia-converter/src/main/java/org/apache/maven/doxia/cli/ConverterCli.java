@@ -18,8 +18,10 @@
  */
 package org.apache.maven.doxia.cli;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
 import org.apache.commons.cli.CommandLine;
@@ -143,11 +145,15 @@ public class ConverterCli
 
             return 1;
         }
-        catch ( UnsupportedFormatException e )
+        catch ( UnsupportedEncodingException e )
         {
-            showFatalError( "Unsupported format", e, showErrors );
+            showFatalError( e.getMessage(), e, showErrors );
 
-            CLIManager.displaySupportedFormat();
+            return 1;
+        }
+        catch ( FileNotFoundException e )
+        {
+            showFatalError( e.getMessage(), e, showErrors );
 
             return 1;
         }
@@ -158,9 +164,7 @@ public class ConverterCli
         }
         catch ( UnsupportedFormatException e )
         {
-            showFatalError( "Unsupported format", e, showErrors );
-
-            CLIManager.displaySupportedFormat();
+            showFatalError( e.getMessage(), e, showErrors );
 
             return 1;
         }
@@ -193,7 +197,7 @@ public class ConverterCli
         {
             Properties properties = new Properties();
             resourceAsStream = ConverterCli.class.getClassLoader()
-                .getResourceAsStream( "META-INF/maven/org.apache.maven.doxia/doxia-convertor/pom.properties" );
+                .getResourceAsStream( "META-INF/maven/org.apache.maven.doxia/doxia-converter/pom.properties" );
 
             if ( resourceAsStream != null )
             {
@@ -201,17 +205,17 @@ public class ConverterCli
 
                 if ( properties.getProperty( "builtOn" ) != null )
                 {
-                    System.out.println( "Doxia Convertor version: " + properties.getProperty( "version", "unknown" )
+                    System.out.println( "Doxia Converter version: " + properties.getProperty( "version", "unknown" )
                         + " built on " + properties.getProperty( "builtOn" ) );
                 }
                 else
                 {
-                    System.out.println( "Doxia Convertor version: " + properties.getProperty( "version", "unknown" ) );
+                    System.out.println( "Doxia Converter version: " + properties.getProperty( "version", "unknown" ) );
                 }
             }
             else
             {
-                System.out.println( "Doxia Convertor version: " + properties.getProperty( "version", "unknown" ) );
+                System.out.println( "Doxia Converter version: " + properties.getProperty( "version", "unknown" ) );
             }
 
             System.out.println( "Java version: " + System.getProperty( "java.version", "<unknown java version>" ) );
