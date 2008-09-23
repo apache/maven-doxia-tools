@@ -504,14 +504,13 @@ public class DefaultConverter
         InputStream is = null;
         try
         {
-            is = new BufferedInputStream( new FileInputStream( f ) );
-
             if ( isXML( f ) )
             {
                 reader = ReaderFactory.newXmlReader( f );
                 return ( (XmlStreamReader) reader ).getEncoding();
             }
 
+            is = new BufferedInputStream( new FileInputStream( f ) );
             CharsetDetector detector = new CharsetDetector();
             detector.setText( is );
             CharsetMatch match = detector.detect();
@@ -548,10 +547,12 @@ public class DefaultConverter
             throw new IllegalArgumentException( "The file '" + f.getAbsolutePath() + "' is not a file." );
         }
 
+        Reader reader = null;
         try
         {
+            reader = new FileReader( f );
             XmlPullParser parser = new MXParser();
-            parser.setInput( new FileReader( f ) );
+            parser.setInput( reader );
             parser.nextToken();
 
             return true;
@@ -559,6 +560,10 @@ public class DefaultConverter
         catch ( Exception e )
         {
             return false;
+        }
+        finally
+        {
+            IOUtil.close( reader );
         }
     }
 
@@ -586,7 +591,8 @@ public class DefaultConverter
         for ( int i = 0; i < SUPPORTED_FROM_FORMAT.length; i++ )
         {
             // Handle Doxia text files
-            if ( SUPPORTED_FROM_FORMAT[i].equalsIgnoreCase( APT_PARSER ) && isDoxiaFormat( f, SUPPORTED_FROM_FORMAT[i] ) )
+            if ( SUPPORTED_FROM_FORMAT[i].equalsIgnoreCase( APT_PARSER )
+                && isDoxiaFormat( f, SUPPORTED_FROM_FORMAT[i] ) )
             {
                 return SUPPORTED_FROM_FORMAT[i];
             }
