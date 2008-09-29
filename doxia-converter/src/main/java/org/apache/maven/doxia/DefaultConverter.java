@@ -589,21 +589,23 @@ public class DefaultConverter
 
         for ( int i = 0; i < SUPPORTED_FROM_FORMAT.length; i++ )
         {
+            String supportedFromFormat = SUPPORTED_FROM_FORMAT[i];
+
             // Handle Doxia text files
-            if ( SUPPORTED_FROM_FORMAT[i].equalsIgnoreCase( APT_PARSER )
-                && isDoxiaFormat( f, SUPPORTED_FROM_FORMAT[i] ) )
+            if ( supportedFromFormat.equalsIgnoreCase( APT_PARSER )
+                && isDoxiaFormat( f, supportedFromFormat ) )
             {
-                return SUPPORTED_FROM_FORMAT[i];
+                return supportedFromFormat;
             }
-            else if ( SUPPORTED_FROM_FORMAT[i].equalsIgnoreCase( CONFLUENCE_PARSER )
-                && isDoxiaFormat( f, SUPPORTED_FROM_FORMAT[i] ) )
+            else if ( supportedFromFormat.equalsIgnoreCase( CONFLUENCE_PARSER )
+                && isDoxiaFormat( f, supportedFromFormat ) )
             {
-                return SUPPORTED_FROM_FORMAT[i];
+                return supportedFromFormat;
             }
-            else if ( SUPPORTED_FROM_FORMAT[i].equalsIgnoreCase( TWIKI_PARSER )
-                && isDoxiaFormat( f, SUPPORTED_FROM_FORMAT[i] ) )
+            else if ( supportedFromFormat.equalsIgnoreCase( TWIKI_PARSER )
+                && isDoxiaFormat( f, supportedFromFormat ) )
             {
-                return SUPPORTED_FROM_FORMAT[i];
+                return supportedFromFormat;
             }
 
             // Handle Doxia xml files
@@ -613,24 +615,24 @@ public class DefaultConverter
                 continue;
             }
             else if ( firstTag.equalsIgnoreCase( "article" )
-                && SUPPORTED_FROM_FORMAT[i].equalsIgnoreCase( DOCBOOK_PARSER ) )
+                && supportedFromFormat.equalsIgnoreCase( DOCBOOK_PARSER ) )
             {
-                return SUPPORTED_FROM_FORMAT[i];
+                return supportedFromFormat;
             }
             else if ( firstTag.equalsIgnoreCase( "faqs" )
-                && SUPPORTED_FROM_FORMAT[i].equalsIgnoreCase( FML_PARSER ) )
+                && supportedFromFormat.equalsIgnoreCase( FML_PARSER ) )
             {
-                return SUPPORTED_FROM_FORMAT[i];
+                return supportedFromFormat;
             }
             else if ( firstTag.equalsIgnoreCase( "document" )
-                && SUPPORTED_FROM_FORMAT[i].equalsIgnoreCase( XDOC_PARSER ) )
+                && supportedFromFormat.equalsIgnoreCase( XDOC_PARSER ) )
             {
-                return SUPPORTED_FROM_FORMAT[i];
+                return supportedFromFormat;
             }
             else if ( firstTag.equalsIgnoreCase( "html" )
-                && SUPPORTED_FROM_FORMAT[i].equalsIgnoreCase( XHTML_PARSER ) )
+                && supportedFromFormat.equalsIgnoreCase( XHTML_PARSER ) )
             {
-                return SUPPORTED_FROM_FORMAT[i];
+                return supportedFromFormat;
             }
         }
 
