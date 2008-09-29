@@ -614,22 +614,22 @@ public class DefaultConverter
             {
                 continue;
             }
-            else if ( firstTag.equalsIgnoreCase( "article" )
+            else if ( firstTag.equals( "article" )
                 && supportedFromFormat.equalsIgnoreCase( DOCBOOK_PARSER ) )
             {
                 return supportedFromFormat;
             }
-            else if ( firstTag.equalsIgnoreCase( "faqs" )
+            else if ( firstTag.equals( "faqs" )
                 && supportedFromFormat.equalsIgnoreCase( FML_PARSER ) )
             {
                 return supportedFromFormat;
             }
-            else if ( firstTag.equalsIgnoreCase( "document" )
+            else if ( firstTag.equals( "document" )
                 && supportedFromFormat.equalsIgnoreCase( XDOC_PARSER ) )
             {
                 return supportedFromFormat;
             }
-            else if ( firstTag.equalsIgnoreCase( "html" )
+            else if ( firstTag.equals( "html" )
                 && supportedFromFormat.equalsIgnoreCase( XHTML_PARSER ) )
             {
                 return supportedFromFormat;
