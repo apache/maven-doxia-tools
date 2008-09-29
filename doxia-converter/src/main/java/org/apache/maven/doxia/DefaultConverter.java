@@ -395,11 +395,8 @@ public class DefaultConverter
         }
 
         Reader reader;
-        FileInputStream is = null;
         try
         {
-            is = new FileInputStream( inputFile );
-
             if ( inputEncoding != null )
             {
                 if ( parser.getType() == Parser.XML_TYPE )
@@ -419,10 +416,6 @@ public class DefaultConverter
         catch ( IOException e )
         {
             throw new ConverterException( "IOException: " + e.getMessage(), e );
-        }
-        finally
-        {
-            IOUtil.close( is );
         }
 
         Writer writer;
