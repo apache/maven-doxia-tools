@@ -22,7 +22,6 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -538,7 +537,7 @@ public class DefaultConverter
      * Determines if a given File shall be handled as XML.
      *
      * @param f not null file
-     * @return <code>true</code> if the given file has XML content, <code>fale</code> otherwise.
+     * @return <code>true</code> if the given file has XML content, <code>false</code> otherwise.
      */
     private static boolean isXML( File f )
     {
@@ -550,7 +549,7 @@ public class DefaultConverter
         Reader reader = null;
         try
         {
-            reader = new FileReader( f );
+            reader = new XmlStreamReader( f );
             XmlPullParser parser = new MXParser();
             parser.setInput( reader );
             parser.nextToken();
