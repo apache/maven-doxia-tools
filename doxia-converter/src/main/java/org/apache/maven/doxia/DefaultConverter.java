@@ -27,12 +27,10 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -112,37 +110,6 @@ public class DefaultConverter
     /** Supported output format, i.e. supported Doxia Sink */
     public static final String[] SUPPORTED_TO_FORMAT =
         { APT_SINK, DOCBOOK_SINK, FO_SINK, ITEXT_SINK, LATEX_SINK, RTF_SINK, XDOC_SINK, XHTML_SINK };
-
-    private static final Set DOCBOOK_ROOT_ELEMENT = new HashSet();
-
-    static
-    {
-        DOCBOOK_ROOT_ELEMENT.add( "set" );
-        DOCBOOK_ROOT_ELEMENT.add( "book" );
-        DOCBOOK_ROOT_ELEMENT.add( "part" );
-        DOCBOOK_ROOT_ELEMENT.add( "chapter" );
-        DOCBOOK_ROOT_ELEMENT.add( "section" );
-        DOCBOOK_ROOT_ELEMENT.add( "sect1" );
-        DOCBOOK_ROOT_ELEMENT.add( "sect2" );
-        DOCBOOK_ROOT_ELEMENT.add( "sect3" );
-        DOCBOOK_ROOT_ELEMENT.add( "sect4" );
-        DOCBOOK_ROOT_ELEMENT.add( "sect5" );
-        DOCBOOK_ROOT_ELEMENT.add( "article" );
-        DOCBOOK_ROOT_ELEMENT.add( "preface" );
-        DOCBOOK_ROOT_ELEMENT.add( "partintro" );
-        DOCBOOK_ROOT_ELEMENT.add( "appendix" );
-        DOCBOOK_ROOT_ELEMENT.add( "bibliography" );
-        DOCBOOK_ROOT_ELEMENT.add( "reference" );
-        DOCBOOK_ROOT_ELEMENT.add( "bibliography" );
-        DOCBOOK_ROOT_ELEMENT.add( "bibliodiv" );
-        DOCBOOK_ROOT_ELEMENT.add( "glossary" );
-        DOCBOOK_ROOT_ELEMENT.add( "refentry" );
-        DOCBOOK_ROOT_ELEMENT.add( "refnamediv" );
-        DOCBOOK_ROOT_ELEMENT.add( "refsection" );
-        DOCBOOK_ROOT_ELEMENT.add( "refsect1" );
-        DOCBOOK_ROOT_ELEMENT.add( "refsect2" );
-        DOCBOOK_ROOT_ELEMENT.add( "refsect3" );
-    }
 
     /** Plexus container */
     private PlexusContainer plexus;
@@ -640,7 +607,7 @@ public class DefaultConverter
             {
                 continue;
             }
-            else if ( DOCBOOK_ROOT_ELEMENT.contains( firstTag )
+            else if ( firstTag.equals( "article" )
                 && supportedFromFormat.equalsIgnoreCase( DOCBOOK_PARSER ) )
             {
                 return supportedFromFormat;
