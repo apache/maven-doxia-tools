@@ -102,6 +102,7 @@ public class ConverterTest
 
         converter.convert( input, output );
         assertTrue( new File( out, "Doxia.htm.apt" ).exists() );
+        assertTrue( new File( out, "Doxia.htm.apt" ).length() != 0 );
 
         FileUtils.deleteDirectory( new File( getBasedir() + "/target/unit/" ) );
     }
@@ -127,6 +128,7 @@ public class ConverterTest
 
         converter.convert( input, output );
         assertTrue( new File( out ).exists() );
+        assertTrue( new File( out ).length() != 0 );
 
         FileUtils.deleteDirectory( new File( getBasedir() + "/target/unit/" ) );
     }
@@ -152,6 +154,7 @@ public class ConverterTest
 
         converter.convert( input, output );
         assertTrue( new File( out ).exists() );
+        assertTrue( new File( out ).length() != 0 );
 
         in = getBasedir() + "/target/unit/file/apt/test.apt.xhtml";
         from = "xhtml";
@@ -163,6 +166,7 @@ public class ConverterTest
 
         converter.convert( input, output );
         assertTrue( new File( out ).exists() );
+        assertTrue( new File( out ).length() != 0 );
     }
 
     /**
@@ -186,6 +190,7 @@ public class ConverterTest
 
         converter.convert( input, output );
         assertTrue( new File( out ).exists() );
+        assertTrue( new File( out ).length() != 0 );
 
         in = getBasedir() + "/target/unit/file/confluence/test.confluence.xhtml";
         from = "xhtml";
@@ -228,6 +233,7 @@ public class ConverterTest
 
         converter.convert( input, output );
         assertTrue( new File( out ).exists() );
+        assertTrue( new File( out ).length() != 0 );
 
         // TODO: docbook output is still crap, see DOXIA-184
         // in = getBasedir() + "/target/unit/file/docbook/test.docbook.xhtml";
@@ -263,6 +269,7 @@ public class ConverterTest
 
         converter.convert( input, output );
         assertTrue( new File( out ).exists() );
+        assertTrue( new File( out ).length() != 0 );
 
         in = getBasedir() + "/target/unit/file/fml/test.fml.xhtml";
         from = "xhtml";
@@ -305,6 +312,7 @@ public class ConverterTest
 
         converter.convert( input, output );
         assertTrue( new File( out ).exists() );
+        assertTrue( new File( out ).length() != 0 );
 
         in = getBasedir() + "/target/unit/file/twiki/test.twiki.xhtml";
         from = "xhtml";
@@ -347,6 +355,7 @@ public class ConverterTest
 
         converter.convert( input, output );
         assertTrue( new File( out ).exists() );
+        assertTrue( new File( out ).length() != 0 );
 
         in = getBasedir() + "/target/unit/file/xdoc/test.xdoc.xhtml";
         from = "xhtml";
@@ -358,6 +367,7 @@ public class ConverterTest
 
         converter.convert( input, output );
         assertTrue( new File( out ).exists() );
+        assertTrue( new File( out ).length() != 0 );
     }
 
     /**
@@ -381,6 +391,7 @@ public class ConverterTest
 
         converter.convert( input, output );
         assertTrue( new File( out ).exists() );
+        assertTrue( new File( out ).length() != 0 );
 
         in = getBasedir() + "/target/unit/file/xhtml/test.xhtml.xhtml";
         from = "xhtml";
@@ -392,6 +403,7 @@ public class ConverterTest
 
         converter.convert( input, output );
         assertTrue( new File( out ).exists() );
+        assertTrue( new File( out ).length() != 0 );
     }
 
     /**
@@ -426,13 +438,14 @@ public class ConverterTest
             converter.convert( input, output );
 
             IOUtil.copy( writer.toString(), fw );
-
-            assertTrue( outFile.exists() );
         }
         finally
         {
             IOUtil.close( fw );
         }
+
+        assertTrue( outFile.exists() );
+        assertTrue( outFile.length() != 0 );
     }
 
     /**
@@ -470,6 +483,7 @@ public class ConverterTest
             IOUtil.copy( writer.toString(), fw );
 
             assertTrue( outFile.exists() );
+            assertTrue( outFile.length() != 0 );
         }
         finally
         {
@@ -512,6 +526,7 @@ public class ConverterTest
             IOUtil.copy( writer.toString(), fw );
 
             assertTrue( outFile.exists() );
+            assertTrue( outFile.length() != 0 );
         }
         finally
         {
@@ -543,6 +558,7 @@ public class ConverterTest
             IOUtil.copy( writer.toString(), fw );
 
             assertTrue( outFile.exists() );
+            assertTrue( outFile.length() != 0 );
         }
         finally
         {
