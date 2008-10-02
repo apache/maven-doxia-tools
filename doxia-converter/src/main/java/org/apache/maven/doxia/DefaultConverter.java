@@ -267,21 +267,7 @@ public class DefaultConverter
                 getLog().debug( "Sink used: " + sink.getClass().getName() );
             }
 
-            try
-            {
-                parser.parse( input.getReader(), sink );
-            }
-            catch ( ParseException e )
-            {
-                throw new ConverterException( "ParseException: " + e.getMessage(), e );
-            }
-            finally
-            {
-                IOUtil.close( input.getReader() );
-                sink.flush();
-                sink.close();
-                IOUtil.close( output.getWriter() );
-            }
+            parse( parser, input.getFormat(), input.getReader(), sink, output.getWriter() );
         }
         finally
         {
@@ -420,6 +406,27 @@ public class DefaultConverter
         if ( getLog().isDebugEnabled() )
         {
             getLog().debug( "Sink used: " + sink.getClass().getName() );
+        }
+
+        parse( parser, inputFormat, reader, sink, writer );
+    }
+
+    /**
+     * @param parser not null
+     * @param reader not null
+     * @param sink not null
+     * @param writer not null
+     * @throws ConverterException if any
+     */
+    private void parse( Parser parser, String inputFormat, Reader reader, Sink sink, Writer writer )
+        throws ConverterException
+    {
+        // add warnings
+        if ( inputFormat.equals( DOCBOOK_PARSER ) && getLog().isWarnEnabled() )
+        {
+            getLog().warn(
+                           "Docbook parser has some known issues. "
+                               + "Please refer to http://jira.codehaus.org/browse/DOXIA-184" );
         }
 
         try
@@ -662,7 +669,7 @@ public class DefaultConverter
     {
         if ( xmlFile == null )
         {
-            throw new IllegalArgumentException( "f is required." );
+            throw new IllegalArgumentException( "xmlFile is required." );
         }
         if ( !xmlFile.isFile() )
         {
