@@ -20,9 +20,13 @@ package org.apache.maven.doxia.linkcheck.validation;
  */
 
 import java.io.File;
+import java.io.IOException;
+import java.io.Reader;
 import java.util.Locale;
 
 import org.apache.maven.doxia.linkcheck.model.LinkcheckFileResult;
+import org.codehaus.plexus.util.IOUtil;
+import org.codehaus.plexus.util.ReaderFactory;
 
 /**
  * A link validator solely for files on the local filesystem.
@@ -62,27 +66,50 @@ public final class FileLinkValidator implements LinkValidator
         return getFile( lvi ).getAbsolutePath();
     }
 
+    // ----------------------------------------------------------------------
+    // Private methods
+    // ----------------------------------------------------------------------
+
     /**
      * Returns the link of the given LinkValidationItem as a File.
      *
      * @param lvi The LinkValidationItem.
      * @return File the link as a File.
      */
-    protected File getFile( LinkValidationItem lvi )
+    private File getFile( LinkValidationItem lvi )
     {
         String link = lvi.getLink();
 
         if ( link.indexOf( '#' ) != -1 )
         {
+            String anchor = link.substring( link.indexOf( '#' ) + 1 );
             link = link.substring( 0, link.indexOf( '#' ) );
 
             // If the link was just #fred or similar, then the file is the file it came from
-            // XXX: Theoretically we could even validate the anchor tag?
-            if ( link.trim().length() == 0 )
+            if ( link.trim().length() == 0 ) // in the same file
             {
-                return lvi.getSource();
+                // the anchor exists?
+                String content = read( lvi.getSource() );
+                if ( content != null && content.indexOf( "name=\"" + anchor + "\"" ) != -1 )
+                {
+                    return lvi.getSource();
+                }
+
+                // return an invalid file
+                return new File( lvi.getLink() );
             }
+
+            // the anchor exists?
+            String content = read( new File( lvi.getSource().getParentFile(), link ) );
+            if ( content != null && content.indexOf( "name=\"" + anchor + "\"" ) != -1 )
+            {
+                return new File( lvi.getSource().getParentFile(), link );
+            }
+
+            // return an invalid file
+            return new File( lvi.getLink() );
         }
+
         if ( link.indexOf( '?' ) != -1 )
         {
             link = link.substring( 0, link.indexOf( '?' ) );
@@ -98,4 +125,29 @@ public final class FileLinkValidator implements LinkValidator
         return new File( lvi.getSource().getParentFile(), link );
     }
 
+    /**
+     * TODO take care of encoding
+     *
+     * @param f not null
+     * @return the content of the file or null if an error occurred.
+     */
+    private static String read( File f )
+    {
+        Reader reader = null;
+        try
+        {
+            reader = ReaderFactory.newPlatformReader( f );
+            return IOUtil.toString( reader );
+        }
+        catch ( IOException e )
+        {
+            // nop;
+        }
+        finally
+        {
+            IOUtil.close( reader );
+        }
+
+        return null;
+    }
 }
