@@ -73,7 +73,9 @@ under the License.
               <goal>xpp3-writer</goal>
             </goals>
             <configuration>
-              <model>src/main/mdo/linkcheck.mdo</model>
+              <models>
+                <model>src/main/mdo/linkcheck.mdo</model>
+              </models>
               <version>1.0.0</version>
             </configuration>
           </execution>
@@ -84,7 +86,9 @@ under the License.
               <goal>java</goal>
             </goals>
             <configuration>
-              <model>src/main/mdo/httpbean.mdo</model>
+              <models>
+                <model>src/main/mdo/httpbean.mdo</model>
+              </models>
               <version>1.0.0</version>
             </configuration>
           </execution>
