@@ -59,7 +59,6 @@
 
     <img src="figure" alt="Figure caption" />
 
-    <table align="center">
       <table align="center" border="1">
         <tr valign="top">
           <th align="center">Centered<br />cell 1,1</th>
@@ -73,11 +72,9 @@
         </tr>
       </table>
     <p><i>Table caption</i></p>
-    </table>
 
     <p>No grid, no caption:</p>
 
-    <table align="center">
       <table align="center" border="0">
         <tr valign="top">
           <td align="center">cell</td>
@@ -88,7 +85,6 @@
           <td align="center">cell</td>
         </tr>
       </table>
-    </table>
 
     <p>Horizontal line:</p>
     <hr />
