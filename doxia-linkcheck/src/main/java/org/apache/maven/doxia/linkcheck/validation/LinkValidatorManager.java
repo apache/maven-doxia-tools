@@ -22,6 +22,7 @@ package org.apache.maven.doxia.linkcheck.validation;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.maven.doxia.linkcheck.model.LinkcheckFileResult;
+import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.SelectorUtils;
 import org.codehaus.plexus.util.StringUtils;
 
@@ -227,16 +228,7 @@ public class LinkValidatorManager implements Serializable
         }
         finally
         {
-            try
-            {
-                is.close();
-            }
-            catch ( IOException e )
-            {
-                LOG.debug( "Unable to close stream!", e );
-
-                is = null;
-            }
+            IOUtil.close( is );
         }
     }
 
@@ -308,16 +300,7 @@ public class LinkValidatorManager implements Serializable
 
             dir = null;
 
-            try
-            {
-                os.close();
-            }
-            catch ( IOException e )
-            {
-                LOG.debug( "Unable to close stream!", e );
-
-                os = null;
-            }
+            IOUtil.close( os );
         }
     }
 

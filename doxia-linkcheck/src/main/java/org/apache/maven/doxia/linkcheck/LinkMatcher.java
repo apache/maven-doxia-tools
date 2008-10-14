@@ -29,6 +29,8 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.codehaus.plexus.util.IOUtil;
+
 /**
  * Link matcher. Reads the contents of a file and tries to match the following: <code>
  * <a href=""....
@@ -42,7 +44,6 @@ import java.util.regex.Pattern;
  */
 class LinkMatcher
 {
-
     /** Regexp for link matching. */
     private static final Pattern MATCH_PATTERN =
         Pattern.compile( "<(?>link|a|img|script)[^>]*?(?>href|src)\\s*?=\\s*?[\\\"'](.*?)[\\\"'][^>]*?",
@@ -83,7 +84,7 @@ class LinkMatcher
         }
         finally
         {
-            reader.close();
+            IOUtil.close( reader );
         }
 
         return pageBuffer;
