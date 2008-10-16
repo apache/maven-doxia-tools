@@ -103,13 +103,15 @@ public class DefaultConverter
 
     private static final String RTF_SINK = "rtf";
 
+    private static final String TWIKI_SINK = "twiki";
+
     private static final String XDOC_SINK = "xdoc";
 
     private static final String XHTML_SINK = "xhtml";
 
     /** Supported output format, i.e. supported Doxia Sink */
     public static final String[] SUPPORTED_TO_FORMAT =
-        { APT_SINK, DOCBOOK_SINK, FO_SINK, ITEXT_SINK, LATEX_SINK, RTF_SINK, XDOC_SINK, XHTML_SINK };
+        { APT_SINK, DOCBOOK_SINK, FO_SINK, ITEXT_SINK, LATEX_SINK, RTF_SINK, TWIKI_SINK, XDOC_SINK, XHTML_SINK };
 
     /** Plexus container */
     private PlexusContainer plexus;
