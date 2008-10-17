@@ -319,19 +319,10 @@ public class ConverterTest
         out = getBasedir() + "/target/unit/file/twiki/test.twiki";
         to = "twiki";
 
-        try
-        {
-            input = InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
-            output = OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
+        input = InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
+        output = OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
 
-            converter.convert( input, output );
-
-            assertFalse( true );
-        }
-        catch ( UnsupportedFormatException e )
-        {
-            assertTrue( true );
-        }
+        converter.convert( input, output );
     }
 
     /**
