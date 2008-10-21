@@ -93,6 +93,8 @@ public class DefaultConverter
 
     private static final String APT_SINK = "apt";
 
+    private static final String CONFLUENCE_SINK = "confluence";
+
     private static final String DOCBOOK_SINK = "docbook";
 
     private static final String FO_SINK = "fo";
@@ -111,7 +113,7 @@ public class DefaultConverter
 
     /** Supported output format, i.e. supported Doxia Sink */
     public static final String[] SUPPORTED_TO_FORMAT =
-        { APT_SINK, DOCBOOK_SINK, FO_SINK, ITEXT_SINK, LATEX_SINK, RTF_SINK, TWIKI_SINK, XDOC_SINK, XHTML_SINK };
+        { APT_SINK, CONFLUENCE_SINK, DOCBOOK_SINK, FO_SINK, ITEXT_SINK, LATEX_SINK, RTF_SINK, TWIKI_SINK, XDOC_SINK, XHTML_SINK };
 
     /** Plexus container */
     private PlexusContainer plexus;
