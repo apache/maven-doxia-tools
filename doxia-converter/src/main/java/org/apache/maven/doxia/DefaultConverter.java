@@ -159,15 +159,6 @@ public class DefaultConverter
     public void convert( InputFileWrapper input, OutputFileWrapper output )
         throws UnsupportedFormatException, ConverterException
     {
-        try
-        {
-            startPlexusContainer();
-        }
-        catch ( PlexusContainerException e )
-        {
-            throw new ConverterException( "PlexusContainerException: " + e.getMessage(), e );
-        }
-
         if ( input == null )
         {
             throw new IllegalArgumentException( "input is required" );
@@ -175,6 +166,15 @@ public class DefaultConverter
         if ( output == null )
         {
             throw new IllegalArgumentException( "output is required" );
+        }
+
+        try
+        {
+            startPlexusContainer();
+        }
+        catch ( PlexusContainerException e )
+        {
+            throw new ConverterException( "PlexusContainerException: " + e.getMessage(), e );
         }
 
         try
@@ -219,15 +219,6 @@ public class DefaultConverter
     public void convert( InputReaderWrapper input, OutputWriterWrapper output )
         throws UnsupportedFormatException, ConverterException
     {
-        try
-        {
-            startPlexusContainer();
-        }
-        catch ( PlexusContainerException e )
-        {
-            throw new ConverterException( "PlexusContainerException: " + e.getMessage(), e );
-        }
-
         if ( input == null )
         {
             throw new IllegalArgumentException( "input is required" );
@@ -235,6 +226,15 @@ public class DefaultConverter
         if ( output == null )
         {
             throw new IllegalArgumentException( "output is required" );
+        }
+
+        try
+        {
+            startPlexusContainer();
+        }
+        catch ( PlexusContainerException e )
+        {
+            throw new ConverterException( "PlexusContainerException: " + e.getMessage(), e );
         }
 
         try
@@ -597,17 +597,17 @@ public class DefaultConverter
 
             // Handle Doxia text files
             if ( supportedFromFormat.equalsIgnoreCase( APT_PARSER )
-                && isDoxiaFormat( f, supportedFromFormat ) )
+                && isDoxiaFileName( f, supportedFromFormat ) )
             {
                 return supportedFromFormat;
             }
             else if ( supportedFromFormat.equalsIgnoreCase( CONFLUENCE_PARSER )
-                && isDoxiaFormat( f, supportedFromFormat ) )
+                && isDoxiaFileName( f, supportedFromFormat ) )
             {
                 return supportedFromFormat;
             }
             else if ( supportedFromFormat.equalsIgnoreCase( TWIKI_PARSER )
-                && isDoxiaFormat( f, supportedFromFormat ) )
+                && isDoxiaFileName( f, supportedFromFormat ) )
             {
                 return supportedFromFormat;
             }
@@ -652,7 +652,7 @@ public class DefaultConverter
      * @param format could be null
      * @return <code>true</code> if the file name computes the format.
      */
-    private static boolean isDoxiaFormat( File f, String format )
+    private static boolean isDoxiaFileName( File f, String format )
     {
         if ( f == null )
         {
