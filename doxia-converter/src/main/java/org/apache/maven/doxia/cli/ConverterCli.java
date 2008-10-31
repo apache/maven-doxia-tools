@@ -37,7 +37,7 @@ import org.apache.maven.doxia.wrapper.OutputFileWrapper;
 import org.codehaus.plexus.util.Os;
 
 /**
- * Doxia converter CLI
+ * Doxia converter CLI.
  *
  * @author <a href="mailto:vincent.siveton@gmail.com">Vincent Siveton</a>
  * @version $Id$
@@ -82,7 +82,7 @@ public class ConverterCli
 
         if ( "1.4".compareTo( System.getProperty( "java.specification.version" ) ) > 0 )
         {
-            System.err.println( "Sorry, but JDK 1.4 or above is required to execute Maven. You appear to be using "
+            System.err.println( "Sorry, but JDK 1.4 or above is required to execute Doxia. You appear to be using "
                 + "Java:" );
             System.err.println( "java version \"" + System.getProperty( "java.version", "<unknown java version>" )
                 + "\"" );
