@@ -40,10 +40,10 @@ public class ConverterUtil
      * @param plexus not null
      * @param format not null
      * @param supportedFormats not null
-     * @return an instance of <code>Parser</code> depending the format.
+     * @return an instance of <code>Parser</code> depending on the format.
      * @throws ComponentLookupException if could not find the Parser for the given format.
      * @throws UnsupportedFormatException if the found parser is not instantiated.
-     * @throws IllegalArgumentException if parameters are null
+     * @throws IllegalArgumentException if any parameter is null
      */
     public static Parser getParser( PlexusContainer plexus, String format, String[] supportedFormats )
         throws ComponentLookupException, UnsupportedFormatException
@@ -83,10 +83,10 @@ public class ConverterUtil
      * @param format not null
      * @param writer could be null
      * @param supportedFormats not null
-     * @return an instance of <code>Sink</code> depending the given format.
+     * @return an instance of <code>Sink</code> depending on the given format.
      * @throws ComponentLookupException if could not find the SinkFactory for the given format.
-     * @throws UnsupportedFormatException if the found parser is not instantiated.
-     * @throws IllegalArgumentException if parameters are null
+     * @throws UnsupportedFormatException if the found sink is not instantiated.
+     * @throws IllegalArgumentException if any parameter is null
      */
     public static Sink getSink( PlexusContainer plexus, String format, Writer writer, String[] supportedFormats )
         throws ComponentLookupException, UnsupportedFormatException
