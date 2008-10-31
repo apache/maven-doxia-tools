@@ -221,12 +221,12 @@ public class ConverterCli
             System.out.println( "Java version: " + System.getProperty( "java.version", "<unknown java version>" ) );
 
             System.out.println( "OS name: \"" + Os.OS_NAME + "\" version: \"" + Os.OS_VERSION + "\" arch: \""
-                + Os.OS_ARCH + "\" Family: \"" + Os.OS_FAMILY + "\"" );
+                + Os.OS_ARCH + "\" family: \"" + Os.OS_FAMILY + "\"" );
 
         }
         catch ( IOException e )
         {
-            System.err.println( "Unable determine version from JAR file: " + e.getMessage() );
+            System.err.println( "Unable to determine version from JAR file: " + e.getMessage() );
         }
     }
 
