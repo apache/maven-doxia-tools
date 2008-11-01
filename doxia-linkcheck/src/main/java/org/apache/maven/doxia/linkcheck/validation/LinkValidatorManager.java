@@ -176,7 +176,10 @@ public class LinkValidatorManager implements Serializable
 
         lvr = null;
 
-        LOG.error( "Unable to validate link : " + lvi.getLink() );
+        if ( LOG.isErrorEnabled() )
+        {
+            LOG.error( "Unable to validate link : " + lvi.getLink() );
+        }
 
         return new LinkValidationResult( LinkcheckFileResult.UNKNOWN_LEVEL, false, "No validator found for this link" );
     }
@@ -191,13 +194,19 @@ public class LinkValidatorManager implements Serializable
     {
         if ( cacheFile == null )
         {
-            LOG.debug( "No cache file specified! Ignoring request to load." );
+            if ( LOG.isDebugEnabled() )
+            {
+                LOG.debug( "No cache file specified! Ignoring request to load." );
+            }
             return;
         }
 
         if ( !cacheFile.exists() )
         {
-            LOG.debug( "Specified cache file does not exist! Ignoring request to load." );
+            if ( LOG.isDebugEnabled() )
+            {
+                LOG.debug( "Specified cache file does not exist! Ignoring request to load." );
+            }
             return;
         }
 
@@ -216,15 +225,24 @@ public class LinkValidatorManager implements Serializable
         }
         catch ( InvalidClassException e )
         {
-            LOG.warn( "Your cache is incompatible with this version of linkcheck. It will be recreated." );
+            if ( LOG.isWarnEnabled() )
+            {
+                LOG.warn( "Your cache is incompatible with this version of linkcheck. It will be recreated." );
+            }
         }
         catch ( ClassNotFoundException e )
         {
-            LOG.error( "Unable to load the cache: " + cacheFile.getAbsolutePath(), e );
+            if ( LOG.isErrorEnabled() )
+            {
+                LOG.error( "Unable to load the cache: " + cacheFile.getAbsolutePath(), e );
+            }
         }
         catch ( IOException t )
         {
-            LOG.error( "Unable to load the cache: " + cacheFile.getAbsolutePath(), t );
+            if ( LOG.isErrorEnabled() )
+            {
+                LOG.error( "Unable to load the cache: " + cacheFile.getAbsolutePath(), t );
+            }
         }
         finally
         {
@@ -242,7 +260,10 @@ public class LinkValidatorManager implements Serializable
     {
         if ( cacheFile == null )
         {
-            LOG.warn( "No cache file specified! Ignoring request to store results." );
+            if ( LOG.isWarnEnabled() )
+            {
+                LOG.warn( "No cache file specified! Ignoring request to store results." );
+            }
             return;
         }
 
@@ -286,7 +307,10 @@ public class LinkValidatorManager implements Serializable
         }
         catch ( IOException e )
         {
-            LOG.error( "Unable to save the cache: " + cacheFile.getAbsolutePath(), e );
+            if ( LOG.isErrorEnabled() )
+            {
+                LOG.error( "Unable to save the cache: " + cacheFile.getAbsolutePath(), e );
+            }
         }
         finally
         {

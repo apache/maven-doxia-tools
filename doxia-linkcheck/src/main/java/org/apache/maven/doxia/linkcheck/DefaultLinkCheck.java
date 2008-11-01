@@ -20,7 +20,6 @@ package org.apache.maven.doxia.linkcheck;
  */
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.Writer;
@@ -202,14 +201,20 @@ public final class DefaultLinkCheck
     {
         if ( this.basedir == null )
         {
-            LOG.error( "No base directory specified!" );
+            if ( LOG.isErrorEnabled() )
+            {
+                LOG.error( "No base directory specified!" );
+            }
 
             throw new NullPointerException( "The basedir can't be null!" );
         }
 
         if ( this.reportOutput == null )
         {
-            LOG.warn( "No output file specified! Results will not be written!" );
+            if ( LOG.isWarnEnabled() )
+            {
+                LOG.warn( "No output file specified! Results will not be written!" );
+            }
         }
 
         model = new LinkcheckModel();
@@ -223,11 +228,17 @@ public final class DefaultLinkCheck
 
         displayMemoryConsumption();
 
-        LOG.info( "Begin to check links in files..." );
+        if ( LOG.isInfoEnabled() )
+        {
+            LOG.info( "Begin to check links in files..." );
+        }
 
         findAndCheckFiles( this.basedir );
 
-        LOG.info( "Links checked." );
+        if ( LOG.isInfoEnabled() )
+        {
+            LOG.info( "Links checked." );
+        }
 
         displayMemoryConsumption();
 
@@ -237,8 +248,11 @@ public final class DefaultLinkCheck
         }
         catch ( Exception e )
         {
-            LOG.error( "Could not write to output file. Maybe try to specify an other encoding instead of '"
-                + encoding + "'.", e );
+            if ( LOG.isErrorEnabled() )
+            {
+                LOG.error( "Could not write to output file. Maybe try to specify an other encoding instead of '"
+                    + encoding + "'.", e );
+            }
         }
 
         validator.saveCache( this.linkCheckCache );
@@ -443,7 +457,6 @@ public final class DefaultLinkCheck
 
                         if ( Arrays.binarySearch( getExcludedPages(), diff ) >= 0 )
                         {
-
                             if ( LOG.isDebugEnabled() )
                             {
                                 LOG.debug( " Ignored analysis of " + file );
@@ -470,7 +483,10 @@ public final class DefaultLinkCheck
 
                     if ( model.getFiles().size() % 100 == 0 )
                     {
-                        LOG.info( "Found " + model.getFiles().size() + " files so far." );
+                        if ( LOG.isInfoEnabled() )
+                        {
+                            LOG.info( "Found " + model.getFiles().size() + " files so far." );
+                        }
                     }
                 }
             }

@@ -224,7 +224,10 @@ public final class OnlineHTTPLinkValidator extends HTTPLinkValidator
     /** Initialize the HttpClient. */
     private void initHttpClient()
     {
-        LOG.debug( "A new HttpClient instance is needed ..." );
+        if ( LOG.isDebugEnabled() )
+        {
+            LOG.debug( "A new HttpClient instance is needed ..." );
+        }
 
         // Some web servers don't allow the default user-agent sent by httpClient
         System.setProperty( "httpclient.useragent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)" );
@@ -271,14 +274,20 @@ public final class OnlineHTTPLinkValidator extends HTTPLinkValidator
         }
         else
         {
-            LOG.debug( "Not using a proxy" );
+            if ( LOG.isDebugEnabled() )
+            {
+                LOG.debug( "Not using a proxy" );
+            }
         }
 
         this.cl.setHostConfiguration( hc );
 
         this.cl.setState( state );
 
-        LOG.debug( "New HttpClient instance created." );
+        if ( LOG.isDebugEnabled() )
+        {
+            LOG.debug( "New HttpClient instance created." );
+        }
     }
 
     /**
@@ -309,7 +318,10 @@ public final class OnlineHTTPLinkValidator extends HTTPLinkValidator
         }
         else
         {
-            LOG.error( "Unsupported method: " + this.http.getMethod() + ", using 'get'." );
+            if ( LOG.isErrorEnabled() )
+            {
+                LOG.error( "Unsupported method: " + this.http.getMethod() + ", using 'get'." );
+            }
             hm = new GetMethod( link );
         }
 
@@ -327,7 +339,10 @@ public final class OnlineHTTPLinkValidator extends HTTPLinkValidator
 
             if ( sl == null )
             {
-                LOG.error( "Unknown error validating link : " + link );
+                if ( LOG.isErrorEnabled() )
+                {
+                    LOG.error( "Unknown error validating link : " + link );
+                }
                 return null;
             }
 
@@ -339,7 +354,10 @@ public final class OnlineHTTPLinkValidator extends HTTPLinkValidator
 
                 if ( locationHeader == null )
                 {
-                    LOG.error( "Site sent redirect, but did not set Location header" );
+                    if ( LOG.isErrorEnabled() )
+                    {
+                        LOG.error( "Site sent redirect, but did not set Location header" );
+                    }
                     return hm;
                 }
 
