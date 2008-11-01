@@ -60,4 +60,13 @@ public interface Converter
      */
     void convert( InputReaderWrapper input, OutputWriterWrapper output )
         throws UnsupportedFormatException, ConverterException;
+
+    /**
+     * Make the generated files human readable.
+     * <br/>
+     * <b>Note</b>: actually, only XML based outputs could be formatted.
+     *
+     * @param formatOutput <code>true</code> to format the generated files, <code>false</code> otherwise.
+     */
+    void setFormatOutput( boolean formatOutput );
 }

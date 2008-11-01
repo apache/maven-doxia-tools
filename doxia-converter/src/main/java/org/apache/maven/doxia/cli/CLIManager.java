@@ -62,6 +62,9 @@ class CLIManager
     /** inEncoding String */
     static final String INENCODING = "inEncoding";
 
+    /** f character */
+    static final char FORMAT = 'f';
+
     /** X character */
     static final char DEBUG = 'X';
 
@@ -91,6 +94,10 @@ class CLIManager
                                                           "Input file encoding. "
                                                               + "If not specified, try to autodetect it." )
                                         .hasArg().create( INENCODING ) );
+        options.addOption( OptionBuilder.withLongOpt( "format" )
+                           .withDescription(
+                                             "Format the output (actually only xml based outputs) to be human readable." )
+                           .create( FORMAT ) );
 
         options.addOption( OptionBuilder.withLongOpt( "debug" )
                                         .withDescription( "Produce execution debug output." ).create( DEBUG ) );

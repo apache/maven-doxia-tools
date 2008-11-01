@@ -19,6 +19,7 @@
 package org.apache.maven.doxia;
 
 import java.io.BufferedInputStream;
+import java.io.CharArrayWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -115,6 +116,9 @@ public class DefaultConverter
     /** Supported output format, i.e. supported Doxia Sink */
     public static final String[] SUPPORTED_TO_FORMAT =
         { APT_SINK, CONFLUENCE_SINK, DOCBOOK_SINK, FO_SINK, ITEXT_SINK, LATEX_SINK, RTF_SINK, TWIKI_SINK, XDOC_SINK, XHTML_SINK };
+
+    /** Flag to format the generated files, actually only for XML based sinks. */
+    private boolean formatOutput;
 
     /** Plexus container */
     private PlexusContainer plexus;
@@ -280,6 +284,12 @@ public class DefaultConverter
         }
     }
 
+    /** {@inheritDoc} */
+    public void setFormatOutput( boolean formatOutput )
+    {
+        this.formatOutput = formatOutput;
+    }
+
     // ----------------------------------------------------------------------
     // Private methods
     // ----------------------------------------------------------------------
@@ -403,6 +413,37 @@ public class DefaultConverter
         }
 
         parse( parser, inputFormat, reader, sink, writer );
+
+        if ( formatOutput && ( output.getFormat().equals( DOCBOOK_SINK ) || output.getFormat().equals( FO_SINK )
+            || output.getFormat().equals( ITEXT_SINK ) || output.getFormat().equals( XDOC_SINK )
+            || output.getFormat().equals( XHTML_SINK ) ) )
+        {
+            // format all xml files excluding docbook which is buggy
+            // TODO Add doc book format
+            if ( output.getFormat().equals( DOCBOOK_SINK ) || inputFormat.equals( DOCBOOK_PARSER ) )
+            {
+                return;
+            }
+            Reader r = null;
+            Writer w = null;
+            try
+            {
+                r = ReaderFactory.newXmlReader( outputFile );
+                CharArrayWriter caw = new CharArrayWriter();
+                XmlUtil.prettyFormat( r, caw );
+                w = WriterFactory.newXmlWriter( outputFile );
+                w.write( caw.toString() );
+            }
+            catch ( IOException e )
+            {
+                throw new ConverterException( "IOException: " + e.getMessage(), e );
+            }
+            finally
+            {
+                IOUtil.close( r );
+                IOUtil.close( w );
+            }
+        }
     }
 
     /**

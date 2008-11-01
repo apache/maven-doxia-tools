@@ -44,7 +44,9 @@ import org.codehaus.plexus.util.ReaderFactory;
 public class ConverterTest
     extends PlexusTestCase
 {
-    Converter converter;
+    private Converter converter;
+
+    private boolean formatOutput;
 
     /** {@inheritDoc} */
     protected void setUp()
@@ -53,6 +55,8 @@ public class ConverterTest
         super.setUp();
 
         converter = new DefaultConverter();
+
+        formatOutput = Boolean.valueOf( System.getProperty( "format", "false" ) ).booleanValue();
     }
 
     /** {@inheritDoc} */
@@ -99,6 +103,7 @@ public class ConverterTest
         OutputFileWrapper output =
             OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
 
+        converter.setFormatOutput( formatOutput );
         converter.convert( input, output );
         assertTrue( new File( out, "Doxia.htm.apt" ).exists() );
         assertTrue( new File( out, "Doxia.htm.apt" ).length() != 0 );
@@ -125,6 +130,7 @@ public class ConverterTest
         OutputFileWrapper output =
             OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
 
+        converter.setFormatOutput( formatOutput );
         converter.convert( input, output );
         assertTrue( new File( out ).exists() );
         assertTrue( new File( out ).length() != 0 );
@@ -151,6 +157,7 @@ public class ConverterTest
         OutputFileWrapper output =
             OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
 
+        converter.setFormatOutput( formatOutput );
         converter.convert( input, output );
         assertTrue( new File( out ).exists() );
         assertTrue( new File( out ).length() != 0 );
@@ -163,6 +170,7 @@ public class ConverterTest
         input = InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
         output = OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
 
+        converter.setFormatOutput( formatOutput );
         converter.convert( input, output );
         assertTrue( new File( out ).exists() );
         assertTrue( new File( out ).length() != 0 );
@@ -187,6 +195,7 @@ public class ConverterTest
         OutputFileWrapper output =
             OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
 
+        converter.setFormatOutput( formatOutput );
         converter.convert( input, output );
         assertTrue( new File( out ).exists() );
         assertTrue( new File( out ).length() != 0 );
@@ -199,6 +208,7 @@ public class ConverterTest
         input = InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
         output = OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
 
+        converter.setFormatOutput( formatOutput );
         converter.convert( input, output );
     }
 
@@ -221,6 +231,7 @@ public class ConverterTest
         OutputFileWrapper output =
             OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
 
+        converter.setFormatOutput( formatOutput );
         converter.convert( input, output );
         assertTrue( new File( out ).exists() );
         assertTrue( new File( out ).length() != 0 );
@@ -234,6 +245,7 @@ public class ConverterTest
         // input = InputFileWrapper.valueOf( in, from, converter.getInputFormats() );
         // output = OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
         //
+        // converter.setFormatOutput( formatOutput );
         // converter.convert( input, output );
         // assertTrue( new File( out ).exists() );
     }
@@ -257,6 +269,7 @@ public class ConverterTest
         OutputFileWrapper output =
             OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
 
+        converter.setFormatOutput( formatOutput );
         converter.convert( input, output );
         assertTrue( new File( out ).exists() );
         assertTrue( new File( out ).length() != 0 );
@@ -271,6 +284,7 @@ public class ConverterTest
             input = InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
             output = OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
 
+            converter.setFormatOutput( formatOutput );
             converter.convert( input, output );
 
             assertFalse( true );
@@ -300,6 +314,7 @@ public class ConverterTest
         OutputFileWrapper output =
             OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
 
+        converter.setFormatOutput( formatOutput );
         converter.convert( input, output );
         assertTrue( new File( out ).exists() );
         assertTrue( new File( out ).length() != 0 );
@@ -312,6 +327,7 @@ public class ConverterTest
         input = InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
         output = OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
 
+        converter.setFormatOutput( formatOutput );
         converter.convert( input, output );
     }
 
@@ -334,6 +350,7 @@ public class ConverterTest
         OutputFileWrapper output =
             OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
 
+        converter.setFormatOutput( formatOutput );
         converter.convert( input, output );
         assertTrue( new File( out ).exists() );
         assertTrue( new File( out ).length() != 0 );
@@ -346,6 +363,7 @@ public class ConverterTest
         input = InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
         output = OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
 
+        converter.setFormatOutput( formatOutput );
         converter.convert( input, output );
         assertTrue( new File( out ).exists() );
         assertTrue( new File( out ).length() != 0 );
@@ -370,6 +388,7 @@ public class ConverterTest
         OutputFileWrapper output =
             OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
 
+        converter.setFormatOutput( formatOutput );
         converter.convert( input, output );
         assertTrue( new File( out ).exists() );
         assertTrue( new File( out ).length() != 0 );
@@ -382,6 +401,7 @@ public class ConverterTest
         input = InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
         output = OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
 
+        converter.setFormatOutput( formatOutput );
         converter.convert( input, output );
         assertTrue( new File( out ).exists() );
         assertTrue( new File( out ).length() != 0 );
@@ -416,6 +436,7 @@ public class ConverterTest
                 InputReaderWrapper.valueOf( new FileReader( inFile ), from, converter.getInputFormats() );
             OutputWriterWrapper output = OutputWriterWrapper.valueOf( writer, to, converter.getOutputFormats() );
 
+            converter.setFormatOutput( formatOutput );
             converter.convert( input, output );
 
             IOUtil.copy( writer.toString(), fw );
@@ -459,6 +480,7 @@ public class ConverterTest
             OutputWriterWrapper output =
                 OutputWriterWrapper.valueOf( new FileWriter( outFile ), to, converter.getOutputFormats() );
 
+            converter.setFormatOutput( formatOutput );
             converter.convert( input, output );
 
             IOUtil.copy( writer.toString(), fw );
@@ -502,6 +524,7 @@ public class ConverterTest
             OutputFileWrapper output =
                 OutputFileWrapper.valueOf( outFile.getAbsolutePath(), to, converter.getOutputFormats() );
 
+            converter.setFormatOutput( formatOutput );
             converter.convert( input, output );
 
             IOUtil.copy( writer.toString(), fw );
@@ -534,6 +557,7 @@ public class ConverterTest
             OutputFileWrapper output =
                 OutputFileWrapper.valueOf( outFile.getAbsolutePath(), to, converter.getOutputFormats() );
 
+            converter.setFormatOutput( formatOutput );
             converter.convert( input, output );
 
             IOUtil.copy( writer.toString(), fw );
@@ -564,6 +588,7 @@ public class ConverterTest
             OutputFileWrapper output =
                 OutputFileWrapper.valueOf( outFile.getAbsolutePath(), to, converter.getOutputFormats() );
 
+            converter.setFormatOutput( formatOutput );
             converter.convert( input, output );
 
             assertFalse( true );

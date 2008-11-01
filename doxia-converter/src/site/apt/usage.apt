@@ -39,16 +39,19 @@ usage: doxia [options] -in <arg> [-from <arg>] [-inEncoding <arg>] -out
              <arg> -to
 
 Options:
- -e,--errors                           Produce execution error messages
- -from <arg>                           From format
- -h,--help                             Display help information
- -in,--input <arg>                     Input file or directory
- -inEncoding,--inputEncoding <arg>     Input file encoding. If not
-                                       specified, autodetect the input encoding.
- -out,--output <arg>                   Output file or directory
- -to <arg>                             To format
- -v,--version                          Display version information
- -X,--debug                            Produce execution debug output
+ -e,--errors                         Produce execution error messages.
+ -f,--format                         Format the output (actually only xml
+                                     based outputs) to be human readable.
+ -from <arg>                         From format. If not specified, try to
+                                     autodetect it.
+ -h,--help                           Display help information.
+ -in,--input <arg>                   Input file or directory.
+ -inEncoding,--inputEncoding <arg>   Input file encoding. If not
+                                     specified, try to autodetect it.
+ -out,--output <arg>                 Output file or directory.
+ -to <arg>                           To format.
+ -v,--version                        Display version information.
+ -X,--debug                          Produce execution debug output.
 
 Supported Formats:
 from: apt, confluence, docbook, fml, twiki, xdoc, xhtml or autodetect

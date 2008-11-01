@@ -161,6 +161,9 @@ public class ConverterCli
             return 1;
         }
 
+        boolean format = commandLine.hasOption( CLIManager.FORMAT );
+        converter.setFormatOutput( format );
+
         try
         {
             converter.convert( input, output );
