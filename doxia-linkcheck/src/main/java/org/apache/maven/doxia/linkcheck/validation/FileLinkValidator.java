@@ -27,6 +27,8 @@ import java.util.Locale;
 import org.apache.maven.doxia.linkcheck.model.LinkcheckFileResult;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.ReaderFactory;
+import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.plexus.util.WriterFactory;
 
 /**
  * A link validator solely for files on the local filesystem.
@@ -37,6 +39,20 @@ import org.codehaus.plexus.util.ReaderFactory;
  */
 public final class FileLinkValidator implements LinkValidator
 {
+    private String encoding;
+
+    /**
+     * @param encoding the encoding file used. If empty, using UTF-8.
+     */
+    public FileLinkValidator( String encoding )
+    {
+        if ( StringUtils.isEmpty( encoding ) )
+        {
+            encoding = WriterFactory.UTF_8;
+        }
+        this.encoding = encoding;
+    }
+
     /** {@inheritDoc} */
     public LinkValidationResult validateLink( LinkValidationItem lvi )
     {
@@ -89,7 +105,7 @@ public final class FileLinkValidator implements LinkValidator
             if ( link.trim().length() == 0 ) // in the same file
             {
                 // the anchor exists?
-                String content = read( lvi.getSource() );
+                String content = read( lvi.getSource(), encoding );
                 if ( content != null && content.indexOf( "name=\"" + anchor + "\"" ) != -1 )
                 {
                     return lvi.getSource();
@@ -100,7 +116,7 @@ public final class FileLinkValidator implements LinkValidator
             }
 
             // the anchor exists?
-            String content = read( new File( lvi.getSource().getParentFile(), link ) );
+            String content = read( new File( lvi.getSource().getParentFile(), link ), encoding );
             if ( content != null && content.indexOf( "name=\"" + anchor + "\"" ) != -1 )
             {
                 return new File( lvi.getSource().getParentFile(), link );
@@ -126,17 +142,16 @@ public final class FileLinkValidator implements LinkValidator
     }
 
     /**
-     * TODO take care of encoding
-     *
      * @param f not null
+     * @param encoding the encoding file used
      * @return the content of the file or null if an error occurred.
      */
-    private static String read( File f )
+    private static String read( File f, String encoding )
     {
         Reader reader = null;
         try
         {
-            reader = ReaderFactory.newPlatformReader( f );
+            reader = ReaderFactory.newReader( f, encoding );
             return IOUtil.toString( reader );
         }
         catch ( IOException e )

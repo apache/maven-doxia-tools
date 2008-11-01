@@ -23,6 +23,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.Writer;
+import java.nio.charset.Charset;
+import java.nio.charset.UnsupportedCharsetException;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -44,7 +47,9 @@ import org.apache.maven.doxia.linkcheck.validation.MailtoLinkValidator;
 import org.apache.maven.doxia.linkcheck.validation.OfflineHTTPLinkValidator;
 import org.apache.maven.doxia.linkcheck.validation.OnlineHTTPLinkValidator;
 import org.codehaus.plexus.util.IOUtil;
+import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.StringUtils;
+import org.codehaus.plexus.util.WriterFactory;
 
 /**
  * The main bean to be called whenever a set of documents should have their links checked.
@@ -118,6 +123,9 @@ public final class DefaultLinkCheck
 
     /** The linkcheck model */
     private LinkcheckModel model = new LinkcheckModel();
+
+    /** The encoding used to process files, UTF-8 by default. */
+    private String encoding = ReaderFactory.UTF_8;
 
     // ----------------------------------------------------------------------
     // Public methods
@@ -227,9 +235,10 @@ public final class DefaultLinkCheck
         {
             createDocument();
         }
-        catch ( IOException e )
+        catch ( Exception e )
         {
-            LOG.error( "Could not write to output file, results will be lost!", e );
+            LOG.error( "Could not write to output file. Maybe try to specify an other encoding instead of '"
+                + encoding + "'.", e );
         }
 
         validator.saveCache( this.linkCheckCache );
@@ -237,6 +246,25 @@ public final class DefaultLinkCheck
         displayMemoryConsumption();
 
         return model;
+    }
+
+    /** {@inheritDoc} */
+    public void setEncoding( String encoding )
+    {
+        if ( StringUtils.isEmpty( encoding ) )
+        {
+            throw new IllegalArgumentException( "encoding is required");
+        }
+        try
+        {
+            Charset.forName( encoding );
+        }
+        catch ( UnsupportedCharsetException e )
+        {
+            throw new IllegalArgumentException( "encoding '" + encoding + "' is unsupported" );
+        }
+
+        this.encoding = encoding;
     }
 
     // ----------------------------------------------------------------------
@@ -356,7 +384,7 @@ public final class DefaultLinkCheck
             this.lvm.setExcludedLinks( getExcludedLinks() );
         }
 
-        this.lvm.addLinkValidator( new FileLinkValidator() );
+        this.lvm.addLinkValidator( new FileLinkValidator( encoding ) );
 
         if ( isOnline() )
         {
@@ -473,7 +501,7 @@ public final class DefaultLinkCheck
 
         try
         {
-            hrefs = LinkMatcher.match( new File( linkcheckFile.getAbsolutePath() ) );
+            hrefs = LinkMatcher.match( new File( linkcheckFile.getAbsolutePath() ), encoding );
         }
         catch ( Throwable t )
         {
@@ -632,11 +660,11 @@ public final class DefaultLinkCheck
             dir.mkdirs();
         }
 
-        FileWriter writer = null;
+        Writer writer = null;
         LinkcheckModelXpp3Writer xpp3Writer = new LinkcheckModelXpp3Writer();
         try
         {
-            writer = new FileWriter( this.reportOutput );
+            writer = WriterFactory.newXmlWriter( this.reportOutput );
             xpp3Writer.write( writer, getModel() );
         }
         finally

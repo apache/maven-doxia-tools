@@ -23,6 +23,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
 import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
@@ -30,6 +31,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.codehaus.plexus.util.IOUtil;
+import org.codehaus.plexus.util.ReaderFactory;
 
 /**
  * Link matcher. Reads the contents of a file and tries to match the following: <code>
@@ -59,24 +61,23 @@ class LinkMatcher
     /**
      * Reads a file and returns a StringBuffer with its contents.
      *
-     * TODO: Check for encoding issues
-     *
      * @param file the file we are reading
+     * @param encoding the encoding file used
      * @return a StringBuffer with file's contents.
      * @throws IOException if something goes wrong.
      */
-    private static StringBuffer fileToStringBuffer( File file ) throws IOException
+    private static StringBuffer fileToStringBuffer( File file, String encoding ) throws IOException
     {
-        BufferedReader reader = null;
-
         final StringBuffer pageBuffer = new StringBuffer();
 
+        BufferedReader reader = null;
+        Reader r = null;
         try
         {
-            reader = new BufferedReader( new FileReader( file ) );
+            r = ReaderFactory.newReader( file, encoding ) ;
+            reader = new BufferedReader( r );
 
             String line;
-
             while ( ( line = reader.readLine() ) != null )
             {
                 pageBuffer.append( line );
@@ -84,6 +85,7 @@ class LinkMatcher
         }
         finally
         {
+            IOUtil.close( r );
             IOUtil.close( reader );
         }
 
@@ -94,14 +96,15 @@ class LinkMatcher
      * Performs the actual matching.
      *
      * @param file the file to check
+     * @param encoding the encoding file used
      * @return a set with all links to check
      * @throws IOException if something goes wrong
      */
-    static Set match( File file ) throws IOException
+    static Set match( File file, String encoding ) throws IOException
     {
         LINK_LIST.clear();
 
-        final Matcher m = MATCH_PATTERN.matcher( fileToStringBuffer( file ) );
+        final Matcher m = MATCH_PATTERN.matcher( fileToStringBuffer( file, encoding ) );
 
         String link;
 

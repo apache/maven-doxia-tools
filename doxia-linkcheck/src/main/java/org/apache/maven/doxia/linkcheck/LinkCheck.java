@@ -122,4 +122,12 @@ public interface LinkCheck
      * @return the analysis in a <code>LinkCheck</code> model.
      */
     public LinkcheckModel execute();
+
+    /**
+     * Set the encoding to use when processing files.
+     *
+     * @param encoding a valid encoding
+     * @see <a href="http://java.sun.com/j2se/1.4.2/docs/guide/intl/encoding.doc.html">Supported encodings</a>
+     */
+    public void setEncoding( String encoding );
 }
