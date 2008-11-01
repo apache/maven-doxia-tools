@@ -117,11 +117,14 @@ public interface LinkCheck
     public void setReportOutputEncoding( String encoding );
 
     /**
-     * Execute the link check.
+     * Execute the link check. The basedir <b>should</b> be set before.
      *
      * @return the analysis in a <code>LinkCheck</code> model.
+     * @throws LinkCheckException if any
+     * @see #setBasedir(File)
      */
-    public LinkcheckModel execute();
+    public LinkcheckModel execute()
+        throws LinkCheckException;
 
     /**
      * Set the encoding to use when processing files.

@@ -41,13 +41,16 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * A LinkValidator manager which manages validators with a cache.
+ *
  * @author <a href="mailto:bwalding@apache.org">Ben Walding</a>
  * @author <a href="mailto:carlos@apache.org">Carlos Sanchez</a>
  * @author <a href="mailto:aheritier@apache.org">Arnaud Heritier</a>
+ * @author <a href="mailto:vincent.siveton@gmail.com">Vincent Siveton</a>
  * @version $Id$
  */
-
-public class LinkValidatorManager implements Serializable
+public class LinkValidatorManager
+    implements Serializable
 {
     /** serialVersionUID. */
     private static final long serialVersionUID = 2467928182206500945L;
@@ -189,8 +192,10 @@ public class LinkValidatorManager implements Serializable
      *
      * @param cacheFile The cache file.
      * May be null, in which case the request is ignored.
+     * @throws IOException if any
      */
     public void loadCache( File cacheFile )
+        throws IOException
     {
         if ( cacheFile == null )
         {
@@ -210,8 +215,16 @@ public class LinkValidatorManager implements Serializable
             return;
         }
 
-        ObjectInputStream is = null;
+        if ( cacheFile.isDirectory() )
+        {
+            if ( LOG.isDebugEnabled() )
+            {
+                LOG.debug( "Cache file is a directory! Ignoring request to load." );
+            }
+            return;
+        }
 
+        ObjectInputStream is = null;
         try
         {
             is = new ObjectInputStream( new FileInputStream( cacheFile ) );
@@ -237,13 +250,6 @@ public class LinkValidatorManager implements Serializable
                 LOG.error( "Unable to load the cache: " + cacheFile.getAbsolutePath(), e );
             }
         }
-        catch ( IOException t )
-        {
-            if ( LOG.isErrorEnabled() )
-            {
-                LOG.error( "Unable to load the cache: " + cacheFile.getAbsolutePath(), t );
-            }
-        }
         finally
         {
             IOUtil.close( is );
@@ -255,14 +261,25 @@ public class LinkValidatorManager implements Serializable
      *
      * @param cacheFile The name of the cache file.
      * May be null, in which case the request is ignored.
+     * @throws IOException if any
      */
     public void saveCache( File cacheFile )
+        throws IOException
     {
         if ( cacheFile == null )
         {
             if ( LOG.isWarnEnabled() )
             {
                 LOG.warn( "No cache file specified! Ignoring request to store results." );
+            }
+            return;
+        }
+
+        if ( cacheFile.isDirectory() )
+        {
+            if ( LOG.isDebugEnabled() )
+            {
+                LOG.debug( "Cache file is a directory! Ignoring request to load." );
             }
             return;
         }
@@ -291,26 +308,17 @@ public class LinkValidatorManager implements Serializable
         }
 
         File dir = cacheFile.getParentFile();
-
         if ( dir != null )
         {
             dir.mkdirs();
         }
 
         ObjectOutputStream os = null;
-
         try
         {
             os = new ObjectOutputStream( new FileOutputStream( cacheFile ) );
 
             os.writeObject( persistentCache );
-        }
-        catch ( IOException e )
-        {
-            if ( LOG.isErrorEnabled() )
-            {
-                LOG.error( "Unable to save the cache: " + cacheFile.getAbsolutePath(), e );
-            }
         }
         finally
         {

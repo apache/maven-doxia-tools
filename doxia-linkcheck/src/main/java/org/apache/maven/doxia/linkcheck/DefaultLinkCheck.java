@@ -198,6 +198,7 @@ public final class DefaultLinkCheck
 
     /** {@inheritDoc} */
     public LinkcheckModel execute()
+        throws LinkCheckException
     {
         if ( this.basedir == null )
         {
@@ -224,7 +225,14 @@ public final class DefaultLinkCheck
         displayMemoryConsumption();
 
         LinkValidatorManager validator = getLinkValidatorManager();
-        validator.loadCache( this.linkCheckCache );
+        try
+        {
+            validator.loadCache( this.linkCheckCache );
+        }
+        catch ( IOException e )
+        {
+            throw new LinkCheckException( "Could not load cache: " + e.getMessage(), e );
+        }
 
         displayMemoryConsumption();
 
@@ -246,16 +254,19 @@ public final class DefaultLinkCheck
         {
             createDocument();
         }
-        catch ( Exception e )
+        catch ( IOException e )
         {
-            if ( LOG.isErrorEnabled() )
-            {
-                LOG.error( "Could not write to output file. Maybe try to specify an other encoding instead of '"
-                    + encoding + "'.", e );
-            }
+            throw new LinkCheckException( "Could not write the linkcheck document: " + e.getMessage(), e );
         }
 
-        validator.saveCache( this.linkCheckCache );
+        try
+        {
+            validator.saveCache( this.linkCheckCache );
+        }
+        catch ( IOException e )
+        {
+            throw new LinkCheckException( "Could not save cache: " + e.getMessage(), e );
+        }
 
         displayMemoryConsumption();
 
@@ -682,6 +693,14 @@ public final class DefaultLinkCheck
         {
             writer = WriterFactory.newXmlWriter( this.reportOutput );
             xpp3Writer.write( writer, getModel() );
+        }
+        catch ( IllegalStateException e )
+        {
+            IOException ioe =
+                new IOException( e.getMessage() + " Maybe try to specify an other encoding instead of '" + encoding
+                    + "'." );
+            ioe.initCause( e );
+            throw ioe;
         }
         finally
         {
