@@ -41,6 +41,9 @@ public class OutputWriterWrapper
     /**
      * Private constructor.
      *
+     * @param writer not null writer to write the result. <b>Should</b> be an UTF-8 Writer such as defines in
+     * {@link org.apache.maven.doxia.sink.Sink}. You could use <code>newWriter</code> methods from
+     * {@link org.codehaus.plexus.util.WriterFactory}.
      * @param format not null
      * @param supportedFormat not null
      * @throws IllegalArgumentException if any.
@@ -58,7 +61,8 @@ public class OutputWriterWrapper
     }
 
     /**
-     * @return the writer
+     * @return the writer. <b>Should</b> be an UTF-8 Writer such as defines in
+     * {@link org.apache.maven.doxia.sink.Sink}.
      */
     public Writer getWriter()
     {
@@ -66,7 +70,9 @@ public class OutputWriterWrapper
     }
 
     /**
-     * @param writer not null
+     * @param writer not null writer to write the result. <b>Should</b> be an UTF-8 Writer such as defines in
+     * {@link org.apache.maven.doxia.sink.Sink}. You could use <code>newWriter</code> methods from
+     * {@link org.codehaus.plexus.util.WriterFactory}.
      * @param format not null
      * @param supportedFormat not null
      * @return a type safe output writer

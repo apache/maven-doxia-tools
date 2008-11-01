@@ -81,7 +81,9 @@ public class ConverterUtil
     /**
      * @param plexus not null
      * @param format not null
-     * @param writer could be null
+     * @param writer not null writer to write the result. <b>Should</b> be an UTF-8 Writer such as defines in
+     * {@link org.apache.maven.doxia.sink.Sink}. You could use <code>newWriter</code> methods from
+     * {@link org.codehaus.plexus.util.WriterFactory}.
      * @param supportedFormats not null
      * @return an instance of <code>Sink</code> depending on the given format.
      * @throws ComponentLookupException if could not find the SinkFactory for the given format.

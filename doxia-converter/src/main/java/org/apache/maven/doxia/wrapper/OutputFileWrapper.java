@@ -41,15 +41,14 @@ public class OutputFileWrapper
      *
      * @param file not null
      * @param format not null
-     * @param charsetName could be null
      * @param supportedFormat not null.
      * @throws IllegalArgumentException if any.
      * @throws UnsupportedEncodingException if the encoding is unsupported.
      */
-    private OutputFileWrapper( String absolutePath, String format, String charsetName, String[] supportedFormat )
+    private OutputFileWrapper( String absolutePath, String format, String[] supportedFormat )
         throws UnsupportedEncodingException
     {
-        super( absolutePath, format, charsetName, supportedFormat );
+        super( absolutePath, format, WriterFactory.UTF_8, supportedFormat );
 
         if ( getFormat().equalsIgnoreCase( AUTO_FORMAT ) )
         {
@@ -60,35 +59,28 @@ public class OutputFileWrapper
     /**
      * @param absolutePath not null
      * @param format not null
-     * @param charsetName could be null
      * @param supportedFormat not null
-     * @return a type safe output writer
+     * @return a type safe output writer using UTF-8 as encoding such as defines in
+     * {@link org.apache.maven.doxia.sink.Sink}.
      * @throws IllegalArgumentException if any.
      * @throws UnsupportedEncodingException if the encoding is unsupported.
      */
     public static OutputFileWrapper valueOf( String absolutePath, String format, String[] supportedFormat )
         throws IllegalArgumentException, UnsupportedEncodingException
     {
-        return valueOf( absolutePath, format, WriterFactory.UTF_8, supportedFormat );
-    }
-
-    /**
-     * @param absolutePath not null
-     * @param format not null
-     * @param charsetName could be null
-     * @param supportedFormat not null
-     * @return a type safe output writer
-     * @throws IllegalArgumentException if any.
-     * @throws UnsupportedEncodingException if the encoding is unsupported.
-     */
-    public static OutputFileWrapper valueOf( String absolutePath, String format, String charsetName,
-                                             String[] supportedFormat )
-        throws IllegalArgumentException, UnsupportedEncodingException
-    {
         if ( StringUtils.isEmpty( format ) )
         {
             throw new IllegalArgumentException( "output format is required" );
         }
-        return new OutputFileWrapper( absolutePath, format, charsetName, supportedFormat );
+        return new OutputFileWrapper( absolutePath, format, supportedFormat );
+    }
+
+
+    /**
+     * @return always the encoding UTF-8 to be used for the file.
+     */
+    public String getEncoding()
+    {
+        return WriterFactory.UTF_8;
     }
 }

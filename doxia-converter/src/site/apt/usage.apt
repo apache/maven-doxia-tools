@@ -36,7 +36,7 @@ Usage
 # java -jar target/apache-doxia-1.0-SNAPSHOT-jar-with-dependencies.jar -h
 
 usage: doxia [options] -in <arg> [-from <arg>] [-inEncoding <arg>] -out
-             <arg> -to <arg> [-outEncoding <arg>]
+             <arg> -to
 
 Options:
  -e,--errors                           Produce execution error messages
@@ -46,8 +46,6 @@ Options:
  -inEncoding,--inputEncoding <arg>     Input file encoding. If not
                                        specified, autodetect the input encoding.
  -out,--output <arg>                   Output file or directory
- -outEncoding,--outputEncoding <arg>   Output file encoding. If not
-                                       specified, use the input encoding (or detected).
  -to <arg>                             To format
  -v,--version                          Display version information
  -X,--debug                            Produce execution debug output
@@ -88,7 +86,7 @@ String to = "...";
 Converter converter = new DefaultConverter();
 try
 {
-    InputFileWrapper input = InputFileWrapper.valueOf( in, from, converter.getInputFormats() );
+    InputFileWrapper input = InputFileWrapper.valueOf( in, from, "ISO-8859-1", converter.getInputFormats() );
     OutputFileWrapper output = OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
 
     converter.convert( input, output );

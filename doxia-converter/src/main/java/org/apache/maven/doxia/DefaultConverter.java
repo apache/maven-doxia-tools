@@ -378,18 +378,7 @@ public class DefaultConverter
         Writer writer;
         try
         {
-            String outputEncoding;
-            if ( StringUtils.isEmpty( output.getEncoding() )
-                || output.getEncoding().equals( OutputFileWrapper.AUTO_ENCODING ) )
-            {
-                outputEncoding = inputEncoding;
-            }
-            else
-            {
-                outputEncoding = output.getEncoding();
-            }
-
-            writer = WriterFactory.newWriter( outputFile, outputEncoding );
+            writer = WriterFactory.newWriter( outputFile, output.getEncoding() );
         }
         catch ( IOException e )
         {

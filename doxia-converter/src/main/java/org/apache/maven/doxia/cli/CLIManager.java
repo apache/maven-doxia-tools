@@ -62,9 +62,6 @@ class CLIManager
     /** inEncoding String */
     static final String INENCODING = "inEncoding";
 
-    /** outEncoding String */
-    static final String OUTENCODING = "outEncoding";
-
     /** X character */
     static final char DEBUG = 'X';
 
@@ -94,11 +91,6 @@ class CLIManager
                                                           "Input file encoding. "
                                                               + "If not specified, try to autodetect it." )
                                         .hasArg().create( INENCODING ) );
-        options.addOption( OptionBuilder.withLongOpt( "outputEncoding" )
-                                        .withDescription(
-                                                          "Output file encoding. If not specified, use the "
-                                                              + "input encoding (or autodetected)." ).hasArg()
-                                        .create( OUTENCODING ) );
 
         options.addOption( OptionBuilder.withLongOpt( "debug" )
                                         .withDescription( "Produce execution debug output." ).create( DEBUG ) );
@@ -133,7 +125,7 @@ class CLIManager
 
         HelpFormatter formatter = new HelpFormatter();
         formatter.printHelp( "doxia [options] -in <arg> [-from <arg>] [-inEncoding <arg>] -out <arg> "
-            + "-to <arg> [-outEncoding <arg>]\n", "\nOptions:", options, getSupportedFormatAndEncoding() );
+            + "-to <arg>\n", "\nOptions:", options, getSupportedFormatAndEncoding() );
     }
 
     private static String getSupportedFormatAndEncoding()

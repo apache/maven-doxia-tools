@@ -3,7 +3,7 @@
  -----
  Vincent Siveton
  ------
- March 2007
+ 2008-11-01
  ------
 
 ~~ Licensed to the Apache Software Foundation (ASF) under one
@@ -28,16 +28,18 @@
 
 Maven Doxia Converter
 
- Doxia Converter is a tool that help you to convert a supported Doxia format to another supported Doxia format.
+  Doxia Converter is a tool that help you to convert a supported Doxia format to another supported Doxia format.
 
- Actually, the supported formats are:
+  Actually, the supported Doxia formats are:
 
-   * input format: apt, confluence, docbook, fml, twiki, xdoc, xhtml
+    * input format: apt, confluence, docbook, fml, twiki, xdoc, xhtml or autodetect
 
-   * output format: apt, docbook, fo, itext, latex, rtf, xdoc, xhtml
+    * output format: apt, confluence, docbook, fo, itext, latex, rtf, twiki, xdoc, xhtml
 
-   []
+    []
+
+  <<Note>>: The tool supports encoding to read files, but all generated files are in UTF-8.
 
 * Usage
 
-   Instructions on how to use the Doxia Converter can be found {{{usage.html}here}}.
+  Instructions on how to use the Doxia Converter can be found {{{usage.html}here}}.
