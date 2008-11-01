@@ -630,57 +630,6 @@ public class ConverterTest
     }
 
     /**
-     * Test {@link DefaultConverter#isXML( f )}
-     *
-     * @throws Throwable
-     */
-    public void testIsXML()
-        throws Throwable
-    {
-        String in = getBasedir() + "/src/test/resources/unit/apt/test.apt";
-        File f = new File( in );
-        Boolean result =
-            (Boolean) PrivateAccessor.invoke( DefaultConverter.class, "isXML", new Class[] { File.class },
-                                              new Object[] { f } );
-        assertEquals( result, Boolean.FALSE );
-
-        in = getBasedir() + "/src/test/resources/unit/confluence/test.confluence";
-        f = new File( in );
-        result =
-            (Boolean) PrivateAccessor.invoke( DefaultConverter.class, "isXML", new Class[] { File.class },
-                                              new Object[] { f } );
-        assertEquals( result, Boolean.FALSE );
-
-        in = getBasedir() + "/src/test/resources/unit/docbook/test.xml";
-        f = new File( in );
-        result =
-            (Boolean) PrivateAccessor.invoke( DefaultConverter.class, "isXML", new Class[] { File.class },
-                                              new Object[] { f } );
-        assertEquals( result, Boolean.TRUE );
-
-        in = getBasedir() + "/src/test/resources/unit/fml/test.fml";
-        f = new File( in );
-        result =
-            (Boolean) PrivateAccessor.invoke( DefaultConverter.class, "isXML", new Class[] { File.class },
-                                              new Object[] { f } );
-        assertEquals( result, Boolean.TRUE );
-
-        in = getBasedir() + "/src/test/resources/unit/twiki/test.twiki";
-        f = new File( in );
-        result =
-            (Boolean) PrivateAccessor.invoke( DefaultConverter.class, "isXML", new Class[] { File.class },
-                                              new Object[] { f } );
-        assertEquals( result, Boolean.FALSE );
-
-        in = getBasedir() + "/src/test/resources/unit/xhtml/test.xhtml";
-        f = new File( in );
-        result =
-            (Boolean) PrivateAccessor.invoke( DefaultConverter.class, "isXML", new Class[] { File.class },
-                                              new Object[] { f } );
-        assertEquals( result, Boolean.TRUE );
-    }
-
-    /**
      * Test {@link DefaultConverter#autoDetectFormat( f, encoding )}
      *
      * @throws Throwable

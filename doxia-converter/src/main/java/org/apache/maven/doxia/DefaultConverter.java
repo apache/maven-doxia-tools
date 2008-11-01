@@ -57,6 +57,7 @@ import org.codehaus.plexus.util.SelectorUtils;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.WriterFactory;
 import org.codehaus.plexus.util.xml.XmlStreamReader;
+import org.codehaus.plexus.util.xml.XmlUtil;
 import org.codehaus.plexus.util.xml.pull.MXParser;
 import org.codehaus.plexus.util.xml.pull.XmlPullParser;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
@@ -496,7 +497,7 @@ public class DefaultConverter
         InputStream is = null;
         try
         {
-            if ( isXML( f ) )
+            if ( XmlUtil.isXml( f ) )
             {
                 reader = ReaderFactory.newXmlReader( f );
                 return ( (XmlStreamReader) reader ).getEncoding();
@@ -524,39 +525,6 @@ public class DefaultConverter
         msg.append( f.getAbsolutePath() );
         msg.append( "\n Specify explicitly the encoding." );
         throw new UnsupportedOperationException( msg.toString() );
-    }
-
-    /**
-     * Determines if a given File shall be handled as XML.
-     *
-     * @param f not null file
-     * @return <code>true</code> if the given file has XML content, <code>false</code> otherwise.
-     */
-    private static boolean isXML( File f )
-    {
-        if ( !f.isFile() )
-        {
-            throw new IllegalArgumentException( "The file '" + f.getAbsolutePath() + "' is not a file." );
-        }
-
-        Reader reader = null;
-        try
-        {
-            reader = new XmlStreamReader( f );
-            XmlPullParser parser = new MXParser();
-            parser.setInput( reader );
-            parser.nextToken();
-
-            return true;
-        }
-        catch ( Exception e )
-        {
-            return false;
-        }
-        finally
-        {
-            IOUtil.close( reader );
-        }
     }
 
     /**

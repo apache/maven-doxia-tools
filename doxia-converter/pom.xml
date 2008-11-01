@@ -33,6 +33,16 @@ under the License.
   <name>Doxia Tools :: Converter</name>
   <description>Doxia Converter Tool to convert a supported format to another</description>
 
+  <dependencyManagement>
+    <dependencies>
+      <!-- Latest Plexus -->
+      <dependency>
+        <groupId>org.codehaus.plexus</groupId>
+        <artifactId>plexus-utils</artifactId>
+        <version>1.5.7-SNAPSHOT</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
   <dependencies>
     <!-- doxia -->
     <dependency>
