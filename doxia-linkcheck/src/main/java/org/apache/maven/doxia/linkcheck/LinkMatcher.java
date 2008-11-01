@@ -21,7 +21,6 @@ package org.apache.maven.doxia.linkcheck;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Locale;
@@ -34,12 +33,13 @@ import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.ReaderFactory;
 
 /**
- * Link matcher. Reads the contents of a file and tries to match the following: <code>
- * <a href=""....
- * <link href=""....
- * <img src=""....
- * <script src=""....
- * </code>
+ * Link matcher. Reads the contents of a file and tries to match the following:
+ * <pre>
+ * &lt;a href="".../&gt;
+ * &lt;link href="".../&gt;
+ * &lt;img src="".../&gt;
+ * &lt;script src="".../&gt;
+ * </pre>
  *
  * @author <a href="mailto:mac@apache.org">Ignacio G. Mac Dowell </a>
  * @version $Id$
@@ -56,6 +56,7 @@ class LinkMatcher
 
     private LinkMatcher()
     {
+        // nop
     }
 
     /**
