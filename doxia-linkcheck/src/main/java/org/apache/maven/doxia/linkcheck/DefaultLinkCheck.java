@@ -278,7 +278,7 @@ public final class DefaultLinkCheck
     {
         if ( StringUtils.isEmpty( encoding ) )
         {
-            throw new IllegalArgumentException( "encoding is required");
+            throw new IllegalArgumentException( "encoding is required" );
         }
         try
         {
@@ -583,9 +583,9 @@ public final class DefaultLinkCheck
                     break;
                 case LinkcheckFileResult.ERROR_LEVEL:
                     boolean ignoredError = false;
-                    if ( result instanceof HTTPLinkValidationResult)
+                    if ( result instanceof HTTPLinkValidationResult )
                     {
-                        HTTPLinkValidationResult httpResult = (HTTPLinkValidationResult)result;
+                        HTTPLinkValidationResult httpResult = (HTTPLinkValidationResult) result;
 
 
                         if ( httpResult.getHttpStatusCode() > 0 && getExcludedHttpStatusErrors() != null
@@ -596,7 +596,7 @@ public final class DefaultLinkCheck
                         }
                     }
 
-                    if (ignoredError)
+                    if ( ignoredError )
                     {
                         linkcheckFile.setSuccessful( linkcheckFile.getSuccessful() + 1 );
                     }
@@ -612,9 +612,9 @@ public final class DefaultLinkCheck
                     break;
                 case LinkcheckFileResult.WARNING_LEVEL:
                     boolean ignoredWarning = false;
-                    if ( result instanceof HTTPLinkValidationResult)
+                    if ( result instanceof HTTPLinkValidationResult )
                     {
-                        HTTPLinkValidationResult httpResult = (HTTPLinkValidationResult)result;
+                        HTTPLinkValidationResult httpResult = (HTTPLinkValidationResult) result;
 
                         if ( httpResult.getHttpStatusCode() > 0 && getExcludedHttpStatusWarnings() != null
                             && StringUtils.indexOfAny( String.valueOf( httpResult.getHttpStatusCode() ),
@@ -624,7 +624,7 @@ public final class DefaultLinkCheck
                         }
                     }
 
-                    if (ignoredWarning)
+                    if ( ignoredWarning )
                     {
                         linkcheckFile.setSuccessful( linkcheckFile.getSuccessful() + 1 );
                     }
@@ -739,7 +739,8 @@ public final class DefaultLinkCheck
                 return true;
             }
 
-            if ( name.toLowerCase( Locale.ENGLISH ).endsWith( ".html" ) || name.toLowerCase( Locale.ENGLISH ).endsWith( ".htm" ) )
+            if ( name.toLowerCase( Locale.ENGLISH ).endsWith( ".html" )
+                || name.toLowerCase( Locale.ENGLISH ).endsWith( ".htm" ) )
             {
                 return true;
             }

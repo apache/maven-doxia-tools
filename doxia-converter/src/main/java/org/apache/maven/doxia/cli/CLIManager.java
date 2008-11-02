@@ -1,3 +1,5 @@
+package org.apache.maven.doxia.cli;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -16,7 +18,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.maven.doxia.cli;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,37 +72,36 @@ class CLIManager
     /** e character */
     static final char ERRORS = 'e';
 
-    private static final Options options;
+    private static final Options OPTIONS;
 
     static
     {
-        options = new Options();
+        OPTIONS = new Options();
 
-        options.addOption( OptionBuilder.withLongOpt( "help" ).withDescription( "Display help information." )
+        OPTIONS.addOption( OptionBuilder.withLongOpt( "help" ).withDescription( "Display help information." )
                                         .create( HELP ) );
-        options.addOption( OptionBuilder.withLongOpt( "version" ).withDescription( "Display version information." )
+        OPTIONS.addOption( OptionBuilder.withLongOpt( "version" ).withDescription( "Display version information." )
                                         .create( VERSION ) );
 
-        options.addOption( OptionBuilder.withLongOpt( "input" ).withDescription( "Input file or directory." )
+        OPTIONS.addOption( OptionBuilder.withLongOpt( "input" ).withDescription( "Input file or directory." )
                                         .hasArg().create( IN ) );
-        options.addOption( OptionBuilder.withLongOpt( "output" ).withDescription( "Output file or directory." )
+        OPTIONS.addOption( OptionBuilder.withLongOpt( "output" ).withDescription( "Output file or directory." )
                                         .hasArg().create( OUT ) );
-        options.addOption( OptionBuilder.withDescription( "From format. If not specified, try to autodetect it." )
+        OPTIONS.addOption( OptionBuilder.withDescription( "From format. If not specified, try to autodetect it." )
                                         .hasArg().create( FROM ) );
-        options.addOption( OptionBuilder.withDescription( "To format." ).hasArg().create( TO ) );
-        options.addOption( OptionBuilder.withLongOpt( "inputEncoding" )
-                                        .withDescription(
-                                                          "Input file encoding. "
+        OPTIONS.addOption( OptionBuilder.withDescription( "To format." ).hasArg().create( TO ) );
+        OPTIONS.addOption( OptionBuilder.withLongOpt( "inputEncoding" )
+                                        .withDescription( "Input file encoding. "
                                                               + "If not specified, try to autodetect it." )
                                         .hasArg().create( INENCODING ) );
-        options.addOption( OptionBuilder.withLongOpt( "format" )
-                           .withDescription(
-                                             "Format the output (actually only xml based outputs) to be human readable." )
+        OPTIONS.addOption( OptionBuilder.withLongOpt( "format" )
+                           .withDescription( "Format the output (actually only xml based outputs) "
+                                             + " to be human readable." )
                            .create( FORMAT ) );
 
-        options.addOption( OptionBuilder.withLongOpt( "debug" )
+        OPTIONS.addOption( OptionBuilder.withLongOpt( "debug" )
                                         .withDescription( "Produce execution debug output." ).create( DEBUG ) );
-        options.addOption( OptionBuilder.withLongOpt( "errors" )
+        OPTIONS.addOption( OptionBuilder.withLongOpt( "errors" )
                                         .withDescription( "Produce execution error messages." ).create( ERRORS ) );
     }
 
@@ -123,7 +123,7 @@ class CLIManager
         String[] cleanArgs = cleanArgs( args );
 
         CommandLineParser parser = new GnuParser();
-        return parser.parse( options, cleanArgs );
+        return parser.parse( OPTIONS, cleanArgs );
     }
 
     static void displayHelp()
@@ -132,7 +132,7 @@ class CLIManager
 
         HelpFormatter formatter = new HelpFormatter();
         formatter.printHelp( "doxia [options] -in <arg> [-from <arg>] [-inEncoding <arg>] -out <arg> "
-            + "-to <arg>\n", "\nOptions:", options, getSupportedFormatAndEncoding() );
+            + "-to <arg>\n", "\nOptions:", OPTIONS, getSupportedFormatAndEncoding() );
     }
 
     private static String getSupportedFormatAndEncoding()

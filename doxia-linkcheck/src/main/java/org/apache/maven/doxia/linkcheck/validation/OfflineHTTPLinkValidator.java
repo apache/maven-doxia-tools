@@ -33,7 +33,8 @@ public final class OfflineHTTPLinkValidator extends HTTPLinkValidator
     /** {@inheritDoc} */
     public LinkValidationResult validateLink( LinkValidationItem lvi )
     {
-        return new LinkValidationResult( LinkcheckFileResult.WARNING_LEVEL, false, "Maven is offline. Link not checked." );
+        return new LinkValidationResult( LinkcheckFileResult.WARNING_LEVEL, false,
+                                         "Maven is offline. Link not checked." );
     }
 
 }

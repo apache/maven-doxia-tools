@@ -39,14 +39,14 @@ public interface LinkCheck
      *
      * @param base the base directory
      */
-    public void setBasedir( File base );
+    void setBasedir( File base );
 
     /**
-     * Sets the base URL. This is pre-pended to links that start with '/'.
+     * Sets the base URL. This is prepended to links that start with '/'.
      *
      * @param url the base URL.
      */
-    public void setBaseURL( String url );
+    void setBaseURL( String url );
 
     /**
      * Sets the excluded HTTP errors, i.e. <code>404</code>, a int[] with excluded errors.
@@ -54,7 +54,7 @@ public interface LinkCheck
      * @param excl The excludes to set
      * @see {@link HttpStatus} for all possible values.
      */
-    public void setExcludedHttpStatusErrors( int[] excl );
+    void setExcludedHttpStatusErrors( int[] excl );
 
     /**
      * Sets the excluded HTTP warnings, i.e. <code>301</code>, a int[] with excluded errors.
@@ -62,7 +62,7 @@ public interface LinkCheck
      * @param excl The excludes to set
      * @see {@link HttpStatus} for all possible values.
      */
-    public void setExcludedHttpStatusWarnings( int[] excl );
+    void setExcludedHttpStatusWarnings( int[] excl );
 
     /**
      * Sets the excluded links, a String[] with excluded locations.
@@ -71,35 +71,35 @@ public interface LinkCheck
      *
      * @param excl The excludes to set
      */
-    public void setExcludedLinks( String[] excl );
+    void setExcludedLinks( String[] excl );
 
     /**
      * Sets the excluded pages, a String[] with excluded locations.
      *
      * @param excl The excludes to set
      */
-    public void setExcludedPages( String[] excl );
+    void setExcludedPages( String[] excl );
 
     /**
      * Sets the http parameters bean.
      *
      * @param http parameters bean.
      */
-    public void setHttp( HttpBean http );
+    void setHttp( HttpBean http );
 
     /**
      * Sets the cache File.
      *
      * @param cacheFile The cacheFile to set. Set this to null to ignore storing the cache.
      */
-    public void setLinkCheckCache( File cacheFile );
+    void setLinkCheckCache( File cacheFile );
 
     /**
      * Set the online mode.
      *
      * @param onLine online mode.
      */
-    public void setOnline( boolean onLine );
+    void setOnline( boolean onLine );
 
     /**
      * Set the output file for the results.
@@ -107,14 +107,14 @@ public interface LinkCheck
      *
      * @param file the output file.
      */
-    public void setReportOutput( File file );
+    void setReportOutput( File file );
 
     /**
      * Sets the outputEncoding.
      *
      * @param encoding The outputEncoding to set.
      */
-    public void setReportOutputEncoding( String encoding );
+    void setReportOutputEncoding( String encoding );
 
     /**
      * Execute the link check. The basedir <b>should</b> be set before.
@@ -123,7 +123,7 @@ public interface LinkCheck
      * @throws LinkCheckException if any
      * @see #setBasedir(File)
      */
-    public LinkcheckModel execute()
+    LinkcheckModel execute()
         throws LinkCheckException;
 
     /**
@@ -132,5 +132,5 @@ public interface LinkCheck
      * @param encoding a valid encoding
      * @see <a href="http://java.sun.com/j2se/1.4.2/docs/guide/intl/encoding.doc.html">Supported encodings</a>
      */
-    public void setEncoding( String encoding );
+    void setEncoding( String encoding );
 }

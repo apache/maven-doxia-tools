@@ -175,26 +175,29 @@ public final class OnlineHTTPLinkValidator extends HTTPLinkValidator
 
             if ( hm == null )
             {
-                return new LinkValidationResult( LinkcheckFileResult.ERROR_LEVEL, false, "Cannot retreive HTTP Status" );
+                return new LinkValidationResult( LinkcheckFileResult.ERROR_LEVEL, false,
+                                                 "Cannot retreive HTTP Status" );
             }
 
             if ( hm.getStatusCode() == HttpStatus.SC_OK )
             {
-                return new HTTPLinkValidationResult( LinkcheckFileResult.VALID_LEVEL, true, hm.getStatusCode(), hm.getStatusText() );
-            }
+                return new HTTPLinkValidationResult( LinkcheckFileResult.VALID_LEVEL, true, hm.getStatusCode(),
+                                                 hm.getStatusText() );
+        }
 
-            // If there's a redirection ... add a warning
-            if ( hm.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY
-                            || hm.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY
-                            || hm.getStatusCode() == HttpStatus.SC_TEMPORARY_REDIRECT )
+        // If there's a redirection ... add a warning
+        if ( hm.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY
+                        || hm.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY
+                        || hm.getStatusCode() == HttpStatus.SC_TEMPORARY_REDIRECT )
+        {
+            if ( LOG.isWarnEnabled() )
             {
-                if ( LOG.isWarnEnabled() )
-                {
-                    LOG.warn( "Received: [" + hm.getStatusCode() + "] for [" + link + "] in page [" + lvi.getSource()
+                LOG.warn( "Received: [" + hm.getStatusCode() + "] for [" + link + "] in page [" + lvi.getSource()
                         + "]" );
                 }
 
-                return new HTTPLinkValidationResult( LinkcheckFileResult.WARNING_LEVEL, true, hm.getStatusCode(), hm.getStatusText() );
+                return new HTTPLinkValidationResult( LinkcheckFileResult.WARNING_LEVEL, true, hm.getStatusCode(),
+                                                     hm.getStatusText() );
             }
 
             if ( LOG.isDebugEnabled() )
@@ -203,7 +206,8 @@ public final class OnlineHTTPLinkValidator extends HTTPLinkValidator
                     + "]" );
             }
 
-            return new HTTPLinkValidationResult( LinkcheckFileResult.ERROR_LEVEL, false, hm.getStatusCode(), hm.getStatusText() );
+            return new HTTPLinkValidationResult( LinkcheckFileResult.ERROR_LEVEL, false, hm.getStatusCode(),
+                                                 hm.getStatusText() );
 
         }
         catch ( Throwable t )

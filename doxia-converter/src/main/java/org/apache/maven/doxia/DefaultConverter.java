@@ -1,3 +1,5 @@
+package org.apache.maven.doxia;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -16,7 +18,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.maven.doxia;
 
 import java.io.BufferedInputStream;
 import java.io.CharArrayWriter;
@@ -115,7 +116,8 @@ public class DefaultConverter
 
     /** Supported output format, i.e. supported Doxia Sink */
     public static final String[] SUPPORTED_TO_FORMAT =
-        { APT_SINK, CONFLUENCE_SINK, DOCBOOK_SINK, FO_SINK, ITEXT_SINK, LATEX_SINK, RTF_SINK, TWIKI_SINK, XDOC_SINK, XHTML_SINK };
+        { APT_SINK, CONFLUENCE_SINK, DOCBOOK_SINK, FO_SINK, ITEXT_SINK, LATEX_SINK, RTF_SINK, TWIKI_SINK, XDOC_SINK,
+            XHTML_SINK };
 
     /** Flag to format the generated files, actually only for XML based sinks. */
     private boolean formatOutput;

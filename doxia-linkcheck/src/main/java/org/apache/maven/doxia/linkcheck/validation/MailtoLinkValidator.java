@@ -31,7 +31,8 @@ import org.apache.maven.doxia.linkcheck.model.LinkcheckFileResult;
 public final class MailtoLinkValidator implements LinkValidator
 {
     /** The (unique) LinkValidationResult to be returned by this LinkValidator. */
-    private static final LinkValidationResult LVR = new LinkValidationResult( LinkcheckFileResult.VALID_LEVEL, false, "" );
+    private static final LinkValidationResult LVR =
+        new LinkValidationResult( LinkcheckFileResult.VALID_LEVEL, false, "" );
 
     /** {@inheritDoc} */
     public LinkValidationResult validateLink( LinkValidationItem lvi )
