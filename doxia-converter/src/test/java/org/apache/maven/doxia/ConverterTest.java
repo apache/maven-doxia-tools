@@ -19,9 +19,12 @@ package org.apache.maven.doxia;
  * under the License.
  */
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.OutputStream;
 import java.io.StringWriter;
 
 import junitx.util.PrivateAccessor;
@@ -29,11 +32,12 @@ import junitx.util.PrivateAccessor;
 import org.apache.maven.doxia.wrapper.InputFileWrapper;
 import org.apache.maven.doxia.wrapper.InputReaderWrapper;
 import org.apache.maven.doxia.wrapper.OutputFileWrapper;
-import org.apache.maven.doxia.wrapper.OutputWriterWrapper;
+import org.apache.maven.doxia.wrapper.OutputStreamWrapper;
 import org.codehaus.plexus.PlexusTestCase;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.ReaderFactory;
+import org.codehaus.plexus.util.WriterFactory;
 
 /**
  * Tests Doxia converter.
@@ -101,7 +105,7 @@ public class ConverterTest
         InputFileWrapper input =
             InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
         OutputFileWrapper output =
-            OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
+            OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
 
         converter.setFormatOutput( formatOutput );
         converter.convert( input, output );
@@ -128,7 +132,7 @@ public class ConverterTest
         InputFileWrapper input =
             InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
         OutputFileWrapper output =
-            OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
+            OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
 
         converter.setFormatOutput( formatOutput );
         converter.convert( input, output );
@@ -155,7 +159,7 @@ public class ConverterTest
         InputFileWrapper input =
             InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
         OutputFileWrapper output =
-            OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
+            OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
 
         converter.setFormatOutput( formatOutput );
         converter.convert( input, output );
@@ -168,7 +172,7 @@ public class ConverterTest
         to = "apt";
 
         input = InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
-        output = OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
+        output = OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
 
         converter.setFormatOutput( formatOutput );
         converter.convert( input, output );
@@ -193,7 +197,7 @@ public class ConverterTest
         InputFileWrapper input =
             InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
         OutputFileWrapper output =
-            OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
+            OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
 
         converter.setFormatOutput( formatOutput );
         converter.convert( input, output );
@@ -206,7 +210,7 @@ public class ConverterTest
         to = "confluence";
 
         input = InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
-        output = OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
+        output = OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
 
         converter.setFormatOutput( formatOutput );
         converter.convert( input, output );
@@ -229,7 +233,7 @@ public class ConverterTest
         InputFileWrapper input =
             InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
         OutputFileWrapper output =
-            OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
+            OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
 
         converter.setFormatOutput( formatOutput );
         converter.convert( input, output );
@@ -267,7 +271,7 @@ public class ConverterTest
         InputFileWrapper input =
             InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
         OutputFileWrapper output =
-            OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
+            OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
 
         converter.setFormatOutput( formatOutput );
         converter.convert( input, output );
@@ -282,7 +286,7 @@ public class ConverterTest
         try
         {
             input = InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
-            output = OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
+            output = OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
 
             converter.setFormatOutput( formatOutput );
             converter.convert( input, output );
@@ -312,7 +316,7 @@ public class ConverterTest
         InputFileWrapper input =
             InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
         OutputFileWrapper output =
-            OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
+            OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
 
         converter.setFormatOutput( formatOutput );
         converter.convert( input, output );
@@ -325,7 +329,7 @@ public class ConverterTest
         to = "twiki";
 
         input = InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
-        output = OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
+        output = OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
 
         converter.setFormatOutput( formatOutput );
         try
@@ -359,7 +363,7 @@ public class ConverterTest
         InputFileWrapper input =
             InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
         OutputFileWrapper output =
-            OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
+            OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
 
         converter.setFormatOutput( formatOutput );
         converter.convert( input, output );
@@ -372,7 +376,7 @@ public class ConverterTest
         to = "xdoc";
 
         input = InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
-        output = OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
+        output = OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
 
         converter.setFormatOutput( formatOutput );
         converter.convert( input, output );
@@ -397,7 +401,7 @@ public class ConverterTest
         InputFileWrapper input =
             InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
         OutputFileWrapper output =
-            OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
+            OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
 
         converter.setFormatOutput( formatOutput );
         converter.convert( input, output );
@@ -410,7 +414,7 @@ public class ConverterTest
         to = "xhtml";
 
         input = InputFileWrapper.valueOf( in, from, ReaderFactory.UTF_8, converter.getInputFormats() );
-        output = OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
+        output = OutputFileWrapper.valueOf( out, to, WriterFactory.UTF_8, converter.getOutputFormats() );
 
         converter.setFormatOutput( formatOutput );
         converter.convert( input, output );
@@ -421,7 +425,7 @@ public class ConverterTest
     /**
      * Input apt reader / output writer
      *
-     * @see Converter#convert(InputReaderWrapper, OutputWriterWrapper)
+     * @see Converter#convert(InputReaderWrapper, OutputStreamWrapper)
      * @throws Exception if any
      */
     public void testAptWriterConverter()
@@ -436,25 +440,25 @@ public class ConverterTest
         File outFile = new File( out );
         outFile.getParentFile().mkdirs();
 
-        FileWriter fw = null;
+        OutputStream fo = null;
         try
         {
-            fw = new FileWriter( outFile );
+            fo = new FileOutputStream( outFile );
 
-            StringWriter writer = new StringWriter();
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
             InputReaderWrapper input =
                 InputReaderWrapper.valueOf( new FileReader( inFile ), from, converter.getInputFormats() );
-            OutputWriterWrapper output = OutputWriterWrapper.valueOf( writer, to, converter.getOutputFormats() );
+            OutputStreamWrapper output = OutputStreamWrapper.valueOf( outputStream, to, "UTF-8", converter.getOutputFormats() );
 
             converter.setFormatOutput( formatOutput );
             converter.convert( input, output );
 
-            IOUtil.copy( writer.toString(), fw );
+            IOUtil.copy( outputStream.toByteArray(), fo );
         }
         finally
         {
-            IOUtil.close( fw );
+            IOUtil.close( fo );
         }
 
         assertTrue( outFile.exists() );
@@ -464,7 +468,7 @@ public class ConverterTest
     /**
      * Input confluence reader / output writer
      *
-     * @see Converter#convert(InputReaderWrapper, OutputWriterWrapper)
+     * @see Converter#convert(InputReaderWrapper, OutputStreamWrapper)
      * @throws Exception if any
      */
     public void testConfluenceWriterConverter()
@@ -479,36 +483,36 @@ public class ConverterTest
         File outFile = new File( out );
         outFile.getParentFile().mkdirs();
 
-        FileWriter fw = null;
+        OutputStream fo = null;
         try
         {
-            fw = new FileWriter( outFile );
+            fo = new FileOutputStream( outFile );
 
-            StringWriter writer = new StringWriter();
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
             InputReaderWrapper input =
                 InputReaderWrapper.valueOf( new FileReader( inFile ), from, converter.getInputFormats() );
-            OutputWriterWrapper output =
-                OutputWriterWrapper.valueOf( new FileWriter( outFile ), to, converter.getOutputFormats() );
+            OutputStreamWrapper output =
+                OutputStreamWrapper.valueOf( outputStream, to, "UTF-8", converter.getOutputFormats() );
 
             converter.setFormatOutput( formatOutput );
             converter.convert( input, output );
 
-            IOUtil.copy( writer.toString(), fw );
-
-            assertTrue( outFile.exists() );
-            assertTrue( outFile.length() != 0 );
+            IOUtil.copy( outputStream.toByteArray(), fo );
         }
         finally
         {
-            IOUtil.close( fw );
+            IOUtil.close( fo );
         }
+
+        assertTrue( outFile.exists() );
+        assertTrue( outFile.length() != 0 );
     }
 
     /**
      * Input xdoc (autodetect) reader / output writer
      *
-     * @see Converter#convert(InputReaderWrapper, OutputWriterWrapper)
+     * @see Converter#convert(InputReaderWrapper, OutputStreamWrapper)
      * @throws Exception if any
      */
     public void testAutoDetectConverter()

@@ -24,8 +24,10 @@ import java.io.CharArrayWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.HashMap;
@@ -41,11 +43,12 @@ import org.apache.maven.doxia.logging.SystemStreamLog;
 import org.apache.maven.doxia.parser.ParseException;
 import org.apache.maven.doxia.parser.Parser;
 import org.apache.maven.doxia.sink.Sink;
+import org.apache.maven.doxia.sink.SinkFactory;
 import org.apache.maven.doxia.util.ConverterUtil;
 import org.apache.maven.doxia.wrapper.InputFileWrapper;
 import org.apache.maven.doxia.wrapper.InputReaderWrapper;
 import org.apache.maven.doxia.wrapper.OutputFileWrapper;
-import org.apache.maven.doxia.wrapper.OutputWriterWrapper;
+import org.apache.maven.doxia.wrapper.OutputStreamWrapper;
 import org.codehaus.plexus.ContainerConfiguration;
 import org.codehaus.plexus.DefaultContainerConfiguration;
 import org.codehaus.plexus.DefaultPlexusContainer;
@@ -223,7 +226,7 @@ public class DefaultConverter
     }
 
     /** {@inheritDoc} */
-    public void convert( InputReaderWrapper input, OutputWriterWrapper output )
+    public void convert( InputReaderWrapper input, OutputStreamWrapper output )
         throws UnsupportedFormatException, ConverterException
     {
         if ( input == null )
@@ -262,14 +265,24 @@ public class DefaultConverter
                 getLog().debug( "Parser used: " + parser.getClass().getName() );
             }
 
-            Sink sink;
+            SinkFactory sinkFactory;
             try
             {
-                sink = ConverterUtil.getSink( plexus, output.getFormat(), output.getWriter(), SUPPORTED_TO_FORMAT );
+                sinkFactory = ConverterUtil.getSinkFactory( plexus, output.getFormat(), SUPPORTED_TO_FORMAT );
             }
             catch ( ComponentLookupException e )
             {
                 throw new ConverterException( "ComponentLookupException: " + e.getMessage(), e );
+            }
+
+            Sink sink;
+            try
+            {
+                sink = sinkFactory.createSink( output.getOutputStream(), output.getEncoding() );
+            }
+            catch ( IOException e )
+            {
+                throw new ConverterException( "IOException: " + e.getMessage(), e );
             }
             sink.enableLogging( log );
 
@@ -278,7 +291,7 @@ public class DefaultConverter
                 getLog().debug( "Sink used: " + sink.getClass().getName() );
             }
 
-            parse( parser, input.getFormat(), input.getReader(), sink, output.getWriter() );
+            parse( parser, input.getFormat(), input.getReader(), sink );
         }
         finally
         {
@@ -388,25 +401,38 @@ public class DefaultConverter
             throw new ConverterException( "IOException: " + e.getMessage(), e );
         }
 
-        Writer writer;
+        SinkFactory sinkFactory;
         try
         {
-            writer = WriterFactory.newWriter( outputFile, output.getEncoding() );
+            sinkFactory = ConverterUtil.getSinkFactory( plexus, output.getFormat(), SUPPORTED_TO_FORMAT );
+        }
+        catch ( ComponentLookupException e )
+        {
+            throw new ConverterException( "ComponentLookupException: " + e.getMessage(), e );
+        }
+
+        Sink sink;
+        try
+        {
+            String outputEncoding;
+            if ( StringUtils.isEmpty( output.getEncoding() )
+                || output.getEncoding().equals( OutputFileWrapper.AUTO_ENCODING ) )
+            {
+                outputEncoding = inputEncoding;
+            }
+            else
+            {
+                outputEncoding = output.getEncoding();
+            }
+
+            OutputStream out = new FileOutputStream( outputFile );
+            sink = sinkFactory.createSink( out, outputEncoding );
         }
         catch ( IOException e )
         {
             throw new ConverterException( "IOException: " + e.getMessage(), e );
         }
 
-        Sink sink;
-        try
-        {
-            sink = ConverterUtil.getSink( plexus, output.getFormat(), writer, SUPPORTED_TO_FORMAT );
-        }
-        catch ( ComponentLookupException e )
-        {
-            throw new ConverterException( "ComponentLookupException: " + e.getMessage(), e );
-        }
         sink.enableLogging( log );
 
         if ( getLog().isDebugEnabled() )
@@ -414,7 +440,7 @@ public class DefaultConverter
             getLog().debug( "Sink used: " + sink.getClass().getName() );
         }
 
-        parse( parser, inputFormat, reader, sink, writer );
+        parse( parser, inputFormat, reader, sink );
 
         if ( formatOutput && ( output.getFormat().equals( DOCBOOK_SINK ) || output.getFormat().equals( FO_SINK )
             || output.getFormat().equals( ITEXT_SINK ) || output.getFormat().equals( XDOC_SINK )
@@ -455,7 +481,7 @@ public class DefaultConverter
      * @param writer not null
      * @throws ConverterException if any
      */
-    private void parse( Parser parser, String inputFormat, Reader reader, Sink sink, Writer writer )
+    private void parse( Parser parser, String inputFormat, Reader reader, Sink sink )
         throws ConverterException
     {
         // add warnings
@@ -479,7 +505,6 @@ public class DefaultConverter
             IOUtil.close( reader );
             sink.flush();
             sink.close();
-            IOUtil.close( writer );
         }
     }
 

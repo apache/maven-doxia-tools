@@ -19,11 +19,10 @@ package org.apache.maven.doxia.util;
  * under the License.
  */
 
-import java.io.Writer;
+import java.io.IOException;
 
 import org.apache.maven.doxia.UnsupportedFormatException;
 import org.apache.maven.doxia.parser.Parser;
-import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.doxia.sink.SinkFactory;
 import org.codehaus.plexus.PlexusContainer;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
@@ -81,16 +80,14 @@ public class ConverterUtil
     /**
      * @param plexus not null
      * @param format not null
-     * @param writer not null writer to write the result. <b>Should</b> be an UTF-8 Writer such as defines in
-     * {@link org.apache.maven.doxia.sink.Sink}. You could use <code>newWriter</code> methods from
-     * {@link org.codehaus.plexus.util.WriterFactory}.
      * @param supportedFormats not null
-     * @return an instance of <code>Sink</code> depending on the given format.
+     * @return an instance of <code>SinkFactory</code> depending on the given format.
      * @throws ComponentLookupException if could not find the SinkFactory for the given format.
      * @throws UnsupportedFormatException if the found sink is not instantiated.
+     * @throws IOException 
      * @throws IllegalArgumentException if any parameter is null
      */
-    public static Sink getSink( PlexusContainer plexus, String format, Writer writer, String[] supportedFormats )
+    public static SinkFactory getSinkFactory( PlexusContainer plexus, String format, String[] supportedFormats )
         throws ComponentLookupException, UnsupportedFormatException
     {
         if ( plexus == null )
@@ -120,12 +117,6 @@ public class ConverterUtil
             throw new UnsupportedFormatException( format, supportedFormats );
         }
 
-        Sink sink = factory.createSink( writer );
-        if ( sink == null )
-        {
-            throw new IllegalArgumentException( "Sink was not instanciated: " + format );
-        }
-
-        return sink;
+        return factory;
     }
 }

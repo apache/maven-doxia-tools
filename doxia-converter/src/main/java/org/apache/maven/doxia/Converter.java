@@ -23,7 +23,7 @@ import org.apache.maven.doxia.logging.LogEnabled;
 import org.apache.maven.doxia.wrapper.InputFileWrapper;
 import org.apache.maven.doxia.wrapper.InputReaderWrapper;
 import org.apache.maven.doxia.wrapper.OutputFileWrapper;
-import org.apache.maven.doxia.wrapper.OutputWriterWrapper;
+import org.apache.maven.doxia.wrapper.OutputStreamWrapper;
 
 /**
  * Interface to convert a Doxia input wrapper to a Doxia output wrapper.
@@ -59,7 +59,7 @@ public interface Converter
      * @throws UnsupportedFormatException if any
      * @throws ConverterException if any
      */
-    void convert( InputReaderWrapper input, OutputWriterWrapper output )
+    void convert( InputReaderWrapper input, OutputStreamWrapper output )
         throws UnsupportedFormatException, ConverterException;
 
     /**

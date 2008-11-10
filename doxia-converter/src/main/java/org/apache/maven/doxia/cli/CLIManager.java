@@ -66,6 +66,9 @@ class CLIManager
     /** f character */
     static final char FORMAT = 'f';
 
+    /** outEncoding String */
+    static final String OUTENCODING = "outEncoding";
+
     /** X character */
     static final char DEBUG = 'X';
 
@@ -95,9 +98,13 @@ class CLIManager
                                                               + "If not specified, try to autodetect it." )
                                         .hasArg().create( INENCODING ) );
         OPTIONS.addOption( OptionBuilder.withLongOpt( "format" )
-                           .withDescription( "Format the output (actually only xml based outputs) "
-                                             + " to be human readable." )
+                                        .withDescription( "Format the output (actually only xml based outputs) "
+                                                              + " to be human readable." )
                            .create( FORMAT ) );
+        OPTIONS.addOption( OptionBuilder.withLongOpt( "outputEncoding" )
+                                        .withDescription( "Output file encoding. If not specified, use the "
+                                                              + "input encoding (or autodetected)." ).hasArg()
+                                        .create( OUTENCODING ) );
 
         OPTIONS.addOption( OptionBuilder.withLongOpt( "debug" )
                                         .withDescription( "Produce execution debug output." ).create( DEBUG ) );
@@ -132,7 +139,7 @@ class CLIManager
 
         HelpFormatter formatter = new HelpFormatter();
         formatter.printHelp( "doxia [options] -in <arg> [-from <arg>] [-inEncoding <arg>] -out <arg> "
-            + "-to <arg>\n", "\nOptions:", OPTIONS, getSupportedFormatAndEncoding() );
+            + "-to <arg> [-outEncoding <arg>]\n", "\nOptions:", OPTIONS, getSupportedFormatAndEncoding() );
     }
 
     private static String getSupportedFormatAndEncoding()

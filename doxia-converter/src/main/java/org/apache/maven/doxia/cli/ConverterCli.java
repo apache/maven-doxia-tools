@@ -139,6 +139,7 @@ public class ConverterCli
             output =
                 OutputFileWrapper.valueOf( commandLine.getOptionValue( CLIManager.OUT ),
                                            commandLine.getOptionValue( CLIManager.TO ),
+                                           commandLine.getOptionValue( CLIManager.OUTENCODING ),
                                            converter.getOutputFormats() );
         }
         catch ( IllegalArgumentException e )

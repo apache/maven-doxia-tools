@@ -19,36 +19,36 @@ package org.apache.maven.doxia.wrapper;
  * under the License.
  */
 
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 
 import org.codehaus.plexus.util.StringUtils;
 
 /**
- * Wrapper for an output writer.
+ * Wrapper for an output stream.
  *
  * @author <a href="mailto:vincent.siveton@gmail.com">Vincent Siveton</a>
  * @version $Id$
  */
-public class OutputWriterWrapper
+public class OutputStreamWrapper
     extends AbstractWrapper
 {
     /** serialVersionUID */
     static final long serialVersionUID = 3329037527245430610L;
 
-    private Writer writer;
+    private OutputStream out;
+
+    private String encoding;
 
     /**
      * Private constructor.
      *
-     * @param writer not null writer to write the result. <b>Should</b> be an UTF-8 Writer such as defines in
-     * {@link org.apache.maven.doxia.sink.Sink}. You could use <code>newWriter</code> methods from
-     * {@link org.codehaus.plexus.util.WriterFactory}.
      * @param format not null
      * @param supportedFormat not null
      * @throws IllegalArgumentException if any.
      */
-    private OutputWriterWrapper( Writer writer, String format, String[] supportedFormat )
+    private OutputStreamWrapper( OutputStream out, String format, String encoding, String[] supportedFormat )
     {
         super( format, supportedFormat );
 
@@ -57,32 +57,38 @@ public class OutputWriterWrapper
             throw new IllegalArgumentException( "output format is required" );
         }
 
-        this.writer = writer;
+        this.out = out;
+        this.encoding = encoding;
     }
 
     /**
-     * @return the writer. <b>Should</b> be an UTF-8 Writer such as defines in
-     * {@link org.apache.maven.doxia.sink.Sink}.
+     * @return the output stream
      */
-    public Writer getWriter()
+    public OutputStream getOutputStream()
     {
-        return this.writer;
+        return this.out;
     }
 
     /**
-     * @param writer not null writer to write the result. <b>Should</b> be an UTF-8 Writer such as defines in
-     * {@link org.apache.maven.doxia.sink.Sink}. You could use <code>newWriter</code> methods from
-     * {@link org.codehaus.plexus.util.WriterFactory}.
+     * @return the encoding
+     */
+    public String getEncoding()
+    {
+        return encoding;
+    }
+
+    /**
+     * @param out not null
      * @param format not null
      * @param supportedFormat not null
-     * @return a type safe output writer
+     * @return a type safe output stream wrapper
      * @throws IllegalArgumentException if any.
      * @throws UnsupportedEncodingException if the encoding is unsupported.
      */
-    public static OutputWriterWrapper valueOf( Writer writer, String format, String[] supportedFormat )
+    public static OutputStreamWrapper valueOf( OutputStream out, String format, String encoding, String[] supportedFormat )
         throws IllegalArgumentException
     {
-        if ( writer == null )
+        if ( out == null )
         {
             throw new IllegalArgumentException( "output writer is required" );
         }
@@ -91,6 +97,6 @@ public class OutputWriterWrapper
             throw new IllegalArgumentException( "output format is required" );
         }
 
-        return new OutputWriterWrapper( writer, format, supportedFormat );
+        return new OutputStreamWrapper( out, format, encoding, supportedFormat );
     }
 }
