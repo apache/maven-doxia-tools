@@ -21,7 +21,6 @@ package org.apache.maven.doxia.wrapper;
 
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.io.Writer;
 
 import org.codehaus.plexus.util.StringUtils;
 

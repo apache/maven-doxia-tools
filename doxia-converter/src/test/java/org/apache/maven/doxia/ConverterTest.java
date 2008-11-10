@@ -618,6 +618,19 @@ public class ConverterTest
         }
     }
 
+    private String autoDetectEncoding( File f )
+        throws Throwable
+    {
+        return (String) PrivateAccessor.invoke( DefaultConverter.class, "autoDetectEncoding",
+                                         new Class[] { File.class }, new Object[] { f } );
+    }
+
+    private String autoDetectEncoding( String filename )
+        throws Throwable
+    {
+        return autoDetectEncoding( new File( getBasedir() + "/src/test/resources/unit/" + filename ) );
+    }
+
     /**
      * Test {@link DefaultConverter#autoDetectEncoding( f )}
      *
@@ -626,47 +639,25 @@ public class ConverterTest
     public void testAutodetectEncoding()
         throws Throwable
     {
-        String in = getBasedir() + "/src/test/resources/unit/apt/test.apt";
-        File f = new File( in );
-        String result =
-            (String) PrivateAccessor.invoke( DefaultConverter.class, "autoDetectEncoding",
-                                             new Class[] { File.class }, new Object[] { f } );
-        assertEquals( result, "ISO-8859-1" );
+        assertEquals( autoDetectEncoding( "apt/test.apt" ), "ISO-8859-1" );
+        assertEquals( autoDetectEncoding( "confluence/test.confluence" ), "ISO-8859-1" );
+        assertEquals( autoDetectEncoding( "docbook/test.xml" ), "UTF-8" );
+        assertEquals( autoDetectEncoding( "fml/test.fml" ), "ISO-8859-1" );
+        assertEquals( autoDetectEncoding( "twiki/test.twiki" ), "ISO-8859-1" );
+        assertEquals( autoDetectEncoding( "xhtml/test.xhtml" ), "UTF-8" );
+    }
 
-        in = getBasedir() + "/src/test/resources/unit/confluence/test.confluence";
-        f = new File( in );
-        result =
-            (String) PrivateAccessor.invoke( DefaultConverter.class, "autoDetectEncoding",
-                                             new Class[] { File.class }, new Object[] { f } );
-        assertEquals( result, "ISO-8859-1" );
+    private String autoDetectFormat( File f, String encoding )
+        throws Throwable
+    {
+        return (String) PrivateAccessor.invoke( DefaultConverter.class, "autoDetectFormat", new Class[] { File.class,
+                                                String.class }, new Object[] { f, encoding } );
+    }
 
-        in = getBasedir() + "/src/test/resources/unit/docbook/test.xml";
-        f = new File( in );
-        result =
-            (String) PrivateAccessor.invoke( DefaultConverter.class, "autoDetectEncoding",
-                                             new Class[] { File.class }, new Object[] { f } );
-        assertEquals( result, "UTF-8" );
-
-        in = getBasedir() + "/src/test/resources/unit/fml/test.fml";
-        f = new File( in );
-        result =
-            (String) PrivateAccessor.invoke( DefaultConverter.class, "autoDetectEncoding",
-                                             new Class[] { File.class }, new Object[] { f } );
-        assertEquals( result, "ISO-8859-1" );
-
-        in = getBasedir() + "/src/test/resources/unit/twiki/test.twiki";
-        f = new File( in );
-        result =
-            (String) PrivateAccessor.invoke( DefaultConverter.class, "autoDetectEncoding",
-                                             new Class[] { File.class }, new Object[] { f } );
-        assertEquals( result, "ISO-8859-1" );
-
-        in = getBasedir() + "/src/test/resources/unit/xhtml/test.xhtml";
-        f = new File( in );
-        result =
-            (String) PrivateAccessor.invoke( DefaultConverter.class, "autoDetectEncoding",
-                                             new Class[] { File.class }, new Object[] { f } );
-        assertEquals( result, "UTF-8" );
+    private String autoDetectFormat( String filename, String encoding )
+        throws Throwable
+    {
+        return autoDetectFormat( new File( getBasedir() + "/src/test/resources/unit/" + filename ), encoding );
     }
 
     /**
@@ -677,61 +668,22 @@ public class ConverterTest
     public void testAutodetectFormat()
         throws Throwable
     {
-        String in = getBasedir() + "/src/test/resources/unit/apt/test.apt";
-        File f = new File( in );
-        String result =
-            (String) PrivateAccessor.invoke( DefaultConverter.class, "autoDetectFormat", new Class[] { File.class,
-                String.class }, new Object[] { f, "UTF-8" } );
-        assertEquals( result, "apt" );
+        assertEquals( autoDetectFormat( "apt/test.apt", "UTF-8" ), "apt" );
 
-        in = getBasedir() + "/src/test/resources/unit/apt/test.unknown";
-        f = new File( in );
         try
         {
-            result =
-                (String) PrivateAccessor.invoke( DefaultConverter.class, "autoDetectFormat", new Class[] { File.class,
-                    String.class }, new Object[] { f, "UTF-8" } );
-
-            assertFalse( true );
+            autoDetectFormat( "apt/test.unknown", "UTF-8" );
+            fail();
         }
         catch ( UnsupportedOperationException e )
         {
             assertTrue( true );
         }
 
-        in = getBasedir() + "/src/test/resources/unit/confluence/test.confluence";
-        f = new File( in );
-        result =
-            (String) PrivateAccessor.invoke( DefaultConverter.class, "autoDetectFormat", new Class[] { File.class,
-                String.class }, new Object[] { f, "UTF-8" } );
-        assertEquals( result, "confluence" );
-
-        in = getBasedir() + "/src/test/resources/unit/docbook/test.xml";
-        f = new File( in );
-        result =
-            (String) PrivateAccessor.invoke( DefaultConverter.class, "autoDetectFormat", new Class[] { File.class,
-                String.class }, new Object[] { f, "UTF-8" } );
-        assertEquals( result, "docbook" );
-
-        in = getBasedir() + "/src/test/resources/unit/fml/test.fml";
-        f = new File( in );
-        result =
-            (String) PrivateAccessor.invoke( DefaultConverter.class, "autoDetectFormat", new Class[] { File.class,
-                String.class }, new Object[] { f, "UTF-8" } );
-        assertEquals( result, "fml" );
-
-        in = getBasedir() + "/src/test/resources/unit/twiki/test.twiki";
-        f = new File( in );
-        result =
-            (String) PrivateAccessor.invoke( DefaultConverter.class, "autoDetectFormat", new Class[] { File.class,
-                String.class }, new Object[] { f, "UTF-8" } );
-        assertEquals( result, "twiki" );
-
-        in = getBasedir() + "/src/test/resources/unit/xhtml/test.xhtml";
-        f = new File( in );
-        result =
-            (String) PrivateAccessor.invoke( DefaultConverter.class, "autoDetectFormat", new Class[] { File.class,
-                String.class }, new Object[] { f, "UTF-8" } );
-        assertEquals( result, "xhtml" );
+        assertEquals( autoDetectFormat( "confluence/test.confluence", "UTF-8" ), "confluence" );
+        assertEquals( autoDetectFormat( "docbook/test.xml", "UTF-8" ), "docbook" );
+        assertEquals( autoDetectFormat( "fml/test.fml", "UTF-8" ), "fml" );
+        assertEquals( autoDetectFormat( "twiki/test.twiki", "UTF-8" ), "twiki" );
+        assertEquals( autoDetectFormat( "xhtml/test.xhtml", "UTF-8" ), "xhtml" );
     }
 }
