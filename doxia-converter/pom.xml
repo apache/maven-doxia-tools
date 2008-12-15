@@ -153,7 +153,9 @@ under the License.
         <artifactId>maven-assembly-plugin</artifactId>
         <version>2.2-beta-2</version>
         <configuration>
-          <descriptorId>jar-with-dependencies</descriptorId>
+          <descriptors>
+            <descriptor>src/main/assembly/jar.xml</descriptor>
+          </descriptors>
           <finalName>apache-doxia-${project.version}</finalName>
           <archive>
             <manifestEntries>
