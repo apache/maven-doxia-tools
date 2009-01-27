@@ -19,7 +19,7 @@ specific language governing permissions and limitations
 under the License.
 -->
 
-<model>
+<model xmlns="http://modello.codehaus.org/MODELLO/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://modello.codehaus.org/MODELLO/1.0.0 http://modello.codehaus.org/xsd/modello-1.0.0.xsd">
   <id>linkcheck</id>
   <name>LinkcheckModel</name>
   <description>Model for the linkcheck report.</description>
@@ -30,14 +30,14 @@ under the License.
     </default>
   </defaults>
   <classes>
-    <class rootElement="true" xml.tagName="linkcheck">
+    <class rootElement="true">
       <name>LinkcheckModel</name>
       <description><![CDATA[
          The <code>&lt;linkcheck&gt;</code> element is the root of the linkcheck descriptor.
       ]]></description>
       <version>1.0.0</version>
       <fields>
-        <field xml.listStyle="flat">
+        <field>
           <name>files</name>
           <description><![CDATA[
             List of <code>&lt;file&gt;</code> elements.
