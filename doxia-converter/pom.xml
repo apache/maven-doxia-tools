@@ -50,6 +50,8 @@ under the License.
       <artifactId>doxia-sink-api</artifactId>
       <version>${doxiaVersion}</version>
     </dependency>
+
+    <!-- doxia modules ordered -->
     <dependency>
       <groupId>org.apache.maven.doxia</groupId>
       <artifactId>doxia-module-apt</artifactId>
