@@ -33,12 +33,14 @@ under the License.
         <exclude>junit:junit</exclude>
         <exclude>junit-addons:junit-addons</exclude>
         <exclude>javax.servlet:servlet-api</exclude>
+        <exclude>org.apache.maven.doxia:doxia-converter</exclude>
       </excludes>
     </dependencySet>
   </dependencySets>
   <fileSets>
     <fileSet>
       <directory>target/classes</directory>
+      <outputDirectory>/</outputDirectory>
     </fileSet>
   </fileSets>
 </assembly>

@@ -54,6 +54,10 @@ public class ConverterCli
      */
     public static void main( String[] args )
     {
+        if ( args == null || args.length == 0 )
+        {
+            args = new String[] { "-h" };
+        }
         System.exit( ConverterCli.doMain( args ) );
     }
 
