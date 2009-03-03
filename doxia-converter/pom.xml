@@ -136,7 +136,7 @@ under the License.
   </dependencies>
 
   <properties>
-    <doxiaVersion>1.1-SNAPSHOT</doxiaVersion>
+    <doxiaVersion>1.1</doxiaVersion>
   </properties>
 
   <build>
