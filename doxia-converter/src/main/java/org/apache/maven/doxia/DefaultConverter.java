@@ -291,7 +291,7 @@ public class DefaultConverter
                 getLog().debug( "Sink used: " + sink.getClass().getName() );
             }
 
-            parse( parser, input.getFormat(), input.getReader(), sink );
+            parse( parser, input.getReader(), sink );
         }
         finally
         {
@@ -440,7 +440,7 @@ public class DefaultConverter
             getLog().debug( "Sink used: " + sink.getClass().getName() );
         }
 
-        parse( parser, inputFormat, reader, sink );
+        parse( parser, reader, sink );
 
         if ( formatOutput && ( output.getFormat().equals( DOCBOOK_SINK ) || output.getFormat().equals( FO_SINK )
             || output.getFormat().equals( ITEXT_SINK ) || output.getFormat().equals( XDOC_SINK )
@@ -478,20 +478,11 @@ public class DefaultConverter
      * @param parser not null
      * @param reader not null
      * @param sink not null
-     * @param writer not null
      * @throws ConverterException if any
      */
-    private void parse( Parser parser, String inputFormat, Reader reader, Sink sink )
+    private void parse( Parser parser, Reader reader, Sink sink )
         throws ConverterException
     {
-        // add warnings
-        if ( inputFormat.equals( DOCBOOK_PARSER ) && getLog().isWarnEnabled() )
-        {
-            getLog().warn(
-                           "Docbook parser has some known issues. "
-                               + "Please refer to http://jira.codehaus.org/browse/DOXIA-184" );
-        }
-
         try
         {
             parser.parse( reader, sink );

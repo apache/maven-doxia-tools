@@ -240,18 +240,17 @@ public class ConverterTest
         assertTrue( new File( out ).exists() );
         assertTrue( new File( out ).length() != 0 );
 
-        // TODO: docbook output is still crap, see DOXIA-184
-        // in = getBasedir() + "/target/unit/file/docbook/test.docbook.xhtml";
-        // from = "xhtml";
-        // out = getBasedir() + "/target/unit/file/docbook/test.docbook";
-        // to = "docbook";
-        //
-        // input = InputFileWrapper.valueOf( in, from, converter.getInputFormats() );
-        // output = OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
-        //
-        // converter.setFormatOutput( formatOutput );
-        // converter.convert( input, output );
-        // assertTrue( new File( out ).exists() );
+         in = getBasedir() + "/target/unit/file/docbook/test.docbook.xhtml";
+         from = "xhtml";
+         out = getBasedir() + "/target/unit/file/docbook/test.docbook";
+         to = "docbook";
+
+         input = InputFileWrapper.valueOf( in, from, converter.getInputFormats() );
+         output = OutputFileWrapper.valueOf( out, to, converter.getOutputFormats() );
+
+         converter.setFormatOutput( formatOutput );
+         converter.convert( input, output );
+         assertTrue( new File( out ).exists() );
     }
 
     /**
