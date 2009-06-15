@@ -127,6 +127,12 @@
       <role-hint>fml</role-hint>
       <implementation>org.apache.maven.doxia.module.fml.FmlParser</implementation>
       <description>Parse a fml model and emit events into the specified doxia Sink.</description>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.doxia.macro.manager.MacroManager</role>
+          <field-name>macroManager</field-name>
+        </requirement>
+      </requirements>
     </component>
 
     <!-- Doxia fo -->
