@@ -62,11 +62,10 @@ public class OutputFileWrapper
      * @param format not null
      * @param supportedFormat not null
      * @return a type safe output writer
-     * @throws IllegalArgumentException if any.
      * @throws UnsupportedEncodingException if the encoding is unsupported.
      */
     public static OutputFileWrapper valueOf( String absolutePath, String format, String[] supportedFormat )
-        throws IllegalArgumentException, UnsupportedEncodingException
+        throws UnsupportedEncodingException
     {
         return valueOf( absolutePath, format, WriterFactory.UTF_8, supportedFormat );
     }
@@ -77,12 +76,11 @@ public class OutputFileWrapper
      * @param charsetName could be null
      * @param supportedFormat not null
      * @return a type safe output writer
-     * @throws IllegalArgumentException if any.
      * @throws UnsupportedEncodingException if the encoding is unsupported.
      */
     public static OutputFileWrapper valueOf( String absolutePath, String format, String charsetName,
                                              String[] supportedFormat )
-        throws IllegalArgumentException, UnsupportedEncodingException
+        throws UnsupportedEncodingException
     {
         if ( StringUtils.isEmpty( format ) )
         {

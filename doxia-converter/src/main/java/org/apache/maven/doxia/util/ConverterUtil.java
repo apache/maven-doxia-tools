@@ -51,16 +51,19 @@ public class ConverterUtil
         {
             throw new IllegalArgumentException( "plexus is required" );
         }
+
         if ( format == null )
         {
             throw new IllegalArgumentException( "format is required" );
         }
+
         if ( supportedFormats == null )
         {
             throw new IllegalArgumentException( "supportedFormats is required" );
         }
 
         Parser parser = null;
+
         for ( int i = 0; i < supportedFormats.length; i++ )
         {
             if ( format.equalsIgnoreCase( supportedFormats[i] ) )
@@ -84,7 +87,7 @@ public class ConverterUtil
      * @return an instance of <code>SinkFactory</code> depending on the given format.
      * @throws ComponentLookupException if could not find the SinkFactory for the given format.
      * @throws UnsupportedFormatException if the found sink is not instantiated.
-     * @throws IOException 
+     * @throws IOException if any.
      * @throws IllegalArgumentException if any parameter is null
      */
     public static SinkFactory getSinkFactory( PlexusContainer plexus, String format, String[] supportedFormats )
@@ -94,16 +97,19 @@ public class ConverterUtil
         {
             throw new IllegalArgumentException( "plexus is required" );
         }
+
         if ( format == null )
         {
             throw new IllegalArgumentException( "format is required" );
         }
+
         if ( supportedFormats == null )
         {
             throw new IllegalArgumentException( "supportedFormats is required" );
         }
 
         SinkFactory factory = null;
+
         for ( int i = 0; i < supportedFormats.length; i++ )
         {
             if ( format.equalsIgnoreCase( supportedFormats[i] ) )

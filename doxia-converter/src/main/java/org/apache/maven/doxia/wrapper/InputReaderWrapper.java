@@ -71,10 +71,8 @@ public class InputReaderWrapper
      * @param format not null
      * @param supportedFormat not null
      * @return a type safe input reader
-     * @throws IllegalArgumentException if any
      */
     public static InputReaderWrapper valueOf( Reader reader, String format, String[] supportedFormat )
-        throws IllegalArgumentException
     {
         return new InputReaderWrapper( reader, format, supportedFormat );
     }

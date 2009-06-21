@@ -20,7 +20,6 @@ package org.apache.maven.doxia.wrapper;
  */
 
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 
 import org.codehaus.plexus.util.StringUtils;
 
@@ -79,13 +78,12 @@ public class OutputStreamWrapper
     /**
      * @param out not null
      * @param format not null
+     * @param encoding not null
      * @param supportedFormat not null
      * @return a type safe output stream wrapper
-     * @throws IllegalArgumentException if any.
-     * @throws UnsupportedEncodingException if the encoding is unsupported.
      */
-    public static OutputStreamWrapper valueOf( OutputStream out, String format, String encoding, String[] supportedFormat )
-        throws IllegalArgumentException
+    public static OutputStreamWrapper valueOf( OutputStream out, String format, String encoding,
+            String[] supportedFormat )
     {
         if ( out == null )
         {

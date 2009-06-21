@@ -48,7 +48,7 @@ public class ConverterCli
     /**
      * Default main which terminates the JVM with <code>0</code> if no errors occurs.
      *
-     * @param args
+     * @param args command line args.
      * @see #doMain(String[])
      * @see System#exit(int)
      */

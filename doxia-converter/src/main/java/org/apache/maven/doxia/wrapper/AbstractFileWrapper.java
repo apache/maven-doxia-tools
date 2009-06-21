@@ -41,9 +41,6 @@ abstract class AbstractFileWrapper
 {
     public static final String AUTO_ENCODING = "auto";
 
-    /** serialVersionUID */
-    static final long serialVersionUID = 6072685230076158590L;
-
     private File file;
 
     private String encoding;
@@ -67,12 +64,12 @@ abstract class AbstractFileWrapper
             throw new IllegalArgumentException( "absolutePath is required" );
         }
 
-        File file = new File( absolutePath );
-        if ( !file.isAbsolute() )
+        File filetoset = new File( absolutePath );
+        if ( !filetoset.isAbsolute() )
         {
-            file = new File( new File( "" ).getAbsolutePath(), absolutePath );
+            filetoset = new File( new File( "" ).getAbsolutePath(), absolutePath );
         }
-        this.file = file;
+        this.file = filetoset;
 
         if ( StringUtils.isNotEmpty( encoding ) && !encoding.equalsIgnoreCase( encoding )
             && !validateEncoding( encoding ) )
@@ -170,9 +167,10 @@ abstract class AbstractFileWrapper
     /** {@inheritDoc} */
     public int hashCode()
     {
-        int result = super.hashCode();
-        result = 37 * result + ( getFile() != null ? getFile().hashCode() : 0 );
-        return result;
+        final int result = super.hashCode();
+        final int hash = 37;
+
+        return hash * result + ( getFile() != null ? getFile().hashCode() : 0 );
     }
 
     /** {@inheritDoc} */

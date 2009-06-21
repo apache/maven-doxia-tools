@@ -41,12 +41,11 @@ public class InputFileWrapper
      * @param format could be null
      * @param charsetName could be null
      * @param supportedFormat not null
-     * @throws IllegalArgumentException if the file doesn't exist.
      * @throws UnsupportedEncodingException if the encoding is unsupported.
      * @throws FileNotFoundException if the file for absolutePath is not found.
      */
     private InputFileWrapper( String absolutePath, String format, String charsetName, String[] supportedFormat )
-        throws IllegalArgumentException, UnsupportedEncodingException, FileNotFoundException
+        throws UnsupportedEncodingException, FileNotFoundException
     {
         super( absolutePath, format, charsetName, supportedFormat );
 
@@ -59,16 +58,14 @@ public class InputFileWrapper
     /**
      * @param absolutePath for a file or a directory not null.
      * @param format could be null
-     * @param charsetName could be null
      * @param supportedFormat not null
      * @return a type safe input reader
-     * @throws IllegalArgumentException if the file doesn't exist.
      * @throws UnsupportedEncodingException if the encoding is unsupported.
      * @throws FileNotFoundException if the file for absolutePath is not found.
      * @see #valueOf(String, String, String, String[]) using AUTO_FORMAT
      */
     public static InputFileWrapper valueOf( String absolutePath, String format, String[] supportedFormat )
-        throws IllegalArgumentException, UnsupportedEncodingException, FileNotFoundException
+        throws UnsupportedEncodingException, FileNotFoundException
     {
         return valueOf( absolutePath, format, AUTO_FORMAT, supportedFormat );
     }
@@ -79,13 +76,12 @@ public class InputFileWrapper
      * @param charsetName could be null
      * @param supportedFormat not null
      * @return a type safe input reader
-     * @throws IllegalArgumentException if the file doesn't exist.
      * @throws UnsupportedEncodingException if the encoding is unsupported.
      * @throws FileNotFoundException if the file for absolutePath is not found.
      */
     public static InputFileWrapper valueOf( String absolutePath, String format, String charsetName,
                                             String[] supportedFormat )
-        throws IllegalArgumentException, UnsupportedEncodingException, FileNotFoundException
+        throws UnsupportedEncodingException, FileNotFoundException
     {
         return new InputFileWrapper( absolutePath, format, charsetName, supportedFormat );
     }

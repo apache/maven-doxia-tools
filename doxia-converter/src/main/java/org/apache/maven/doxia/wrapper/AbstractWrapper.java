@@ -34,9 +34,6 @@ abstract class AbstractWrapper
 {
     public static final String AUTO_FORMAT = "auto";
 
-    /** serialVersionUID */
-    static final long serialVersionUID = -1150854786311626411L;
-
     private String format;
 
     private String[] supportedFormat;
@@ -111,9 +108,10 @@ abstract class AbstractWrapper
     /** {@inheritDoc} */
     public int hashCode()
     {
-        int result = 17;
-        result = 37 * result + ( format != null ? format.hashCode() : 0 );
-        return result;
+        final int result = 17;
+        final int hash = 37;
+
+        return hash * result + ( format != null ? format.hashCode() : 0 );
     }
 
     /** {@inheritDoc} */
