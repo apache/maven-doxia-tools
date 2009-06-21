@@ -79,6 +79,11 @@ public class LinkValidationItem
     /** {@inheritDoc} */
     public boolean equals( Object obj )
     {
+        if ( !( obj instanceof LinkValidationItem ) )
+        {
+            return false;
+        }
+
         LinkValidationItem lvi = (LinkValidationItem) obj;
 
         if ( !lvi.link.equals( this.link ) )
