@@ -32,11 +32,8 @@ under the License.
   <classes>
     <class>
       <name>HttpBean</name>
-      <description><![CDATA[
-         Http bean to encapsulate the supported HTTP parameters.
-
-         @see org.apache.commons.httpclient.HttpMethod
-      ]]></description>
+      <description>Http bean to encapsulate the supported HTTP parameters.
+         @see org.apache.commons.httpclient.HttpMethod</description>
       <version>1.0.0</version>
       <fields>
         <field>
@@ -62,8 +59,7 @@ under the License.
      return a message-body in the response.
      </blockquote>
      </dd>
-     </dl>
-          ]]></description>
+     </dl>]]></description>
           <version>1.0.0</version>
           <identifier>true</identifier>
           <type>String</type>
@@ -73,26 +69,21 @@ under the License.
           <name>followRedirects</name>
           <description><![CDATA[
      if the HTTP method should automatically follow HTTP redirects
-     (status code 302, etc.), <tt>false</tt> otherwise.
-          ]]></description>
+     (status code 302, etc.), <tt>false</tt> otherwise.]]></description>
           <version>1.0.0</version>
           <identifier>true</identifier>
           <type>boolean</type>
         </field>
         <field>
           <name>proxyHost</name>
-          <description><![CDATA[
-            The proxy host.
-          ]]></description>
+          <description>The proxy host.</description>
           <version>1.0.0</version>
           <identifier>true</identifier>
           <type>String</type>
         </field>
         <field>
           <name>proxyPort</name>
-          <description><![CDATA[
-            The proxy port.
-          ]]></description>
+          <description>The proxy port.</description>
           <version>1.0.0</version>
           <identifier>true</identifier>
           <type>int</type>
@@ -100,41 +91,83 @@ under the License.
         </field>
         <field>
           <name>proxyUser</name>
-          <description><![CDATA[
-            The proxy user.
-          ]]></description>
+          <description>The proxy user.</description>
           <version>1.0.0</version>
           <identifier>true</identifier>
           <type>String</type>
         </field>
         <field>
           <name>proxyPassword</name>
-          <description><![CDATA[
-            The proxy password.
-          ]]></description>
+          <description>The proxy password.</description>
           <version>1.0.0</version>
           <identifier>true</identifier>
           <type>String</type>
         </field>
         <field>
           <name>proxyNtlmHost</name>
-          <description><![CDATA[
-            The proxy NTLM (NT Lan Manager) host.
-          ]]></description>
+          <description>The proxy NTLM (NT Lan Manager) host.</description>
           <version>1.0.0</version>
           <identifier>true</identifier>
           <type>String</type>
         </field>
         <field>
           <name>proxyNtlmDomain</name>
-          <description><![CDATA[
-            The proxy NTLM (NT Lan Manager) domain.
-          ]]></description>
+          <description>The proxy NTLM (NT Lan Manager) domain.</description>
           <version>1.0.0</version>
           <identifier>true</identifier>
           <type>String</type>
         </field>
+        <field java.setter="false">
+          <name>timeout</name>
+          <description>The timeout to be used. A value of zero means the timeout is not used.
+            Default value is 2000.</description>
+          <version>1.0.0</version>
+          <identifier>true</identifier>
+          <type>int</type>
+          <defaultValue>2000</defaultValue>
+        </field>
       </fields>
+      <codeSegments>
+        <codeSegment>
+          <version>1.0.0</version>
+          <code>
+          <![CDATA[
+    /**
+     * Set the timeout to be used. A value of zero means the timeout is not used.
+     *
+     * @param timeout positive int
+     */
+    public void setTimeout( int timeout )
+    {
+        if ( timeout < 0 )
+        {
+            throw new IllegalArgumentException( timeout + " should be 0 or positive." );
+        }
+        this.timeout = timeout;
+    }
+
+    private java.util.Properties httpClientParameters;
+
+    /**
+     * @return the extra HttpClient parameters
+     * @see http://hc.apache.org/httpclient-3.x/preference-api.html
+     */
+    public java.util.Properties getHttpClientParameters()
+    {
+        return httpClientParameters;
+    }
+
+    /**
+     * @param httpClientParameters the extra HttpClient parameters to set
+     * @see http://hc.apache.org/httpclient-3.x/preference-api.html
+     */
+    public void setHttpClientParameters( java.util.Properties httpClientParameters )
+    {
+        this.httpClientParameters = httpClientParameters;
+    }]]>
+          </code>
+        </codeSegment>
+      </codeSegments>
     </class>
   </classes>
 </model>
