@@ -22,6 +22,8 @@ package org.apache.maven.doxia.linkcheck.validation;
 import java.io.IOException;
 
 import java.net.URL;
+import java.util.Iterator;
+import java.util.Map;
 
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.Header;
@@ -38,13 +40,14 @@ import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.HeadMethod;
+import org.apache.commons.httpclient.params.HttpClientParams;
+import org.apache.commons.httpclient.params.HttpMethodParams;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.maven.doxia.linkcheck.HttpBean;
 import org.apache.maven.doxia.linkcheck.model.LinkcheckFileResult;
 import org.codehaus.plexus.util.StringUtils;
-
 
 /**
  * Checks links which are normal URLs
@@ -54,7 +57,8 @@ import org.codehaus.plexus.util.StringUtils;
  * @author <a href="mailto:vincent.siveton@gmail.com">Vincent Siveton</a>
  * @version $Id$
  */
-public final class OnlineHTTPLinkValidator extends HTTPLinkValidator
+public final class OnlineHTTPLinkValidator
+    extends HTTPLinkValidator
 {
     /** Log for debug output. */
     private static final Log LOG = LogFactory.getLog( OnlineHTTPLinkValidator.class );
@@ -97,10 +101,7 @@ public final class OnlineHTTPLinkValidator extends HTTPLinkValidator
             bean = new HttpBean();
         }
 
-        if ( LOG.isDebugEnabled() )
-        {
-            LOG.debug( "Will use method : [" + bean.getMethod() + "]" );
-        }
+        LOG.debug( "Will use method : [" + bean.getMethod() + "]" );
 
         this.http = bean;
 
@@ -135,42 +136,50 @@ public final class OnlineHTTPLinkValidator extends HTTPLinkValidator
             initHttpClient();
         }
 
-        String link = lvi.getLink();
+        if ( this.http.getHttpClientParameters() != null )
+        {
+            for ( Iterator it = this.http.getHttpClientParameters().entrySet().iterator(); it.hasNext(); )
+            {
+                Map.Entry entry = (Map.Entry) it.next();
 
+                if ( entry.getValue() != null )
+                {
+                    System.setProperty( entry.getKey().toString(), entry.getValue().toString() );
+                }
+            }
+        }
+
+        // Some web servers don't allow the default user-agent sent by httpClient
+        System.setProperty( HttpMethodParams.USER_AGENT, "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)" );
+
+        String link = lvi.getLink();
         try
         {
             if ( link.startsWith( "/" ) )
             {
                 if ( getBaseURL() == null )
                 {
-                    if ( LOG.isWarnEnabled() )
-                    {
+                    LOG.warn( "Cannot check link [" + link + "] in page [" + lvi.getSource()
+                        + "], as no base URL has been set!" );
 
-                        LOG.warn( "Cannot check link [" + link + "] in page [" + lvi.getSource()
-                            + "], as no base URL has been set!" );
-                    }
                     return new LinkValidationResult( LinkcheckFileResult.WARNING_LEVEL, false,
-                            "No base URL specified" );
+                                                     "No base URL specified" );
                 }
 
                 link = getBaseURL() + link;
             }
 
             HttpMethod hm = null;
-
             try
             {
                 hm = checkLink( link, 0 );
             }
             catch ( Throwable t )
             {
-                if ( LOG.isDebugEnabled() )
-                {
-                    LOG.debug( "Received: [" + t + "] for [" + link + "] in page [" + lvi.getSource() + "]", t );
-                }
+                LOG.debug( "Received: [" + t + "] for [" + link + "] in page [" + lvi.getSource() + "]", t );
 
-                return new LinkValidationResult( LinkcheckFileResult.ERROR_LEVEL, false, t.getClass().getName() + " : "
-                                + t.getMessage() );
+                return new LinkValidationResult( LinkcheckFileResult.ERROR_LEVEL, false, t.getClass().getName()
+                    + " : " + t.getMessage() );
             }
 
             if ( hm == null )
@@ -182,116 +191,114 @@ public final class OnlineHTTPLinkValidator extends HTTPLinkValidator
             if ( hm.getStatusCode() == HttpStatus.SC_OK )
             {
                 return new HTTPLinkValidationResult( LinkcheckFileResult.VALID_LEVEL, true, hm.getStatusCode(),
-                                                 hm.getStatusText() );
-        }
+                                                     hm.getStatusText() );
+            }
 
-        // If there's a redirection ... add a warning
-        if ( hm.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY
-                        || hm.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY
-                        || hm.getStatusCode() == HttpStatus.SC_TEMPORARY_REDIRECT )
-        {
-            if ( LOG.isWarnEnabled() )
+            String msg =
+                "Received: [" + hm.getStatusCode() + "] for [" + link + "] in page [" + lvi.getSource() + "]";
+            // If there's a redirection ... add a warning
+            if ( hm.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY
+                || hm.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY
+                || hm.getStatusCode() == HttpStatus.SC_TEMPORARY_REDIRECT )
             {
-                LOG.warn( "Received: [" + hm.getStatusCode() + "] for [" + link + "] in page [" + lvi.getSource()
-                        + "]" );
-                }
+                LOG.warn( msg );
 
                 return new HTTPLinkValidationResult( LinkcheckFileResult.WARNING_LEVEL, true, hm.getStatusCode(),
                                                      hm.getStatusText() );
             }
 
-            if ( LOG.isDebugEnabled() )
-            {
-                LOG.debug( "Received: [" + hm.getStatusCode() + "] for [" + link + "] in page [" + lvi.getSource()
-                    + "]" );
-            }
+            LOG.debug( msg );
 
             return new HTTPLinkValidationResult( LinkcheckFileResult.ERROR_LEVEL, false, hm.getStatusCode(),
                                                  hm.getStatusText() );
-
         }
         catch ( Throwable t )
         {
+            String msg = "Received: [" + t + "] for [" + link + "] in page [" + lvi.getSource() + "]";
             if ( LOG.isDebugEnabled() )
             {
-                LOG.debug( "Received: [" + t + "] for [" + link + "] in page [" + lvi.getSource() + "]", t );
+                LOG.debug( msg, t );
             }
             else
             {
-                LOG.error( "Received: [" + t + "] for [" + link + "] in page [" + lvi.getSource() + "]" );
+                LOG.error( msg );
             }
 
             return new LinkValidationResult( LinkcheckFileResult.ERROR_LEVEL, false, t.getMessage() );
+        }
+        finally
+        {
+            System.getProperties().remove( HttpMethodParams.USER_AGENT );
+
+            if ( this.http.getHttpClientParameters() != null )
+            {
+                for ( Iterator it = this.http.getHttpClientParameters().entrySet().iterator(); it.hasNext(); )
+                {
+                    Map.Entry entry = (Map.Entry) it.next();
+
+                    if ( entry.getValue() != null )
+                    {
+                        System.getProperties().remove( entry.getKey().toString() );
+                    }
+                }
+            }
         }
     }
 
     /** Initialize the HttpClient. */
     private void initHttpClient()
     {
-        if ( LOG.isDebugEnabled() )
-        {
-            LOG.debug( "A new HttpClient instance is needed ..." );
-        }
-
-        // Some web servers don't allow the default user-agent sent by httpClient
-        System.setProperty( "httpclient.useragent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)" );
+        LOG.debug( "A new HttpClient instance is needed ..." );
 
         this.cl = new HttpClient( new MultiThreadedHttpConnectionManager() );
+
+        // Default params
+        if ( this.http.getTimeout() != 0 )
+        {
+            this.cl.getHttpConnectionManager().getParams().setConnectionTimeout( this.http.getTimeout() );
+            this.cl.getHttpConnectionManager().getParams().setSoTimeout( this.http.getTimeout() );
+        }
+        this.cl.getParams().setBooleanParameter( HttpClientParams.ALLOW_CIRCULAR_REDIRECTS, true );
 
         HostConfiguration hc = new HostConfiguration();
 
         HttpState state = new HttpState();
-
         if ( StringUtils.isNotEmpty( this.http.getProxyHost() ) )
         {
             hc.setProxy( this.http.getProxyHost(), this.http.getProxyPort() );
 
-            if ( LOG.isDebugEnabled() )
-            {
-                LOG.debug( "Proxy Host:" + this.http.getProxyHost() );
-                LOG.debug( "Proxy Port:" + this.http.getProxyPort() );
-            }
+            LOG.debug( "Proxy Host:" + this.http.getProxyHost() );
+            LOG.debug( "Proxy Port:" + this.http.getProxyPort() );
 
             if ( StringUtils.isNotEmpty( this.http.getProxyUser() ) && this.http.getProxyPassword() != null )
             {
-                if ( LOG.isDebugEnabled() )
-                {
-                    LOG.debug( "Proxy User:" + this.http.getProxyUser() );
-                }
+                LOG.debug( "Proxy User:" + this.http.getProxyUser() );
 
                 Credentials credentials;
-
                 if ( StringUtils.isNotEmpty( this.http.getProxyNtlmHost() ) )
                 {
-                    credentials = new NTCredentials( this.http.getProxyUser(), this.http.getProxyPassword(), this.http
-                        .getProxyNtlmHost(), this.http.getProxyNtlmDomain() );
+                    credentials =
+                        new NTCredentials( this.http.getProxyUser(), this.http.getProxyPassword(),
+                                           this.http.getProxyNtlmHost(), this.http.getProxyNtlmDomain() );
                 }
                 else
                 {
-                    credentials = new UsernamePasswordCredentials( this.http.getProxyUser(), this.http
-                        .getProxyPassword() );
+                    credentials =
+                        new UsernamePasswordCredentials( this.http.getProxyUser(), this.http.getProxyPassword() );
                 }
 
                 state.setProxyCredentials( AuthScope.ANY, credentials );
             }
-
         }
         else
         {
-            if ( LOG.isDebugEnabled() )
-            {
-                LOG.debug( "Not using a proxy" );
-            }
+            LOG.debug( "Not using a proxy" );
         }
 
         this.cl.setHostConfiguration( hc );
-
         this.cl.setState( state );
 
-        if ( LOG.isDebugEnabled() )
-        {
-            LOG.debug( "New HttpClient instance created." );
-        }
+        LOG.debug( "New HttpClient instance created." );
     }
 
     /**
@@ -305,13 +312,29 @@ public final class OnlineHTTPLinkValidator extends HTTPLinkValidator
     private HttpMethod checkLink( String link, int nbRedirect )
         throws IOException
     {
-        if ( nbRedirect > MAX_NB_REDIRECT )
+        int max = MAX_NB_REDIRECT;
+        if ( this.http.getHttpClientParameters() != null
+            && this.http.getHttpClientParameters().get( HttpClientParams.MAX_REDIRECTS ) != null )
         {
-            throw new HttpException( "Maximum number of redirections (" + MAX_NB_REDIRECT + ") exceeded" );
+            try
+            {
+                max =
+                    Integer.valueOf(
+                                     this.http.getHttpClientParameters().get( HttpClientParams.MAX_REDIRECTS )
+                                              .toString() ).intValue();
+            }
+            catch ( NumberFormatException e )
+            {
+                LOG.warn( "HttpClient parameter '" + HttpClientParams.MAX_REDIRECTS
+                    + "' is not a number. Ignoring" );
+            }
+        }
+        if ( nbRedirect > max )
+        {
+            throw new HttpException( "Maximum number of redirections (" + max + ") exceeded" );
         }
 
         HttpMethod hm;
-
         if ( HEAD_METHOD.equalsIgnoreCase( this.http.getMethod() ) )
         {
             hm = new HeadMethod( link );
@@ -322,17 +345,15 @@ public final class OnlineHTTPLinkValidator extends HTTPLinkValidator
         }
         else
         {
-            if ( LOG.isErrorEnabled() )
-            {
-                LOG.error( "Unsupported method: " + this.http.getMethod() + ", using 'get'." );
-            }
+            LOG.error( "Unsupported method: " + this.http.getMethod() + ", using 'get'." );
             hm = new GetMethod( link );
         }
 
+        // Default
+        hm.setFollowRedirects( this.http.isFollowRedirects() );
+
         try
         {
-            hm.setFollowRedirects( this.http.isFollowRedirects() );
-
             URL url = new URL( link );
 
             cl.getHostConfiguration().setHost( url.getHost(), url.getPort(), url.getProtocol() );
@@ -340,28 +361,23 @@ public final class OnlineHTTPLinkValidator extends HTTPLinkValidator
             cl.executeMethod( hm );
 
             StatusLine sl = hm.getStatusLine();
-
             if ( sl == null )
             {
-                if ( LOG.isErrorEnabled() )
-                {
-                    LOG.error( "Unknown error validating link : " + link );
-                }
+                LOG.error( "Unknown error validating link : " + link );
+
                 return null;
             }
 
             if ( hm.getStatusCode() == HttpStatus.SC_MOVED_PERMANENTLY
-                            || hm.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY
-                            || hm.getStatusCode() == HttpStatus.SC_TEMPORARY_REDIRECT )
+                || hm.getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY
+                || hm.getStatusCode() == HttpStatus.SC_TEMPORARY_REDIRECT )
             {
                 Header locationHeader = hm.getResponseHeader( "location" );
 
                 if ( locationHeader == null )
                 {
-                    if ( LOG.isErrorEnabled() )
-                    {
-                        LOG.error( "Site sent redirect, but did not set Location header" );
-                    }
+                    LOG.error( "Site sent redirect, but did not set Location header" );
+
                     return hm;
                 }
 
@@ -376,7 +392,7 @@ public final class OnlineHTTPLinkValidator extends HTTPLinkValidator
 
                         newLink =
                             oldUrl.getProtocol() + "://" + oldUrl.getHost()
-                                            + ( oldUrl.getPort() > 0 ? ":" + oldUrl.getPort() : "" ) + newLink;
+                                + ( oldUrl.getPort() > 0 ? ":" + oldUrl.getPort() : "" ) + newLink;
                     }
                     else
                     {
@@ -386,10 +402,7 @@ public final class OnlineHTTPLinkValidator extends HTTPLinkValidator
 
                 HttpMethod oldHm = hm;
 
-                if ( LOG.isDebugEnabled() )
-                {
-                    LOG.debug( "[" + link + "] is redirected to [" + newLink + "]" );
-                }
+                LOG.debug( "[" + link + "] is redirected to [" + newLink + "]" );
 
                 oldHm.releaseConnection();
 

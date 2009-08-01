@@ -34,6 +34,7 @@ import java.io.InvalidClassException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -404,6 +405,17 @@ public class LinkValidatorManager
             return link.indexOf( pattern ) != -1;
         }
 
+        URI uri = URI.create( link );
+
+        if ( uri.getScheme() != null && !pattern.startsWith( uri.getScheme() ) )
+        {
+            return true;
+        }
+
+        if ( pattern.matches( "\\*+/?.*" ) && !link.startsWith( "/" ) && !link.startsWith( "./" ) )
+        {
+            link = "./" + link;
+        }
         String diff = StringUtils.difference( link, pattern );
         if ( diff.startsWith( "/" ) )
         {
