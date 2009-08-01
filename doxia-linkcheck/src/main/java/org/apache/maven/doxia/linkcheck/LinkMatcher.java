@@ -67,7 +67,8 @@ class LinkMatcher
      * @return a StringBuffer with file's contents.
      * @throws IOException if something goes wrong.
      */
-    private static StringBuffer fileToStringBuffer( File file, String encoding ) throws IOException
+    private static StringBuffer fileToStringBuffer( File file, String encoding )
+        throws IOException
     {
         final StringBuffer pageBuffer = new StringBuffer();
 
@@ -75,7 +76,7 @@ class LinkMatcher
         Reader r = null;
         try
         {
-            r = ReaderFactory.newReader( file, encoding ) ;
+            r = ReaderFactory.newReader( file, encoding );
             reader = new BufferedReader( r );
 
             String line;
@@ -101,7 +102,8 @@ class LinkMatcher
      * @return a set with all links to check
      * @throws IOException if something goes wrong
      */
-    static Set match( File file, String encoding ) throws IOException
+    static Set match( File file, String encoding )
+        throws IOException
     {
         LINK_LIST.clear();
 

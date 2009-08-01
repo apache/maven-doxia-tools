@@ -37,7 +37,8 @@ import org.codehaus.plexus.util.WriterFactory;
  * @author <a href="mailto:aheritier@apache.org">Arnaud Heritier</a>
  * @version $Id$
  */
-public final class FileLinkValidator implements LinkValidator
+public final class FileLinkValidator
+    implements LinkValidator
 {
     private String encoding;
 
@@ -74,8 +75,8 @@ public final class FileLinkValidator implements LinkValidator
         // If we find an http(s) link or a mail link, it's not good
         // links starting with "/" should have a base URL pre-pended and be handled by OnlineHTTPLinkValidator.
         if ( link.toLowerCase( Locale.ENGLISH ).startsWith( "http://" )
-            || link.toLowerCase( Locale.ENGLISH ).startsWith( "https://" )
-            || link.indexOf( '@' ) != -1 || link.startsWith( "/" ) )
+            || link.toLowerCase( Locale.ENGLISH ).startsWith( "https://" ) || link.indexOf( '@' ) != -1
+            || link.startsWith( "/" ) )
         {
             return null;
         }

@@ -28,7 +28,8 @@ import org.apache.maven.doxia.linkcheck.model.LinkcheckFileResult;
  * @author <a href="mailto:aheritier@apache.org">Arnaud Heritier</a>
  * @version $Id$
  */
-public final class MailtoLinkValidator implements LinkValidator
+public final class MailtoLinkValidator
+    implements LinkValidator
 {
     /** The (unique) LinkValidationResult to be returned by this LinkValidator. */
     private static final LinkValidationResult LVR =

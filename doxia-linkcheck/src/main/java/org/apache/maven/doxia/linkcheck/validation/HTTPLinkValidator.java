@@ -28,7 +28,8 @@ import java.util.Locale;
  * @author <a href="mailto:aheritier@apache.org">Arnaud Heritier</a>
  * @version $Id$
  */
-public abstract class HTTPLinkValidator implements LinkValidator
+public abstract class HTTPLinkValidator
+    implements LinkValidator
 {
     /** {@inheritDoc} */
     public Object getResourceKey( LinkValidationItem lvi )
@@ -36,8 +37,7 @@ public abstract class HTTPLinkValidator implements LinkValidator
         String link = lvi.getLink();
 
         if ( !link.toLowerCase( Locale.ENGLISH ).startsWith( "http://" )
-            && !link.toLowerCase( Locale.ENGLISH ).startsWith( "https://" )
-            && !link.startsWith( "/" ) )
+            && !link.toLowerCase( Locale.ENGLISH ).startsWith( "https://" ) && !link.startsWith( "/" ) )
         {
             return null;
         }

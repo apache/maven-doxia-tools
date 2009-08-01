@@ -185,7 +185,8 @@ public class LinkValidatorManager
             LOG.error( "Unable to validate link : " + lvi.getLink() );
         }
 
-        return new LinkValidationResult( LinkcheckFileResult.UNKNOWN_LEVEL, false, "No validator found for this link" );
+        return new LinkValidationResult( LinkcheckFileResult.UNKNOWN_LEVEL, false,
+                                         "No validator found for this link" );
     }
 
     /**
@@ -303,7 +304,7 @@ public class LinkValidatorManager
                 if ( LOG.isDebugEnabled() )
                 {
                     LOG.debug( "[" + resourceKey + "] with result [" + this.cache.get( resourceKey )
-                                    + "] is stored in the cache." );
+                        + "] is stored in the cache." );
                 }
             }
         }
@@ -363,7 +364,7 @@ public class LinkValidatorManager
                 if ( LOG.isDebugEnabled() )
                 {
                     LOG.debug( "The cache returns for [" + resourceKey + "] the result ["
-                                            + this.cache.get( resourceKey ) + "]." );
+                        + this.cache.get( resourceKey ) + "]." );
                 }
 
                 return (LinkValidationResult) this.cache.get( resourceKey );
@@ -388,6 +389,11 @@ public class LinkValidatorManager
         this.cache.put( resourceKey, lvr );
     }
 
+    /**
+     * @param link not null
+     * @param pattern not null
+     * @return true if pattern match
+     */
     protected static boolean matchPattern( String link, String pattern )
     {
         if ( StringUtils.isEmpty( pattern ) )

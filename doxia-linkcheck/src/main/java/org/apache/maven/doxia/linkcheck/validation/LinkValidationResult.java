@@ -29,7 +29,8 @@ import java.io.Serializable;
  * @author <a href="mailto:aheritier@apache.org">Arnaud Heritier</a>
  * @version $Id$
  */
-public class LinkValidationResult implements Serializable
+public class LinkValidationResult
+    implements Serializable
 {
     /** serialVersionUID. */
     private static final long serialVersionUID = -8346824125135406813L;

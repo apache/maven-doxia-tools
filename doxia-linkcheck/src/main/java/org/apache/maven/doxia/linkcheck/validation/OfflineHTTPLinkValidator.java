@@ -27,14 +27,13 @@ import org.apache.maven.doxia.linkcheck.model.LinkcheckFileResult;
  * @author <a href="mailto:aheritier@apache.org">Arnaud Heritier</a>
  * @version $Id$
  */
-public final class OfflineHTTPLinkValidator extends HTTPLinkValidator
+public final class OfflineHTTPLinkValidator
+    extends HTTPLinkValidator
 {
-
     /** {@inheritDoc} */
     public LinkValidationResult validateLink( LinkValidationItem lvi )
     {
         return new LinkValidationResult( LinkcheckFileResult.WARNING_LEVEL, false,
                                          "Maven is offline. Link not checked." );
     }
-
 }

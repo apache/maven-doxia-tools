@@ -191,9 +191,9 @@ public final class DefaultLinkCheck
     }
 
     /** {@inheritDoc} */
-    public void setReportOutputEncoding( String encoding )
+    public void setReportOutputEncoding( String enc )
     {
-        this.reportOutputEncoding = encoding;
+        this.reportOutputEncoding = enc;
     }
 
     /** {@inheritDoc} */
@@ -460,7 +460,8 @@ public final class DefaultLinkCheck
 
                     if ( getExcludedPages() != null )
                     {
-                        String diff = StringUtils.difference( getBasedir().getAbsolutePath(), file.getAbsolutePath() );
+                        String diff =
+                            StringUtils.difference( getBasedir().getAbsolutePath(), file.getAbsolutePath() );
                         if ( diff.startsWith( File.separator ) )
                         {
                             diff = diff.substring( 1 );
@@ -480,7 +481,8 @@ public final class DefaultLinkCheck
                     String fileRelativePath = file.getAbsolutePath();
                     if ( fileRelativePath.startsWith( this.basedir.getAbsolutePath() ) )
                     {
-                        fileRelativePath = fileRelativePath.substring( this.basedir.getAbsolutePath().length() + 1 );
+                        fileRelativePath =
+                            fileRelativePath.substring( this.basedir.getAbsolutePath().length() + 1 );
                     }
                     fileRelativePath = fileRelativePath.replace( '\\', '/' );
 
@@ -587,8 +589,8 @@ public final class DefaultLinkCheck
                     {
                         HTTPLinkValidationResult httpResult = (HTTPLinkValidationResult) result;
 
-
-                        if ( httpResult.getHttpStatusCode() > 0 && getExcludedHttpStatusErrors() != null
+                        if ( httpResult.getHttpStatusCode() > 0
+                            && getExcludedHttpStatusErrors() != null
                             && StringUtils.indexOfAny( String.valueOf( httpResult.getHttpStatusCode() ),
                                                        toStringArray( getExcludedHttpStatusErrors() ) ) >= 0 )
                         {
@@ -616,7 +618,8 @@ public final class DefaultLinkCheck
                     {
                         HTTPLinkValidationResult httpResult = (HTTPLinkValidationResult) result;
 
-                        if ( httpResult.getHttpStatusCode() > 0 && getExcludedHttpStatusWarnings() != null
+                        if ( httpResult.getHttpStatusCode() > 0
+                            && getExcludedHttpStatusWarnings() != null
                             && StringUtils.indexOfAny( String.valueOf( httpResult.getHttpStatusCode() ),
                                                        toStringArray( getExcludedHttpStatusWarnings() ) ) >= 0 )
                         {
@@ -664,7 +667,8 @@ public final class DefaultLinkCheck
         if ( LOG.isDebugEnabled() )
         {
             Runtime r = Runtime.getRuntime();
-            LOG.debug( "Memory: " + ( r.totalMemory() - r.freeMemory() ) / MEG + "M/" + r.totalMemory() / MEG + "M" );
+            LOG.debug( "Memory: " + ( r.totalMemory() - r.freeMemory() ) / MEG + "M/" + r.totalMemory() / MEG
+                + "M" );
         }
     }
 
@@ -697,8 +701,8 @@ public final class DefaultLinkCheck
         catch ( IllegalStateException e )
         {
             IOException ioe =
-                new IOException( e.getMessage() + " Maybe try to specify an other encoding instead of '" + encoding
-                    + "'." );
+                new IOException( e.getMessage() + " Maybe try to specify an other encoding instead of '"
+                    + encoding + "'." );
             ioe.initCause( e );
             throw ioe;
         }
