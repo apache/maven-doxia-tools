@@ -73,7 +73,7 @@ public class LinkCheckTest
             map.put( ftc.getRelativePath(), ftc );
         }
 
-        assertEquals( "files.size()", 8, result.getFiles().size() );
+        assertEquals( "files.size()", 9, result.getFiles().size() );
 
         check( map, "nolink.html", 0 );
         check( map, "test-resources/nolink.html", 0 );
@@ -81,6 +81,7 @@ public class LinkCheckTest
         check( map, "test-resources/test1/test2.html", 0 );
         check( map, "test1/test1.html", 1 );
         check( map, "testA.html", 3 );
+        check( map, "linkincomment.html", 1 );
 
         /* test excludes */
         String fileName = "testExcludes.html";

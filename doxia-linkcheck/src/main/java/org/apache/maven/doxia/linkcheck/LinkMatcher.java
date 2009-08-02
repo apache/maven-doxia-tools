@@ -19,7 +19,6 @@ package org.apache.maven.doxia.linkcheck;
  * under the License.
  */
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
@@ -60,38 +59,33 @@ class LinkMatcher
     }
 
     /**
-     * Reads a file and returns a StringBuffer with its contents.
+     * Reads a file and returns its contents without any XML comments.
      *
      * @param file the file we are reading
      * @param encoding the encoding file used
      * @return a StringBuffer with file's contents.
      * @throws IOException if something goes wrong.
+     * @see ReaderFactory#newReader(File, String)
+     * @see IOUtil#toString(Reader)
      */
-    private static StringBuffer fileToStringBuffer( File file, String encoding )
+    private static String toString( File file, String encoding )
         throws IOException
     {
-        final StringBuffer pageBuffer = new StringBuffer();
-
-        BufferedReader reader = null;
-        Reader r = null;
+        String content;
+        Reader reader = null;
         try
         {
-            r = ReaderFactory.newReader( file, encoding );
-            reader = new BufferedReader( r );
+            reader = ReaderFactory.newReader( file, encoding );
 
-            String line;
-            while ( ( line = reader.readLine() ) != null )
-            {
-                pageBuffer.append( line );
-            }
+            content = IOUtil.toString( reader );
         }
         finally
         {
-            IOUtil.close( r );
             IOUtil.close( reader );
         }
 
-        return pageBuffer;
+        // some link could be in comments, remove them
+        return content.replaceAll( "(?s)<!--.*?-->", "" );
     }
 
     /**
@@ -107,7 +101,7 @@ class LinkMatcher
     {
         LINK_LIST.clear();
 
-        final Matcher m = MATCH_PATTERN.matcher( fileToStringBuffer( file, encoding ) );
+        final Matcher m = MATCH_PATTERN.matcher( toString( file, encoding ) );
 
         String link;
 
@@ -133,5 +127,4 @@ class LinkMatcher
 
         return LINK_LIST;
     }
-
 }
