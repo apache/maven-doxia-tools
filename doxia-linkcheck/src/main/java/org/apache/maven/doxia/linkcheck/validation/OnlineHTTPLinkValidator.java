@@ -101,7 +101,10 @@ public final class OnlineHTTPLinkValidator
             bean = new HttpBean();
         }
 
-        LOG.debug( "Will use method : [" + bean.getMethod() + "]" );
+        if ( LOG.isDebugEnabled() )
+        {
+            LOG.debug( "Will use method : [" + bean.getMethod() + "]" );
+        }
 
         this.http = bean;
 
@@ -159,8 +162,11 @@ public final class OnlineHTTPLinkValidator
             {
                 if ( getBaseURL() == null )
                 {
-                    LOG.warn( "Cannot check link [" + link + "] in page [" + lvi.getSource()
-                        + "], as no base URL has been set!" );
+                    if ( LOG.isWarnEnabled() )
+                    {
+                        LOG.warn( "Cannot check link [" + link + "] in page [" + lvi.getSource()
+                            + "], as no base URL has been set!" );
+                    }
 
                     return new LinkValidationResult( LinkcheckFileResult.WARNING_LEVEL, false,
                                                      "No base URL specified" );
@@ -176,7 +182,10 @@ public final class OnlineHTTPLinkValidator
             }
             catch ( Throwable t )
             {
-                LOG.debug( "Received: [" + t + "] for [" + link + "] in page [" + lvi.getSource() + "]", t );
+                if ( LOG.isDebugEnabled() )
+                {
+                    LOG.debug( "Received: [" + t + "] for [" + link + "] in page [" + lvi.getSource() + "]", t );
+                }
 
                 return new LinkValidationResult( LinkcheckFileResult.ERROR_LEVEL, false, t.getClass().getName()
                     + " : " + t.getMessage() );
@@ -267,12 +276,18 @@ public final class OnlineHTTPLinkValidator
         {
             hc.setProxy( this.http.getProxyHost(), this.http.getProxyPort() );
 
-            LOG.debug( "Proxy Host:" + this.http.getProxyHost() );
-            LOG.debug( "Proxy Port:" + this.http.getProxyPort() );
+            if ( LOG.isDebugEnabled() )
+            {
+                LOG.debug( "Proxy Host:" + this.http.getProxyHost() );
+                LOG.debug( "Proxy Port:" + this.http.getProxyPort() );
+            }
 
             if ( StringUtils.isNotEmpty( this.http.getProxyUser() ) && this.http.getProxyPassword() != null )
             {
-                LOG.debug( "Proxy User:" + this.http.getProxyUser() );
+                if ( LOG.isDebugEnabled() )
+                {
+                    LOG.debug( "Proxy User:" + this.http.getProxyUser() );
+                }
 
                 Credentials credentials;
                 if ( StringUtils.isNotEmpty( this.http.getProxyNtlmHost() ) )
@@ -325,8 +340,11 @@ public final class OnlineHTTPLinkValidator
             }
             catch ( NumberFormatException e )
             {
-                LOG.warn( "HttpClient parameter '" + HttpClientParams.MAX_REDIRECTS
-                    + "' is not a number. Ignoring" );
+                if ( LOG.isWarnEnabled() )
+                {
+                    LOG.warn( "HttpClient parameter '" + HttpClientParams.MAX_REDIRECTS
+                        + "' is not a number. Ignoring!" );
+                }
             }
         }
         if ( nbRedirect > max )
@@ -345,7 +363,10 @@ public final class OnlineHTTPLinkValidator
         }
         else
         {
-            LOG.error( "Unsupported method: " + this.http.getMethod() + ", using 'get'." );
+            if ( LOG.isErrorEnabled() )
+            {
+                LOG.error( "Unsupported method: " + this.http.getMethod() + ", using 'get'." );
+            }
             hm = new GetMethod( link );
         }
 
@@ -363,7 +384,10 @@ public final class OnlineHTTPLinkValidator
             StatusLine sl = hm.getStatusLine();
             if ( sl == null )
             {
-                LOG.error( "Unknown error validating link : " + link );
+                if ( LOG.isErrorEnabled() )
+                {
+                    LOG.error( "Unknown error validating link : " + link );
+                }
 
                 return null;
             }
@@ -402,7 +426,10 @@ public final class OnlineHTTPLinkValidator
 
                 HttpMethod oldHm = hm;
 
-                LOG.debug( "[" + link + "] is redirected to [" + newLink + "]" );
+                if ( LOG.isDebugEnabled() )
+                {
+                    LOG.debug( "[" + link + "] is redirected to [" + newLink + "]" );
+                }
 
                 oldHm.releaseConnection();
 
