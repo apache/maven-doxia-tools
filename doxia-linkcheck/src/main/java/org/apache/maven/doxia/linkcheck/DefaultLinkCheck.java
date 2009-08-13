@@ -270,7 +270,11 @@ public final class DefaultLinkCheck
 
         displayMemoryConsumption();
 
-        return model;
+        // free memory
+        LinkcheckModel returnValue = model;
+        model = null;
+
+        return returnValue;
     }
 
     /** {@inheritDoc} */
