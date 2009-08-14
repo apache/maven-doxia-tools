@@ -120,9 +120,6 @@ public final class DefaultLinkCheck
     /** The base URL for links that start with '/'. */
     private String baseURL;
 
-    /** The linkcheck model */
-    private LinkcheckModel model = new LinkcheckModel();
-
     /** The encoding used to process files, UTF-8 by default. */
     private String encoding = ReaderFactory.UTF_8;
 
@@ -218,7 +215,7 @@ public final class DefaultLinkCheck
             }
         }
 
-        model = new LinkcheckModel();
+        LinkcheckModel model = new LinkcheckModel();
         model.setModelEncoding( reportOutputEncoding );
         model.setFiles( new LinkedList() );
 
@@ -241,7 +238,7 @@ public final class DefaultLinkCheck
             LOG.info( "Begin to check links in files..." );
         }
 
-        findAndCheckFiles( this.basedir );
+        findAndCheckFiles( this.basedir, model );
 
         if ( LOG.isInfoEnabled() )
         {
@@ -252,7 +249,7 @@ public final class DefaultLinkCheck
 
         try
         {
-            createDocument();
+            createDocument( model );
         }
         catch ( IOException e )
         {
@@ -270,11 +267,7 @@ public final class DefaultLinkCheck
 
         displayMemoryConsumption();
 
-        // free memory
-        LinkcheckModel returnValue = model;
-        model = null;
-
-        return returnValue;
+        return model;
     }
 
     /** {@inheritDoc} */
@@ -365,16 +358,6 @@ public final class DefaultLinkCheck
     }
 
     /**
-     * The model.
-     *
-     * @return the model.
-     */
-    private LinkcheckModel getModel()
-    {
-        return model;
-    }
-
-    /**
      * Sets the LinkValidatorManager.
      *
      * @param validator the LinkValidatorManager to set
@@ -440,7 +423,7 @@ public final class DefaultLinkCheck
      *
      * @param base the base directory to traverse.
      */
-    private void findAndCheckFiles( File base )
+    private void findAndCheckFiles( File base, LinkcheckModel model )
     {
         File[] f = base.listFiles( CUSTOM_FF );
 
@@ -453,7 +436,7 @@ public final class DefaultLinkCheck
 
                 if ( file.isDirectory() )
                 {
-                    findAndCheckFiles( file );
+                    findAndCheckFiles( file, model );
                 }
                 else
                 {
@@ -681,7 +664,7 @@ public final class DefaultLinkCheck
      *
      * @throws IOException if any
      */
-    private void createDocument()
+    private void createDocument( LinkcheckModel model )
         throws IOException
     {
         if ( this.reportOutput == null )
@@ -700,7 +683,7 @@ public final class DefaultLinkCheck
         try
         {
             writer = WriterFactory.newXmlWriter( this.reportOutput );
-            xpp3Writer.write( writer, getModel() );
+            xpp3Writer.write( writer, model );
         }
         catch ( IllegalStateException e )
         {
