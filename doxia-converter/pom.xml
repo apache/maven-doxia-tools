@@ -33,6 +33,10 @@ under the License.
   <name>Doxia Tools :: Converter</name>
   <description>Doxia Converter Tool to convert a supported format to another</description>
 
+  <properties>
+    <doxiaVersion>1.1.2-SNAPSHOT</doxiaVersion>
+  </properties>
+
   <dependencies>
     <!-- doxia -->
     <dependency>
@@ -139,10 +143,6 @@ under the License.
       <scope>test</scope>
     </dependency>
   </dependencies>
-
-  <properties>
-    <doxiaVersion>1.1.1</doxiaVersion>
-  </properties>
 
   <build>
     <plugins>
