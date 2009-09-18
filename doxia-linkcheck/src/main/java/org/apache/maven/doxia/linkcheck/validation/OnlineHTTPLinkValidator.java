@@ -154,6 +154,7 @@ public final class OnlineHTTPLinkValidator
 
         // Some web servers don't allow the default user-agent sent by httpClient
         System.setProperty( HttpMethodParams.USER_AGENT, "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)" );
+        this.cl.getParams().setParameter( HttpMethodParams.USER_AGENT, "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)" );
 
         String link = lvi.getLink();
         try
