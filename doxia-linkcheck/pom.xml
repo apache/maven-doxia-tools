@@ -46,6 +46,12 @@ under the License.
       <artifactId>commons-logging</artifactId>
       <version>1.1.1</version>
     </dependency>
+    <!-- Not included in Httpclient -->
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.14</version>
+    </dependency>
 
     <!-- Plexus -->
     <dependency>
