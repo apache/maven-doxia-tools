@@ -34,7 +34,7 @@ under the License.
   <description>Doxia Converter Tool to convert a supported format to another</description>
 
   <properties>
-    <doxiaVersion>1.1.2-SNAPSHOT</doxiaVersion>
+    <doxiaVersion>1.1.2</doxiaVersion>
   </properties>
 
   <dependencies>
