@@ -25,7 +25,7 @@ under the License.
   <parent>
     <groupId>org.apache.maven</groupId>
     <artifactId>maven-parent</artifactId>
-    <version>13</version>
+    <version>16</version>
     <relativePath>../../pom/maven/pom.xml</relativePath>
   </parent>
 
@@ -168,17 +168,17 @@ under the License.
           <artifactId>modello-maven-plugin</artifactId>
           <version>1.1</version>
         </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <configuration>
-          <source>1.4</source>
-          <links>
-            <link>http://java.sun.com/j2se/1.4.2/docs/api/</link>
-            <link>http://junit.sourceforge.net/javadoc/</link>
-          </links>
-        </configuration>
-      </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <configuration>
+            <source>1.4</source>
+            <links>
+              <link>http://java.sun.com/j2se/1.4.2/docs/api/</link>
+              <link>http://junit.sourceforge.net/javadoc/</link>
+            </links>
+          </configuration>
+        </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
@@ -208,21 +208,21 @@ under the License.
             <link>http://java.sun.com/j2se/1.4.2/docs/api/</link>
             <link>http://junit.sourceforge.net/javadoc/</link>
           </links>
-          <reportSets>
-            <reportSet>
-              <id>html</id>
-              <reports>
-                <report>javadoc</report>
-              </reports>
-            </reportSet>
-            <reportSet>
-              <id>test-html</id>
-              <reports>
-                <report>test-javadoc</report>
-              </reports>
-            </reportSet>
-          </reportSets>
         </configuration>
+        <reportSets>
+          <reportSet>
+            <id>html</id>
+            <reports>
+              <report>javadoc</report>
+            </reports>
+          </reportSet>
+          <reportSet>
+            <id>test-html</id>
+            <reports>
+              <report>test-javadoc</report>
+            </reports>
+          </reportSet>
+        </reportSets>
       </plugin>
     </plugins>
   </reporting>
