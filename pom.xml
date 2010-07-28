@@ -35,7 +35,7 @@ under the License.
   <packaging>pom</packaging>
 
   <name>Doxia Tools</name>
-  <description>Set of generic tools.</description>
+  <description>A set of tools for working with Doxia documents.</description>
   <url>http://maven.apache.org/doxia/doxia-tools</url>
   <inceptionYear>2005</inceptionYear>
 
@@ -88,8 +88,8 @@ under the License.
   </mailingLists>
 
   <modules>
-    <module>doxia-linkcheck</module>
     <module>doxia-converter</module>
+    <module>doxia-linkcheck</module>
   </modules>
 
   <scm>
