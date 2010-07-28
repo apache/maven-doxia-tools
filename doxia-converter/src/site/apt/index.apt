@@ -3,7 +3,7 @@
  -----
  Vincent Siveton
  ------
- 2008-11-01
+ 2010-07-28
  ------
 
 ~~ Licensed to the Apache Software Foundation (ASF) under one
@@ -26,10 +26,10 @@
 ~~ NOTE: For help with the syntax of this file, see:
 ~~ http://maven.apache.org/doxia/references/apt-format.html
 
-Maven Doxia Converter
+Doxia Converter
 
   Doxia Converter is a tool that helps you convert a source
-  document from any supported Doxia format to any other supported Doxia format.
+  document from one supported Doxia format to other supported Doxia format.
 
   Currently, the supported Doxia formats are:
 

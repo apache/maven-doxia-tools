@@ -21,18 +21,16 @@
  */
  -->
 
-<project>
+<project xmlns="http://maven.apache.org/DECORATION/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0 http://maven.apache.org/xsd/decoration-1.0.0.xsd">
 
   <body>
 
     <menu ref="parent"/>
 
     <menu name="Doxia :: LinkCheck">
-      <item name="Overview" href="index.html"/>
+      <item name="Introduction" href="index.html"/>
       <item name="Usage" href="usage.html"/>
     </menu>
-
-    <menu ref="reports"/>
 
   </body>
 </project>
