@@ -3,7 +3,7 @@
  ------
  Vincent Siveton
  ------
- 2008-09-21
+ 2010-07-28
  ------
 
 ~~ Licensed to the Apache Software Foundation (ASF) under one
@@ -33,7 +33,7 @@ Usage
 * Command Line Help
 
 +-----+
-# java -jar target/apache-doxia-1.0-SNAPSHOT-jar-with-dependencies.jar -h
+# java -jar target/apache-doxia-${project.version}-jar-with-dependencies.jar -h
 
 usage: doxia [options] -in <arg> [-from <arg>] [-inEncoding <arg>] -out
              <arg> -to <arg> [-outEncoding <arg>]
@@ -70,7 +70,7 @@ windows-1256, KOI8-R, ISO-8859-9
 * Command Line Execution
 
 +-----+
-# java -jar target/apache-doxia-1.0-SNAPSHOT-jar-with-dependencies.jar \
+# java -jar target/apache-doxia-${project.version}-jar-with-dependencies.jar \
     -in /path/to/xhtml.file \
     -from xhtml \
     -out /path/to/outputdir \
