@@ -188,9 +188,9 @@ public final class DefaultLinkCheck
     }
 
     /** {@inheritDoc} */
-    public void setReportOutputEncoding( String enc )
+    public void setReportOutputEncoding( String encoding )
     {
-        this.reportOutputEncoding = enc;
+        this.reportOutputEncoding = encoding;
     }
 
     /** {@inheritDoc} */
@@ -199,20 +199,14 @@ public final class DefaultLinkCheck
     {
         if ( this.basedir == null )
         {
-            if ( LOG.isErrorEnabled() )
-            {
-                LOG.error( "No base directory specified!" );
-            }
+            LOG.error( "No base directory specified!" );
 
             throw new NullPointerException( "The basedir can't be null!" );
         }
 
         if ( this.reportOutput == null )
         {
-            if ( LOG.isWarnEnabled() )
-            {
-                LOG.warn( "No output file specified! Results will not be written!" );
-            }
+            LOG.warn( "No output file specified! Results will not be written!" );
         }
 
         LinkcheckModel model = new LinkcheckModel();
@@ -233,17 +227,11 @@ public final class DefaultLinkCheck
 
         displayMemoryConsumption();
 
-        if ( LOG.isInfoEnabled() )
-        {
-            LOG.info( "Begin to check links in files..." );
-        }
+        LOG.info( "Begin to check links in files..." );
 
         findAndCheckFiles( this.basedir, model );
 
-        if ( LOG.isInfoEnabled() )
-        {
-            LOG.info( "Links checked." );
-        }
+        LOG.info( "Links checked." );
 
         displayMemoryConsumption();
 
@@ -524,14 +512,8 @@ public final class DefaultLinkCheck
             // We catch Throwable, because there is a chance that the domReader will throw
             // a stack overflow exception for some files
 
-            if ( LOG.isDebugEnabled() )
-            {
-                LOG.error( "Received: [" + t + "] in page [" + linkcheckFile.getRelativePath() + "]", t );
-            }
-            else
-            {
-                LOG.error( "Received: [" + t + "] in page [" + linkcheckFile.getRelativePath() + "]" );
-            }
+            LOG.error( "Received: [" + t + "] in page [" + linkcheckFile.getRelativePath() + "]" );
+            LOG.debug( t.getMessage(), t );
 
             LinkcheckFileResult lcr = new LinkcheckFileResult();
 

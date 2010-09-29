@@ -201,28 +201,19 @@ public class LinkValidatorManager
     {
         if ( cacheFile == null )
         {
-            if ( LOG.isDebugEnabled() )
-            {
-                LOG.debug( "No cache file specified! Ignoring request to load." );
-            }
+            LOG.debug( "No cache file specified! Ignoring request to load." );
             return;
         }
 
         if ( !cacheFile.exists() )
         {
-            if ( LOG.isDebugEnabled() )
-            {
-                LOG.debug( "Specified cache file does not exist! Ignoring request to load." );
-            }
+            LOG.debug( "Specified cache file does not exist! Ignoring request to load." );
             return;
         }
 
         if ( cacheFile.isDirectory() )
         {
-            if ( LOG.isDebugEnabled() )
-            {
-                LOG.debug( "Cache file is a directory! Ignoring request to load." );
-            }
+            LOG.debug( "Cache file is a directory! Ignoring request to load." );
             return;
         }
 
@@ -240,10 +231,7 @@ public class LinkValidatorManager
         }
         catch ( InvalidClassException e )
         {
-            if ( LOG.isWarnEnabled() )
-            {
-                LOG.warn( "Your cache is incompatible with this version of linkcheck. It will be recreated." );
-            }
+            LOG.warn( "Your cache is incompatible with this version of linkcheck. It will be recreated." );
         }
         catch ( ClassNotFoundException e )
         {
@@ -270,19 +258,13 @@ public class LinkValidatorManager
     {
         if ( cacheFile == null )
         {
-            if ( LOG.isWarnEnabled() )
-            {
-                LOG.warn( "No cache file specified! Ignoring request to store results." );
-            }
+            LOG.warn( "No cache file specified! Ignoring request to store results." );
             return;
         }
 
         if ( cacheFile.isDirectory() )
         {
-            if ( LOG.isDebugEnabled() )
-            {
-                LOG.debug( "Cache file is a directory! Ignoring request to load." );
-            }
+            LOG.debug( "Cache file is a directory! Ignoring request to load." );
             return;
         }
 
