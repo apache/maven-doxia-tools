@@ -20,7 +20,6 @@ package org.apache.maven.doxia.linkcheck;
  */
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.charset.Charset;
@@ -28,11 +27,11 @@ import java.nio.charset.UnsupportedCharsetException;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Locale;
 import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
 import org.apache.maven.doxia.linkcheck.model.LinkcheckFile;
 import org.apache.maven.doxia.linkcheck.model.LinkcheckFileResult;
 import org.apache.maven.doxia.linkcheck.model.LinkcheckModel;
@@ -45,6 +44,8 @@ import org.apache.maven.doxia.linkcheck.validation.LinkValidatorManager;
 import org.apache.maven.doxia.linkcheck.validation.MailtoLinkValidator;
 import org.apache.maven.doxia.linkcheck.validation.OfflineHTTPLinkValidator;
 import org.apache.maven.doxia.linkcheck.validation.OnlineHTTPLinkValidator;
+
+import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.StringUtils;
@@ -66,9 +67,6 @@ public final class DefaultLinkCheck
 {
     /** Log. */
     private static final Log LOG = LogFactory.getLog( DefaultLinkCheck.class );
-
-    /** FilenameFilter. */
-    private static final FilenameFilter CUSTOM_FF = new DefaultLinkCheck.CustomFilenameFilter();
 
     /** One MegaByte. */
     private static final long MEG = 1024 * 1024;
@@ -229,7 +227,14 @@ public final class DefaultLinkCheck
 
         LOG.info( "Begin to check links in files..." );
 
-        findAndCheckFiles( this.basedir, model );
+        try
+        {
+            findAndCheckFiles( this.basedir, model );
+        }
+        catch ( IOException e )
+        {
+            throw new LinkCheckException( "Could not scan base directory: " + basedir.getAbsolutePath(), e );
+        }
 
         LOG.info( "Links checked." );
 
@@ -292,16 +297,6 @@ public final class DefaultLinkCheck
     }
 
     /**
-     * Get the base directory for the files to be linkchecked.
-     *
-     * @return the base directory
-     */
-    private File getBasedir()
-    {
-        return this.basedir;
-    }
-
-    /**
      * Returns the excluded links.
      * Could contains a link, i.e. <code>http:&#47;&#47;maven.apache.org/</code>,
      * or pattern links i.e. <code>http:&#47;&#47;maven.apache.org&#47;**&#47;*.html</code>
@@ -314,13 +309,30 @@ public final class DefaultLinkCheck
     }
 
     /**
-     * Returns the excluded pages.
+     * Gets the comma separated list of effective exclude patterns.
      *
-     * @return String[]
+     * @return The comma separated list of effective exclude patterns, never <code>null</code>.
      */
-    private String[] getExcludedPages()
+    private String getExcludedPages()
     {
-        return this.excludedPages;
+        LinkedList patternList = new LinkedList( FileUtils.getDefaultExcludesAsList() );
+
+        if ( excludedPages != null )
+        {
+            patternList.addAll( Arrays.asList( excludedPages ) );
+        }
+
+        return StringUtils.join( patternList.iterator(), "," );
+    }
+
+    /**
+     * Gets the comma separated list of effective include patterns.
+     *
+     * @return The comma separated list of effective include patterns, never <code>null</code>.
+     */
+    private String getIncludedPages()
+    {
+        return "**/*.html,**/*.htm";
     }
 
     /**
@@ -343,16 +355,6 @@ public final class DefaultLinkCheck
     private int[] getExcludedHttpStatusWarnings()
     {
         return this.excludedHttpStatusWarnings;
-    }
-
-    /**
-     * Sets the LinkValidatorManager.
-     *
-     * @param validator the LinkValidatorManager to set
-     */
-    private void setLinkValidatorManager( LinkValidatorManager validator )
-    {
-        this.lvm = validator;
     }
 
     /**
@@ -412,77 +414,44 @@ public final class DefaultLinkCheck
      * @param base the base directory to traverse.
      */
     private void findAndCheckFiles( File base, LinkcheckModel model )
+        throws IOException
     {
-        File[] f = base.listFiles( CUSTOM_FF );
+        Iterator files = FileUtils.getFiles( base, getIncludedPages(), getExcludedPages() ).iterator();
 
-        if ( f != null )
+        while( files.hasNext() )
         {
-            File file;
-            for ( int i = 0; i < f.length; i++ )
-            {
-                file = f[i];
+            checkFile( (File) files.next(), model );
+        }
+    }
 
-                if ( file.isDirectory() )
-                {
-                    findAndCheckFiles( file, model );
-                }
-                else
-                {
-                    if ( LOG.isDebugEnabled() )
-                    {
-                        LOG.debug( " File - " + file );
-                    }
-
-                    if ( getExcludedPages() != null )
-                    {
-                        String diff =
-                            StringUtils.difference( getBasedir().getAbsolutePath(), file.getAbsolutePath() );
-                        if ( diff.startsWith( File.separator ) )
-                        {
-                            diff = diff.substring( 1 );
-                        }
-
-                        if ( Arrays.binarySearch( getExcludedPages(), diff ) >= 0 )
-                        {
-                            if ( LOG.isDebugEnabled() )
-                            {
-                                LOG.debug( " Ignored analysis of " + file );
-                            }
-
-                            continue;
-                        }
-                    }
-
-                    String fileRelativePath = file.getAbsolutePath();
-                    if ( fileRelativePath.startsWith( this.basedir.getAbsolutePath() ) )
-                    {
-                        fileRelativePath =
-                            fileRelativePath.substring( this.basedir.getAbsolutePath().length() + 1 );
-                    }
-                    fileRelativePath = fileRelativePath.replace( '\\', '/' );
-
-                    LinkcheckFile linkcheckFile = new LinkcheckFile();
-                    linkcheckFile.setAbsolutePath( file.getAbsolutePath() );
-                    linkcheckFile.setRelativePath( fileRelativePath );
-
-                    check( linkcheckFile );
-
-                    model.addFile( linkcheckFile );
-
-                    if ( model.getFiles().size() % 100 == 0 )
-                    {
-                        if ( LOG.isInfoEnabled() )
-                        {
-                            LOG.info( "Found " + model.getFiles().size() + " files so far." );
-                        }
-                    }
-                }
-            }
-
-            file = null;
+    private void checkFile( File file, LinkcheckModel model )
+    {
+        if ( LOG.isDebugEnabled() )
+        {
+            LOG.debug( " File - " + file );
         }
 
-        f = null;
+        String fileRelativePath = file.getAbsolutePath();
+
+        if ( fileRelativePath.startsWith( this.basedir.getAbsolutePath() ) )
+        {
+            fileRelativePath = fileRelativePath.substring( this.basedir.getAbsolutePath().length() + 1 );
+        }
+
+        fileRelativePath = fileRelativePath.replace( '\\', '/' );
+
+        LinkcheckFile linkcheckFile = new LinkcheckFile();
+        linkcheckFile.setAbsolutePath( file.getAbsolutePath() );
+        linkcheckFile.setRelativePath( fileRelativePath );
+
+        check( linkcheckFile );
+
+        model.addFile( linkcheckFile );
+
+        if ( ( model.getFiles().size() % 100 == 0 ) && LOG.isInfoEnabled() )
+        {
+            LOG.info( "Found " + model.getFiles().size() + " files so far." );
+        }
     }
 
     /**
@@ -696,29 +665,5 @@ public final class DefaultLinkCheck
             result[i] = String.valueOf( array[i] );
         }
         return result;
-    }
-
-    /** Custom FilenameFilter used to search html files */
-    static class CustomFilenameFilter
-        implements FilenameFilter
-    {
-        /** {@inheritDoc} */
-        public boolean accept( File dir, String name )
-        {
-            File n = new File( dir, name );
-
-            if ( n.isDirectory() )
-            {
-                return true;
-            }
-
-            if ( name.toLowerCase( Locale.ENGLISH ).endsWith( ".html" )
-                || name.toLowerCase( Locale.ENGLISH ).endsWith( ".htm" ) )
-            {
-                return true;
-            }
-
-            return false;
-        }
     }
 }
