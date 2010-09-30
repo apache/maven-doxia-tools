@@ -34,7 +34,10 @@ import java.io.InvalidClassException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+
 import java.net.URI;
+import java.net.URISyntaxException;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -393,11 +396,18 @@ public class LinkValidatorManager
             return link.indexOf( pattern ) != -1;
         }
 
-        URI uri = URI.create( link );
-
-        if ( uri.getScheme() != null && !pattern.startsWith( uri.getScheme() ) )
+        try
         {
-            return true;
+            URI uri = new URI( link );
+
+            if ( uri.getScheme() != null && !pattern.startsWith( uri.getScheme() ) )
+            {
+                return true;
+            }
+        }
+        catch ( URISyntaxException ex )
+        {
+            LOG.debug( "Trying to check link to illegal URI: " + link, ex );
         }
 
         if ( pattern.matches( "\\*+/?.*" ) && !link.startsWith( "/" ) && !link.startsWith( "./" ) )
