@@ -402,7 +402,7 @@ public class LinkValidatorManager
 
             if ( uri.getScheme() != null && !pattern.startsWith( uri.getScheme() ) )
             {
-                return true;
+                return false;
             }
         }
         catch ( URISyntaxException ex )

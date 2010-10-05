@@ -63,5 +63,9 @@ public class LinkValidatorManagerTest
         link = "http://maven.apache.org/test/test.html";
         pattern = "http://maven.apache.org/**/*.jsp";
         assertFalse( LinkValidatorManager.matchPattern( link, pattern ) );
+
+        link = "http://java.sun.com/";
+        pattern = "../../exclude/*";
+        assertFalse( LinkValidatorManager.matchPattern( link, pattern ) );
     }
 }
