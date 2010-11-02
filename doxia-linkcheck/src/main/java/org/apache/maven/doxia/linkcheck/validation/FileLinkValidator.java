@@ -108,7 +108,7 @@ public final class FileLinkValidator
             {
                 // the anchor exists?
                 String content = read( lvi.getSource(), encoding );
-                if ( content != null && content.indexOf( "name=\"" + anchor + "\"" ) != -1 )
+                if ( Anchors.matchesAnchor( content, anchor ) )
                 {
                     return lvi.getSource();
                 }
@@ -119,7 +119,7 @@ public final class FileLinkValidator
 
             // the anchor exists?
             String content = read( new File( lvi.getSource().getParentFile(), link ), encoding );
-            if ( content != null && content.indexOf( "name=\"" + anchor + "\"" ) != -1 )
+            if ( Anchors.matchesAnchor( content, anchor ) )
             {
                 return new File( lvi.getSource().getParentFile(), link );
             }

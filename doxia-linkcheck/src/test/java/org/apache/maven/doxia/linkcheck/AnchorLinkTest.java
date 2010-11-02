@@ -19,21 +19,21 @@ package org.apache.maven.doxia.linkcheck;
  * under the License.
  */
 
+import org.apache.maven.doxia.linkcheck.model.LinkcheckFile;
+import org.apache.maven.doxia.linkcheck.model.LinkcheckModel;
+import org.codehaus.plexus.PlexusTestCase;
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.apache.maven.doxia.linkcheck.model.LinkcheckFile;
-import org.apache.maven.doxia.linkcheck.model.LinkcheckModel;
-import org.codehaus.plexus.PlexusTestCase;
-
 /**
  * @author Ben Walding
  * @author <a href="mailto:carlos@apache.org">Carlos Sanchez</a>
- * @version $Id$
+ * @version $Id: LinkCheckTest.java 800044 2009-08-02 12:28:50Z vsiveton $
  */
-public class LinkCheckTest
+public class AnchorLinkTest
     extends PlexusTestCase
 {
     /**
@@ -47,17 +47,19 @@ public class LinkCheckTest
 
         lc.setOnline( true ); // TODO: check if online
 
-        lc.setBasedir( new File( getBasedir(), "src/test/resources" ) ); // TODO
+        lc.setBasedir( new File( getBasedir(), "src/test/resources/anchorTest" ) ); // TODO
 
-        lc.setReportOutput( new File( getBasedir(), "target/linkcheck/linkcheck.xml" ) );
+        lc.setReportOutput( new File( getBasedir(), "target/linkcheck/anchorTest/linkcheck.xml" ) );
 
         lc.setReportOutputEncoding( "UTF-8" );
 
-        lc.setLinkCheckCache( new File( getBasedir(), "target/linkcheck/linkcheck.cache" ) ); // TODO
+        lc.setLinkCheckCache( new File( getBasedir(), "target/linkcheck/anchorTest/linkcheck.cache" ) ); // TODO
 
-        String[] excludes = new String[] {
+        String[] excludes = new String[]
+        {
             "http://cvs.apache.org/viewcvs.cgi/maven-pluginszz/",
-            "http://cvs.apache.org/viewcvs.cgi/mavenzz/" };
+            "http://cvs.apache.org/viewcvs.cgi/mavenzz/"
+        };
 
         lc.setExcludedLinks( excludes );
 
@@ -73,39 +75,24 @@ public class LinkCheckTest
             map.put( ftc.getRelativePath(), ftc );
         }
 
-        assertEquals( "files.size()", 10, result.getFiles().size() );
+        assertEquals( "files.size()", 1, result.getFiles().size() );
 
-        check( map, "nolink.html", 0 );
-        check( map, "test-resources/nolink.html", 0 );
-        check( map, "test-resources/test1/test1.html", 2 );
-        check( map, "test-resources/test1/test2.html", 0 );
-        check( map, "test1/test1.html", 1 );
-        check( map, "testA.html", 3 );
-        check( map, "anchorTest/testAnchor.html", 1 );
-        check( map, "linkincomment.html", 1 );
+        LinkcheckFile ftc = check( map, "testAnchor.html", 1 );
 
-        /* test excludes */
-        String fileName = "testExcludes.html";
-        check( map, fileName, 2 );
+        //System.out.println("anchor test " + ftc.getResults());
 
-        LinkcheckFile ftc = (LinkcheckFile) map.get( fileName );
-        assertEquals( "Excluded links", 2, ftc.getSuccessful() );
-
-        // index-all.html should get parsed, but is currently having problems.
-        // There are 805 distinct links in this page
-        check( map, "index-all.html", 805 );
-
-        // FIXME: this fails because the local (anchor) link is reported as valid, why?
-        //ftc = (LinkcheckFile) map.get( "testA.html" );
-        //assertEquals( "Non-existent links", 0, ftc.getSuccessful() );
+        assertEquals( "Should have matched!", 1, ftc.getSuccessful() );
+        assertEquals( "Should have no failures!", 0, ftc.getUnsuccessful() );
     }
 
-    private void check( Map map, String name, int linkCount )
+    private LinkcheckFile check( Map map, String name, int linkCount )
     {
         LinkcheckFile ftc = (LinkcheckFile) map.get( name );
 
         assertNotNull( name + " = null!", ftc );
 
         assertEquals( name + ".getResults().size()", linkCount, ftc.getResults().size() );
+
+        return ftc;
     }
 }

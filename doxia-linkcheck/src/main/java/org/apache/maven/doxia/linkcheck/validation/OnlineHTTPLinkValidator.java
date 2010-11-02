@@ -157,6 +157,14 @@ public final class OnlineHTTPLinkValidator
         this.cl.getParams().setParameter( HttpMethodParams.USER_AGENT, "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)" );
 
         String link = lvi.getLink();
+        String anchor = "";
+        int idx = link.indexOf( '#' );
+        if ( idx != -1 )
+        {
+            anchor = link.substring( idx + 1 );
+            link = link.substring( 0, idx );
+        }
+
         try
         {
             if ( link.startsWith( "/" ) )
@@ -200,6 +208,17 @@ public final class OnlineHTTPLinkValidator
 
             if ( hm.getStatusCode() == HttpStatus.SC_OK )
             {
+                // lets check if the anchor is present
+                if ( anchor.length() > 0 )
+                {
+                    String content = hm.getResponseBodyAsString();
+
+                    if ( !Anchors.matchesAnchor( content, anchor ) )
+                    {
+                        return new HTTPLinkValidationResult( LinkcheckFileResult.VALID_LEVEL, false,
+                            "Missing anchor '" + anchor + "'" );
+                    }
+                }
                 return new HTTPLinkValidationResult( LinkcheckFileResult.VALID_LEVEL, true, hm.getStatusCode(),
                                                      hm.getStatusText() );
             }
