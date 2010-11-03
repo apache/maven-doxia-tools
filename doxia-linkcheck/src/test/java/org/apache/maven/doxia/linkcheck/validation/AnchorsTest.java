@@ -42,6 +42,9 @@ public class AnchorsTest extends TestCase
             + "\n"
             + "</body>\n"
             + "</html>", "foo", true );
+
+        assertAnchorMatches( "<A NAME=\"navbar_bottom\"></A>", "navbar_bottom", true );
+        assertAnchorMatches( "<A ID=\"navbar_bottom\"></A>", "navbar_bottom", true );
     }
 
     protected void assertAnchorMatches( String content, String anchor, boolean expected )

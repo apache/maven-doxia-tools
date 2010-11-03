@@ -37,7 +37,7 @@ public class Anchors
     {
         if ( content != null && anchor.length() > 0 ) {
             // can use name or id attributes and also can use single or double quotes with whitespace around the =
-            String regex = "(name|id)\\s*=\\s*('|\")" + escapeBrackets( anchor ) + "('|\")";
+            String regex = "(?i)(name|id)(?-i)\\s*=\\s*('|\")" + escapeBrackets( anchor ) + "('|\")";
             Pattern pattern = Pattern.compile( regex );
             Matcher matcher = pattern.matcher( content );
             return matcher.find();
