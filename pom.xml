@@ -25,7 +25,7 @@ under the License.
   <parent>
     <groupId>org.apache.maven</groupId>
     <artifactId>maven-parent</artifactId>
-    <version>16</version>
+    <version>19-SNAPSHOT</version>
     <relativePath>../../pom/maven/pom.xml</relativePath>
   </parent>
 
@@ -36,7 +36,7 @@ under the License.
 
   <name>Doxia Tools</name>
   <description>A set of tools for working with Doxia documents.</description>
-  <url>http://maven.apache.org/doxia/doxia-tools</url>
+  <url>http://maven.apache.org/doxia/doxia-tools/</url>
   <inceptionYear>2005</inceptionYear>
 
   <mailingLists>
@@ -181,6 +181,7 @@ under the License.
         </plugin>
         <plugin>
           <artifactId>maven-site-plugin</artifactId>
+          <version>2.3-SNAPSHOT</version>
           <configuration>
             <stagingSiteURL>scp://people.apache.org/www/maven.apache.org/doxia/doxia-tools-${project.version}</stagingSiteURL>
           </configuration>
