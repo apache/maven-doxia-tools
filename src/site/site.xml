@@ -21,12 +21,24 @@
  */
  -->
 
-<project xmlns="http://maven.apache.org/DECORATION/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0 http://maven.apache.org/xsd/decoration-1.0.0.xsd">
+<project name="Doxia Tools" xmlns="http://maven.apache.org/DECORATION/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0 http://maven.apache.org/xsd/decoration-1.0.0.xsd">
+
+  <bannerLeft>
+    <name>Maven</name>
+    <src>images/apache-maven-project-2.png</src>
+    <href>http://maven.apache.org/</href>
+  </bannerLeft>
+  <bannerRight>
+    <name>Doxia</name>
+    <src>images/maven-logo-2.gif</src>
+    <href>http://maven.apache.org/doxia/</href>
+  </bannerRight>
+
   <body>
     <breadcrumbs>
-      <!-- TODO: This breadcrumb should be removed when it has been solved in the parent -->
-      <item name="Maven" href="http://maven.apache.org/index.html" />
       <item name="Doxia" href="http://maven.apache.org/doxia/index.html" />
+      <item name="Doxia Tools" href="http://maven.apache.org/doxia/doxia-tools/index.html" />
     </breadcrumbs>
 
     <menu name="Downloads" inherit="bottom">
