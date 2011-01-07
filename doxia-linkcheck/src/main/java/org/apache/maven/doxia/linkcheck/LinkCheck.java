@@ -50,17 +50,17 @@ public interface LinkCheck
 
     /**
      * Sets the excluded HTTP errors, i.e. <code>404</code>, a int[] with excluded errors.
+     * See {@link org.apache.commons.httpclient.HttpStatus} for all possible values.
      *
      * @param excl The excludes to set
-     * @see {@link HttpStatus} for all possible values.
      */
     void setExcludedHttpStatusErrors( int[] excl );
 
     /**
      * Sets the excluded HTTP warnings, i.e. <code>301</code>, a int[] with excluded errors.
+     * See {@link org.apache.commons.httpclient.HttpStatus} for all possible values.
      *
      * @param excl The excludes to set
-     * @see {@link HttpStatus} for all possible values.
      */
     void setExcludedHttpStatusWarnings( int[] excl );
 

@@ -631,7 +631,7 @@ public class ConverterTest
     }
 
     /**
-     * Test {@link DefaultConverter#autoDetectEncoding( f )}
+     * Test {@link DefaultConverter#autoDetectEncoding(File)}
      *
      * @throws Throwable
      */
@@ -660,7 +660,7 @@ public class ConverterTest
     }
 
     /**
-     * Test {@link DefaultConverter#autoDetectFormat( f, encoding )}
+     * Test {@link DefaultConverter#autoDetectFormat(File,String)}
      *
      * @throws Throwable
      */

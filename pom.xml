@@ -176,7 +176,15 @@ under the License.
             <links>
               <link>http://java.sun.com/j2se/1.4.2/docs/api/</link>
               <link>http://junit.sourceforge.net/javadoc/</link>
+              <link>http://hc.apache.org/httpclient-3.x/apidocs/</link>
             </links>
+            <tagletArtifacts>
+              <tagletArtifact>
+                <groupId>org.codehaus.plexus</groupId>
+                <artifactId>plexus-javadoc</artifactId>
+                <version>1.0</version>
+              </tagletArtifact>
+            </tagletArtifacts>
           </configuration>
         </plugin>
         <plugin>
@@ -210,23 +218,24 @@ under the License.
         <artifactId>maven-javadoc-plugin</artifactId>
         <configuration>
           <source>1.4</source>
-          <aggregate>true</aggregate>
           <links>
             <link>http://java.sun.com/j2se/1.4.2/docs/api/</link>
             <link>http://junit.sourceforge.net/javadoc/</link>
+            <link>http://hc.apache.org/httpclient-3.x/apidocs/</link>
           </links>
+          <tagletArtifacts>
+            <tagletArtifact>
+              <groupId>org.codehaus.plexus</groupId>
+              <artifactId>plexus-javadoc</artifactId>
+              <version>1.0</version>
+            </tagletArtifact>
+          </tagletArtifacts>
         </configuration>
         <reportSets>
           <reportSet>
             <id>html</id>
             <reports>
-              <report>javadoc</report>
-            </reports>
-          </reportSet>
-          <reportSet>
-            <id>test-html</id>
-            <reports>
-              <report>test-javadoc</report>
+              <report>aggregate</report>
             </reports>
           </reportSet>
         </reportSets>
