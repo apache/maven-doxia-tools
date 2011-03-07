@@ -30,6 +30,8 @@ Usage
 
  The following examples describe the basic usage of the Doxia Converter.
 
+%{toc|section=1|fromDepth=2|toDepth=2}
+
 * Command Line Help
 
 +-----+
@@ -105,3 +107,64 @@ catch ( ConverterException e )
     e.printStackTrace();
 }
 +-----+
+
+* Ant Usage
+
++---
+ <target name="doxia-convert">
+     <java
+         jar="./lib/doxia-converter-1.2-jar-with-dependencies.jar"
+         dir="."
+         fork="true"
+         failonerror="true"
+         >
+
+         <arg value="-in"/>
+         <arg value="${tdi.apt}"/>
+
+         <arg value="-out"/>
+         <arg value="./doc/${tdi.apt}.${doxia.out.extension}"/>
+
+         <arg value="-to"/>
+         <arg value="${doxia.out.format}"/>
+
+
+         <arg value="-from"/>
+         <arg value="apt"/>
+
+         <arg value="-f"/>
+     </java>
+ </target>
+
+ <target name="doc.xhtml">
+     <antcall target="doxia-convert">
+         <param name = "doxia.out.format" value = "xhtml"/>
+         <param name = "doxia.out.extension" value = "html"/>
+     </antcall>
+ </target>
+ <target name="doc.docbook">
+     <antcall target="doxia-convert">
+         <param name = "doxia.out.format" value = "docbook"/>
+         <param name = "doxia.out.extension" value = "xml"/>
+     </antcall>
+ </target>
+ <target name="doc.rtf">
+     <antcall target="doxia-convert">
+         <param name = "doxia.out.format" value = "rtf"/>
+         <param name = "doxia.out.extension" value = "rtf"/>
+     </antcall>
+ </target>
+ <target name="doc.latex">
+     <antcall target="doxia-convert">
+         <param name = "doxia.out.format" value = "latex"/>
+         <param name = "doxia.out.extension" value = "tex"/>
+     </antcall>
+ </target>
+
+ <target name="doc">
+     <antcall target="doc.xhtml" />
+     <antcall target="doc.docbook" />
+     <antcall target="doc.rtf" />
+     <antcall target="doc.latex" />
+ </target>
++---
