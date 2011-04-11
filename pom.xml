@@ -158,12 +158,6 @@ under the License.
             <tagBase>https://svn.apache.org/repos/asf/maven/doxia/doxia-tools/tags</tagBase>
           </configuration>
         </plugin>
-        <plugin>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <configuration>
-            <forkMode>never</forkMode>
-          </configuration>
-        </plugin>
         <!-- TODO need to upgrade to last version or Maven parent version -->
         <plugin>
           <groupId>org.codehaus.plexus</groupId>
@@ -249,4 +243,20 @@ under the License.
       </plugin>
     </plugins>
   </reporting>
+
+  <profiles>
+    <profile>
+      <id>reporting</id>
+      <reporting>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>cobertura-maven-plugin</artifactId>
+            <version>2.4</version>
+           </plugin>
+        </plugins>
+      </reporting>
+    </profile>
+  </profiles>
+
 </project>
