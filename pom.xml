@@ -105,7 +105,7 @@ under the License.
 
   <ciManagement>
     <system>Hudson</system>
-    <url>https://hudson.apache.org/hudson/</url>
+    <url>https://builds.apache.org/hudson/job/doxia-tools/</url>
   </ciManagement>
 
   <distributionManagement>
