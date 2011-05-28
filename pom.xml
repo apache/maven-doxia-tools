@@ -163,12 +163,12 @@ under the License.
 
   <issueManagement>
     <system>jira</system>
-    <url>http://jira.codehaus.org/browse/DOXIA</url>
+    <url>http://jira.codehaus.org/browse/DOXIATOOLS</url>
   </issueManagement>
 
   <ciManagement>
-    <system>Hudson</system>
-    <url>https://builds.apache.org/hudson/job/doxia-tools/</url>
+    <system>Jenkins</system>
+    <url>https://builds.apache.org/job/doxia-tools/</url>
   </ciManagement>
 
   <distributionManagement>
