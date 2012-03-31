@@ -22,7 +22,6 @@ package org.apache.maven.doxia.linkcheck.validation;
 import java.io.IOException;
 
 import java.net.URL;
-import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.commons.httpclient.Credentials;
@@ -141,10 +140,8 @@ public final class OnlineHTTPLinkValidator
 
         if ( this.http.getHttpClientParameters() != null )
         {
-            for ( Iterator it = this.http.getHttpClientParameters().entrySet().iterator(); it.hasNext(); )
+            for ( Map.Entry<Object, Object> entry : this.http.getHttpClientParameters().entrySet() )
             {
-                Map.Entry entry = (Map.Entry) it.next();
-
                 if ( entry.getValue() != null )
                 {
                     System.setProperty( entry.getKey().toString(), entry.getValue().toString() );
@@ -261,10 +258,8 @@ public final class OnlineHTTPLinkValidator
 
             if ( this.http.getHttpClientParameters() != null )
             {
-                for ( Iterator it = this.http.getHttpClientParameters().entrySet().iterator(); it.hasNext(); )
+                for ( Map.Entry<Object, Object> entry : this.http.getHttpClientParameters().entrySet() )
                 {
-                    Map.Entry entry = (Map.Entry) it.next();
-
                     if ( entry.getValue() != null )
                     {
                         System.getProperties().remove( entry.getKey().toString() );

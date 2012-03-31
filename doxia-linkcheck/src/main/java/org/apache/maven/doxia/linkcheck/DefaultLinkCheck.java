@@ -25,8 +25,8 @@ import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.logging.Log;
@@ -209,7 +209,7 @@ public final class DefaultLinkCheck
 
         LinkcheckModel model = new LinkcheckModel();
         model.setModelEncoding( reportOutputEncoding );
-        model.setFiles( new LinkedList() );
+        model.setFiles( new LinkedList<LinkcheckFile>() );
 
         displayMemoryConsumption();
 
@@ -315,7 +315,8 @@ public final class DefaultLinkCheck
      */
     private String getExcludedPages()
     {
-        LinkedList patternList = new LinkedList( FileUtils.getDefaultExcludesAsList() );
+        @SuppressWarnings( "unchecked" )
+        LinkedList<String> patternList = new LinkedList<String>( FileUtils.getDefaultExcludesAsList() );
 
         if ( excludedPages != null )
         {
@@ -413,14 +414,13 @@ public final class DefaultLinkCheck
      *
      * @param base the base directory to traverse.
      */
+    @SuppressWarnings( "unchecked" )
     private void findAndCheckFiles( File base, LinkcheckModel model )
         throws IOException
     {
-        Iterator files = FileUtils.getFiles( base, getIncludedPages(), getExcludedPages() ).iterator();
-
-        while( files.hasNext() )
+        for ( File file : (List<File>) FileUtils.getFiles( base, getIncludedPages(), getExcludedPages() ) )
         {
-            checkFile( (File) files.next(), model );
+            checkFile( file, model );
         }
     }
 
@@ -470,7 +470,7 @@ public final class DefaultLinkCheck
             LOG.debug( "Validating " + linkcheckFile.getRelativePath() );
         }
 
-        final Set hrefs;
+        final Set<String> hrefs;
 
         try
         {
@@ -495,15 +495,12 @@ public final class DefaultLinkCheck
             return;
         }
 
-        String href;
         LinkcheckFileResult lcr;
         LinkValidationItem lvi;
         LinkValidationResult result;
 
-        for ( Iterator iter = hrefs.iterator(); iter.hasNext(); )
+        for ( String href : hrefs )
         {
-            href = (String) iter.next();
-
             lcr = new LinkcheckFileResult();
             lvi = new LinkValidationItem( new File( linkcheckFile.getAbsolutePath() ), href );
             result = lvm.validateLink( lvi );
@@ -590,11 +587,6 @@ public final class DefaultLinkCheck
                     break;
             }
         }
-
-        href = null;
-        lcr = null;
-        lvi = null;
-        result = null;
     }
 
     /**

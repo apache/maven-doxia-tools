@@ -39,7 +39,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -63,20 +62,20 @@ public class LinkValidatorManager
     private static final Log LOG = LogFactory.getLog( LinkValidatorManager.class );
 
     /** validators. */
-    private List validators = new LinkedList();
+    private List<LinkValidator> validators = new LinkedList<LinkValidator>();
 
     /** excludes. */
     private String[] excludedLinks = new String[0];
 
     /** cache. */
-    private Map cache = new HashMap();
+    private Map<Object, LinkValidationResult> cache = new HashMap<Object, LinkValidationResult>();
 
     /**
      * Returns the list of validators.
      *
      * @return List
      */
-    public List getValidators()
+    public List<LinkValidator> getValidators()
     {
         return this.validators;
     }
@@ -143,19 +142,9 @@ public class LinkValidatorManager
             }
         }
 
-        Iterator iter = this.validators.iterator();
-
-        LinkValidator lv;
-
-        Object resourceKey;
-
-        LinkValidationResult lvr;
-
-        while ( iter.hasNext() )
+        for ( LinkValidator lv : this.validators )
         {
-            lv = (LinkValidator) iter.next();
-
-            resourceKey = lv.getResourceKey( lvi );
+            Object resourceKey = lv.getResourceKey( lvi );
 
             if ( resourceKey != null )
             {
@@ -164,7 +153,7 @@ public class LinkValidatorManager
                     LOG.debug( lv.getClass().getName() + " - Checking link " + lvi.getLink() );
                 }
 
-                lvr = lv.validateLink( lvi );
+                LinkValidationResult lvr = lv.validateLink( lvi );
 
                 if ( lvr.getStatus() == LinkValidationResult.NOTMINE )
                 {
@@ -177,19 +166,12 @@ public class LinkValidatorManager
             }
         }
 
-        lv = null;
-
-        resourceKey = null;
-
-        lvr = null;
-
         if ( LOG.isErrorEnabled() )
         {
             LOG.error( "Unable to validate link : " + lvi.getLink() );
         }
 
-        return new LinkValidationResult( LinkcheckFileResult.UNKNOWN_LEVEL, false,
-                                         "No validator found for this link" );
+        return new LinkValidationResult( LinkcheckFileResult.UNKNOWN_LEVEL, false, "No validator found for this link" );
     }
 
     /**
@@ -199,6 +181,7 @@ public class LinkValidatorManager
      * May be null, in which case the request is ignored.
      * @throws IOException if any
      */
+    @SuppressWarnings( "unchecked" )
     public void loadCache( File cacheFile )
         throws IOException
     {
@@ -225,7 +208,7 @@ public class LinkValidatorManager
         {
             is = new ObjectInputStream( new FileInputStream( cacheFile ) );
 
-            this.cache = (Map) is.readObject();
+            this.cache = (Map<Object, LinkValidationResult>) is.readObject();
 
             if ( LOG.isDebugEnabled() )
             {
@@ -272,23 +255,17 @@ public class LinkValidatorManager
         }
 
         // Remove non-persistent items from cache
-        Map persistentCache = new HashMap();
+        Map<Object, LinkValidationResult> persistentCache = new HashMap<Object, LinkValidationResult>();
 
-        Iterator iter = this.cache.keySet().iterator();
-
-        Object resourceKey;
-
-        while ( iter.hasNext() )
+        for ( Map.Entry<Object, LinkValidationResult> resource : this.cache.entrySet() )
         {
-            resourceKey = iter.next();
-
-            if ( ( (LinkValidationResult) this.cache.get( resourceKey ) ).isPersistent() )
+            if ( resource.getValue().isPersistent() )
             {
-                persistentCache.put( resourceKey, this.cache.get( resourceKey ) );
+                persistentCache.put( resource.getKey(), resource.getValue() );
 
                 if ( LOG.isDebugEnabled() )
                 {
-                    LOG.debug( "[" + resourceKey + "] with result [" + this.cache.get( resourceKey )
+                    LOG.debug( "[" + resource.getKey() + "] with result [" + resource.getValue()
                         + "] is stored in the cache." );
                 }
             }
@@ -309,16 +286,6 @@ public class LinkValidatorManager
         }
         finally
         {
-            persistentCache = null;
-
-            iter = null;
-
-            resourceKey = null;
-
-            cacheFile = null;
-
-            dir = null;
-
             IOUtil.close( os );
         }
     }
@@ -332,17 +299,9 @@ public class LinkValidatorManager
      */
     public LinkValidationResult getCachedResult( LinkValidationItem lvi )
     {
-        Iterator iter = getValidators().iterator();
-
-        LinkValidator lv;
-
-        Object resourceKey;
-
-        while ( iter.hasNext() )
+        for ( LinkValidator lv :  getValidators() )
         {
-            lv = (LinkValidator) iter.next();
-
-            resourceKey = lv.getResourceKey( lvi );
+            Object resourceKey = lv.getResourceKey( lvi );
 
             if ( resourceKey != null && this.cache.containsKey( resourceKey ) )
             {
@@ -355,10 +314,6 @@ public class LinkValidatorManager
                 return (LinkValidationResult) this.cache.get( resourceKey );
             }
         }
-
-        lv = null;
-
-        resourceKey = null;
 
         return null;
     }

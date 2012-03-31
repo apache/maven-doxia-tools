@@ -51,7 +51,7 @@ class LinkMatcher
                          Pattern.CASE_INSENSITIVE );
 
     /** No need to create a new object each time a file is processed. Just clear it. */
-    private static final Set LINK_LIST = new TreeSet();
+    private static final Set<String> LINK_LIST = new TreeSet<String>();
 
     private LinkMatcher()
     {
@@ -96,7 +96,7 @@ class LinkMatcher
      * @return a set with all links to check
      * @throws IOException if something goes wrong
      */
-    static Set match( File file, String encoding )
+    static Set<String> match( File file, String encoding )
         throws IOException
     {
         LINK_LIST.clear();
@@ -113,12 +113,14 @@ class LinkMatcher
             {
                 continue;
             }
-            else if ( link.toLowerCase( Locale.ENGLISH ).indexOf( "javascript" ) != -1 )
+
+            if ( link.toLowerCase( Locale.ENGLISH ).indexOf( "javascript" ) != -1 )
             {
                 continue;
             }
             // TODO: Review dead code and delete if not needed
-            // else if (link.toLowerCase( Locale.ENGLISH ).indexOf("mailto:") != -1) {
+            // else if ( link.toLowerCase( Locale.ENGLISH ).indexOf( "mailto:" ) != -1 )
+            // {
             // continue;
             // }
 
