@@ -154,6 +154,7 @@ under the License.
     <module>doxia-book-renderer</module>
     <module>doxia-book-maven-plugin</module>
     <module>doxia-converter</module>
+    <module>doxia-integration-tools</module>
     <module>doxia-linkcheck</module>
   </modules>
 
