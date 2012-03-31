@@ -1,0 +1,35 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Doxia Eclipse IDE plugins common resources
+Bundle-SymbolicName: org.apache.maven.doxia.ide.eclipse.common.ui
+ ;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Require-Bundle: org.apache.maven.doxia.ide.dependencies;bundle-version="[1.0.0,1.3.0)",
+ org.eclipse.equinox.common;bundle-version="3.6.0",
+ org.eclipse.core.resources;bundle-version="3.6.0",
+ org.eclipse.ui.ide,
+ org.eclipse.ui.console,
+ org.eclipse.swt,
+ org.eclipse.jface,
+ org.eclipse.jface.text,
+ org.eclipse.ui.workbench,
+ org.eclipse.core.runtime;bundle-version="3.6.0",
+ org.eclipse.wst.sse.core,
+ org.eclipse.wst.sse.ui,
+ org.eclipse.wst.xml.core,
+ org.eclipse.wst.xml.ui,
+ org.eclipse.wst.common.ui
+Export-Package: org.apache.maven.doxia.ide.eclipse.common.ui,
+ org.apache.maven.doxia.ide.eclipse.common.ui.editors.text,
+ org.apache.maven.doxia.ide.eclipse.common.ui.rules,
+ org.apache.maven.doxia.ide.eclipse.common.ui.actions,
+ org.apache.maven.doxia.ide.eclipse.common.ui.contentassist,
+ org.apache.maven.doxia.ide.eclipse.common.ui.dialogs,
+ org.apache.maven.doxia.ide.eclipse.common.ui.editors,
+ org.apache.maven.doxia.ide.eclipse.common.ui.wizards
+Bundle-RequiredExecutionEnvironment: J2SE-1.5,
+ JavaSE-1.6
+Bundle-Vendor: Apache Software Foundation
+Bundle-Localization: plugin
+Bundle-Activator: org.apache.maven.doxia.ide.eclipse.common.ui.CommonPlugin
+Bundle-ActivationPolicy: lazy
