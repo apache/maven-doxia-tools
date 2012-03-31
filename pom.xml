@@ -151,6 +151,8 @@ under the License.
   </mailingLists>
 
   <modules>
+    <module>doxia-book-renderer</module>
+    <module>doxia-book-maven-plugin</module>
     <module>doxia-converter</module>
     <module>doxia-linkcheck</module>
   </modules>
