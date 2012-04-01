@@ -38,9 +38,9 @@ under the License.
   <url>http://maven.apache.org/doxia</url>
 
   <scm>
-      <connection>scm:svn:http://svn.apache.org/repos/asf/maven/doxia/doxia-ide/trunk/eclipse/doxia-osgi</connection>
-      <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/doxia/doxia-ide/trunk/eclipse/doxia-osgi</developerConnection>
-      <url>http://svn.apache.org/viewvc/maven/doxia/doxia-ide/trunk/eclipse/doxia-osgi</url>
+      <connection>scm:svn:http://svn.apache.org/repos/asf/maven/doxia/doxia-tools/trunk/doxia-ide/eclipse/doxia-osgi</connection>
+      <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/doxia/doxia-tools/trunk/doxia-ide/eclipse/doxia-osgi</developerConnection>
+      <url>http://svn.apache.org/viewvc/maven/doxia/doxia-tools/trunk/doxia-ide/eclipse/doxia-osgi</url>
   </scm>
   <issueManagement>
     <system>jira</system>

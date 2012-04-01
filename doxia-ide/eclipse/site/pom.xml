@@ -39,9 +39,9 @@ under the License.
 
   <!-- The project basedir and not the site -->
   <scm>
-      <connection>scm:svn:http://svn.apache.org/repos/asf/maven/doxia/doxia-ide/trunk/eclipse/</connection>
-      <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/doxia/doxia-ide/trunk/eclipse/</developerConnection>
-      <url>http://svn.apache.org/viewvc/maven/doxia/doxia-ide/trunk/eclipse/</url>
+      <connection>scm:svn:http://svn.apache.org/repos/asf/maven/doxia/doxia-tools/trunk/doxia-ide/</connection>
+      <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/doxia/doxia-tools/trunk/doxia-ide/</developerConnection>
+      <url>http://svn.apache.org/viewvc/maven/doxia/doxia-tools/trunk/doxia-ide/</url>
   </scm>
   <issueManagement>
     <system>jira</system>
