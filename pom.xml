@@ -161,7 +161,7 @@ under the License.
   <scm>
     <connection>scm:svn:http://svn.apache.org/repos/asf/maven/doxia/doxia-tools/trunk</connection>
     <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/doxia/doxia-tools/trunk</developerConnection>
-    <url>http://svn.apache.org/viewcvs.cgi/maven/doxia/doxia-tools/trunk</url>
+    <url>http://svn.apache.org/viewvc/maven/doxia/doxia-tools/trunk</url>
   </scm>
 
   <issueManagement>
