@@ -1440,7 +1440,8 @@ public class DefaultSiteTool
     private static String getDistMgmntSiteUrl( MavenProject project )
     {
         if ( project.getDistributionManagement() != null
-            && project.getDistributionManagement().getSite() != null )
+            && project.getDistributionManagement().getSite() != null
+            && project.getDistributionManagement().getSite().getUrl() != null )
         {
             return urlEncode( project.getDistributionManagement().getSite().getUrl() );
         }
