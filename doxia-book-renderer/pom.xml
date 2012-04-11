@@ -32,7 +32,6 @@ under the License.
   <artifactId>doxia-book-renderer</artifactId>
   <name>Doxia Tools :: Book Renderer</name>
   <description>A component to render books like user manuals and guides in any format supported by Doxia.</description>
-  <url>http://maven.apache.org/doxia/doxia/doxia-book/</url>
 
   <properties>
     <doxiaVersion>1.3-SNAPSHOT</doxiaVersion>

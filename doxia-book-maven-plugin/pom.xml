@@ -34,7 +34,6 @@ under the License.
 
   <name>Doxia Tools :: Book Maven Plugin</name>
   <description>A Maven plugin for Doxia books.</description>
-  <url>http://maven.apache.org/doxia/doxia/doxia-maven-plugin/</url>
 
   <prerequisites>
     <maven>${mavenVersion}</maven>

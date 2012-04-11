@@ -33,7 +33,6 @@ under the License.
 
   <name>Doxia Tools :: Linkcheck</name>
   <description>Doxia linkcheck is a tool to check the validity of links</description>
-  <url>http://maven.apache.org/doxia/doxia-tools/doxia-linkcheck/</url>
 
   <dependencies>
     <!-- compile dependencies -->
