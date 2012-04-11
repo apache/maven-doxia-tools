@@ -34,14 +34,14 @@ under the License.
   <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
-  <description>Website for the Apache Maven Doxia Eclipse plugin.</description>
+  <description>Website for the Apache Maven Doxia Eclipse Editor plugin.</description>
   <url>http://maven.apache.org/doxia</url><!-- TODO -->
 
   <!-- The project basedir and not the site -->
   <scm>
-      <connection>scm:svn:http://svn.apache.org/repos/asf/maven/doxia/doxia-tools/trunk/doxia-ide/</connection>
-      <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/doxia/doxia-tools/trunk/doxia-ide/</developerConnection>
-      <url>http://svn.apache.org/viewvc/maven/doxia/doxia-tools/trunk/doxia-ide/</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/doxia/doxia-tools/trunk/doxia-ide/</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/doxia/doxia-tools/trunk/doxia-ide/</developerConnection>
+    <url>http://svn.apache.org/viewvc/maven/doxia/doxia-tools/trunk/doxia-ide/</url>
   </scm>
   <issueManagement>
     <system>jira</system>
@@ -51,6 +51,12 @@ under the License.
     <system>Jenkins</system>
     <url>https://builds.apache.org/job/doxia-eclipse-editor/</url>
   </ciManagement>
+  <distributionManagement>
+    <site>
+      <id>apache.website</id>
+      <url>scp://people.apache.org/www/maven.apache.org/doxia/doxia-tools/doxia-ide/eclipse/</url>
+    </site>
+  </distributionManagement>
 
   <build>
     <pluginManagement>
