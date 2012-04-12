@@ -81,5 +81,5 @@ mvn clean install -f eclipse-plugins/pom.xml
 |_ Builds Eclipse plugins
 +-------------------------------+
 
-  See the {{{http://svn.apache.org/repos/asf/maven/sandbox/trunk/doxia/doxia-ide/eclipse/README.TXT}README.TXT}}
+  See the {{{http://svn.apache.org/repos/asf/maven/doxia/doxia-tools/trunk/doxia-ide/eclipse/README.TXT}README.TXT}}
   for more informations.
