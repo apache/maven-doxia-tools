@@ -1,5 +1,5 @@
  -----
- Development of Apache Doxia Eclipse Plugin
+ Development of Apache Doxia Eclipse Editor Plugin
  -----
  Vincent Siveton
  Benson Margulies
@@ -27,15 +27,15 @@
 ~~ NOTE: For help with the syntax of this file, see:
 ~~ http://maven.apache.org/doxia/references/apt-format.html
 
-Development of Apache Doxia Eclipse Plugin
+Development of Apache Doxia Eclipse Editor Plugin
 
   The project is divided in an OSGi bundle containing Apache Doxia and a set of Eclipse plugins and features.
-  The build uses {{{http://tycho.sonatype.org/}Tycho}} and of course Apache Maven (version 3).
+  The build uses {{{http://www.eclipse.org/tycho/}Tycho}} and of course Apache Maven (version 3).
 
 * Doxia Components as an OSGi plugin
 
    To have eclipse plugins that use the insides of Doxia, we need at least one
-   OSGi bundle containing Doxia itself (org.apache.maven.doxia.eclipse.dependencies).
+   OSGi bundle containing Doxia itself (<<<org.apache.maven.doxia.eclipse.dependencies>>>).
    This could be arranged by adding OSGi
    manifest metadata to them one-at-a-time, but I doubt that anyone has much
    enthusiasm for that.
@@ -59,14 +59,14 @@ Development of Apache Doxia Eclipse Plugin
 
 * Eclipse plugins
 
-   The plugins are divided in a common project (org.apache.maven.doxia.ide.eclipse.common.ui), which contains all
+   The plugins are divided in a common project (<<<org.apache.maven.doxia.ide.eclipse.common.ui>>>), which contains all
    generic classes to handle actions, dialogs, editors, rules and wizards.
    Other plugins are specific implementations for a given Doxia format (i.e. APT).
 
 * Building
 
   Tycho won't resolve through the reactor for the bundle, so you need to build
-  org.apache.maven.doxia.eclipse.dependencies project first:
+  <<<org.apache.maven.doxia.eclipse.dependencies>>> project first:
 
 +-------------------------------+
 mvn clean install -f doxia-osgi/pom.xml
