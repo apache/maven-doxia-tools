@@ -22,7 +22,7 @@ under the License.
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
   <properties>
-    <title>Welcome to Apache Doxia Eclipse Plugin</title>
+    <title>Welcome to Apache Doxia Eclipse Editor Plugin</title>
     <author email="vsiveton@apache.org">Vincent Siveton</author>
   </properties>
 
@@ -34,23 +34,23 @@ under the License.
       </div>
     </section>
 
-    <section name="Apache Doxia Eclipse Plugin">
+    <section name="Apache Doxia Eclipse Editor Plugin">
       <p>
-        Apache Doxia Eclipse Plugin is an Eclipse plugin under development. It includes several
+        Apache Doxia Eclipse Editor Plugin is an Eclipse plugin under development. It includes several
         new tools to support all
         <a href="http://maven.apache.org/doxia/references/index.html">Apache Doxia formats</a> in Eclipse,
         i.e. APT, Confluence, Simplified DocBook, FML, TWiki, XDOC and Xhtml.
         Moreover, it comes also with wizards.
       </p>
-      <subsection name="What can Apache Doxia Eclipse Plugin do for you?">
+      <subsection name="What can Apache Doxia Eclipse Editor Plugin do for you?">
         <p>
           This Eclipse Plugin:
         </p>
         <ul>
           <li>Supports all Apache Doxia file formats</li>
-          <li>Shows the rendering of any Apache Doxia files directly, without running <code>mvn site</code></li>
+          <li>Shows the rendering of any Apache Doxia file directly, without running <code>mvn site</code></li>
           <li>Supports color and styles highlighting in the editors</li>
-          <li>Provides helpers to insert commonly used patterns in each format (bold, italic, monospace, link, table)</li>
+          <li>Provides helpers to insert commonly used patterns in each format (bold, italic, monospaced, link, table)</li>
           <li>Includes wizards for creating new Apache Doxia files</li>
         </ul>
         <p>
