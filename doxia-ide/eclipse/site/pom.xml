@@ -35,13 +35,13 @@ under the License.
   <packaging>pom</packaging>
 
   <description>Website for the Apache Maven Doxia Eclipse Editor plugin.</description>
-  <url>http://maven.apache.org/doxia</url><!-- TODO -->
+  <url>http://maven.apache.org/doxia/doxia-tools/doxia-ide/eclipse/</url>
 
   <!-- The project basedir and not the site -->
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/doxia/doxia-tools/trunk/doxia-ide/</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/doxia/doxia-tools/trunk/doxia-ide/</developerConnection>
-    <url>http://svn.apache.org/viewvc/maven/doxia/doxia-tools/trunk/doxia-ide/</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/doxia/doxia-tools/trunk/doxia-ide/eclipse/</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/doxia/doxia-tools/trunk/doxia-ide/eclipse/</developerConnection>
+    <url>http://svn.apache.org/viewvc/maven/doxia/doxia-tools/trunk/doxia-ide/eclipse/</url>
   </scm>
   <issueManagement>
     <system>jira</system>
