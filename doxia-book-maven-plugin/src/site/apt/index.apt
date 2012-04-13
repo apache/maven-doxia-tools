@@ -1,8 +1,10 @@
  -----
- Doxia Maven Plugin
+ Introduction
  -----
  Lukas Theussl
  -----
+ 2012-04-13
+ ------
 
 ~~ Licensed to the Apache Software Foundation (ASF) under one
 ~~ or more contributor license agreements.  See the NOTICE file
@@ -40,12 +42,12 @@ Introduction
 
  First you need a simple book descriptor which is used to specify the layout of your book, i.e.
  the ordering of the sections and the names for the chapters.
- See {{{http://maven.apache.org/doxia/book/index.html}The Book Descriptor Reference}}
+ See {{{http://maven.apache.org/doxia/doxia-tools/doxia-book-renderer/book.html}The Book Descriptor Reference}}
  for a reference to the descriptor.
 
 * Usage
 
-  General instructions on how to use the Doxia Maven Plugin can be found on the {{{./usage.html}usage page}}. Some more
+  General instructions on how to use the Doxia Book Maven Plugin can be found on the {{{./usage.html}usage page}}. Some more
   specific use cases are described in the examples given below. Last but not least, users occasionally contribute
   additional examples, tips or errata to the
   {{{http://docs.codehaus.org/display/MAVENUSER/PDF+Plugin}plugin's wiki page}}.
