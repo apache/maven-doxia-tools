@@ -143,12 +143,9 @@ under the License.
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
           <!-- To be sure that JVM will implement AWT in software -->
-          <systemProperties>
-            <property>
-              <name>java.awt.headless</name>
-              <value>true</value>
-            </property>
-          </systemProperties>
+          <systemPropertyVariables>
+            <java.awt.headless>true</java.awt.headless>
+          </systemPropertyVariables>
         </configuration>
       </plugin>
     </plugins>
