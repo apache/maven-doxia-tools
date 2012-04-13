@@ -32,7 +32,7 @@ under the License.
   <artifactId>doxia-book-maven-plugin</artifactId>
   <packaging>maven-plugin</packaging>
 
-  <name>Doxia Tools :: Book Maven Plugin</name>
+  <name>Doxia Book Maven Plugin</name>
   <description>A Maven plugin for Doxia books.</description>
 
   <prerequisites>
