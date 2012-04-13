@@ -40,7 +40,7 @@ under the License.
   </prerequisites>
 
   <properties>
-    <doxiaVersion>1.3-SNAPSHOT</doxiaVersion>
+    <doxiaVersion>1.3</doxiaVersion>
     <mavenVersion>2.0.6</mavenVersion>
   </properties>
 
