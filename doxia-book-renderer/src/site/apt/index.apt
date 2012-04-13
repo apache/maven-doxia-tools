@@ -3,11 +3,33 @@
  -----
  Lukas Theussl
  -----
+ 2012-04-13
+ ------
+
+~~ Licensed to the Apache Software Foundation (ASF) under one
+~~ or more contributor license agreements.  See the NOTICE file
+~~ distributed with this work for additional information
+~~ regarding copyright ownership.  The ASF licenses this file
+~~ to you under the Apache License, Version 2.0 (the
+~~ "License"); you may not use this file except in compliance
+~~ with the License.  You may obtain a copy of the License at
+~~
+~~   http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~ Unless required by applicable law or agreed to in writing,
+~~ software distributed under the License is distributed on an
+~~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~ KIND, either express or implied.  See the License for the
+~~ specific language governing permissions and limitations
+~~ under the License.
+
+~~ NOTE: For help with the syntax of this file, see:
+~~ http://maven.apache.org/doxia/references/apt-format.html
 
 Introduction
 
  Doxia allows you to write books like user manuals and guides in any format supported by Doxia. Combined with the
- Doxia Book Maven you are able to include the manuals directly in your generated site with links to the off-line
+ Doxia Book Maven Plugin you are able to include the manuals directly in your generated site with links to the off-line
  friendly formats like XDoc, PDF, RTF and LaTeX.
 
 * How It Works
@@ -15,6 +37,6 @@ Introduction
  The only thing you need in addition to the content files itself is a simple book descriptor which is used to specify
  the ordering of the sections and the names for the chapters.
 
- See {{{./book.html}The Book Descriptor Reference}} for a reference to the descriptor. A sample is given on the
+ See the {{{./book.html}Book Descriptor Reference}} for a reference to the descriptor. A sample is given on the
  main Doxia {{{http://maven.apache.org/doxia/book/index.html}site}}.
 

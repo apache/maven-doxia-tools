@@ -28,7 +28,7 @@
 
     <menu ref="parent"/>
 
-    <menu name="About Doxia :: Book Components">
+    <menu name="Overview">
       <item name="Introduction" href="index.html"/>
       <item name="Usage" href="usage.html"/>
       <item name="JavaDocs" href="apidocs/index.html"/>
@@ -36,8 +36,8 @@
       <!--item name="FAQ" href="faq.html"/-->
     </menu>
 
-    <menu name="Book Schema">
-      <item name="Reference" href="book.html"/>
+    <menu name="Reference">
+      <item name="Book Reference" href="book.html"/>
       <item name="Using Book Schema" href="using-book-xsd.html"/>
     </menu>
 

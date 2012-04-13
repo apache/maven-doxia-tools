@@ -3,7 +3,7 @@
  -----
  Vincent Siveton
  ------
- 2009-01-28
+ 2012-04-13
  ------
 
 ~~ Licensed to the Apache Software Foundation (ASF) under one
@@ -30,7 +30,7 @@ Using Schema Book 1.0
 
   The Decoration XSD is located {{{http://maven.apache.org/xsd/book-1.0.0.xsd}here}}.
 
-  Your favorite IDE probably supports XSD schema's for .xml files. You need to specify the following:
+  Your favorite IDE probably supports XSD schema's for <<<.xml>>> files. You need to specify the following:
 
 +-----+
 <book xmlns="http://maven.apache.org/BOOK/1.0.0"
