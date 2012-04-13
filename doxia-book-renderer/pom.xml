@@ -30,7 +30,7 @@ under the License.
   </parent>
 
   <artifactId>doxia-book-renderer</artifactId>
-  <name>Doxia Tools :: Book Renderer</name>
+  <name>Doxia Book Renderer</name>
   <description>A component to render books like user manuals and guides in any format supported by Doxia.</description>
 
   <properties>
