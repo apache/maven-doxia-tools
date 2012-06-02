@@ -62,6 +62,8 @@ import org.apache.maven.project.MavenProjectBuilder;
 import org.apache.maven.project.ProjectBuildingException;
 import org.apache.maven.reporting.MavenReport;
 
+import org.codehaus.plexus.component.annotations.Component;
+import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.i18n.I18N;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.IOUtil;
@@ -79,9 +81,8 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
  *
  * @author <a href="mailto:vincent.siveton@gmail.com">Vincent Siveton</a>
  * @version $Id$
- *
- * @plexus.component role="org.apache.maven.doxia.tools.SiteTool" role-hint="default"
  */
+@Component( role = SiteTool.class )
 public class DefaultSiteTool
     extends AbstractLogEnabled
     implements SiteTool
@@ -92,37 +93,32 @@ public class DefaultSiteTool
 
     /**
      * The component that is used to resolve additional artifacts required.
-     *
-     * @plexus.requirement
      */
+    @Requirement
     private ArtifactResolver artifactResolver;
 
     /**
      * The component used for creating artifact instances.
-     *
-     * @plexus.requirement
      */
+    @Requirement
     private ArtifactFactory artifactFactory;
 
     /**
      * Internationalization.
-     *
-     * @plexus.requirement
      */
+    @Requirement
     protected I18N i18n;
 
     /**
      * The component for assembling inheritance.
-     *
-     * @plexus.requirement
      */
+    @Requirement
     protected DecorationModelInheritanceAssembler assembler;
 
     /**
      * Project builder.
-     *
-     * @plexus.requirement
      */
+    @Requirement
     protected MavenProjectBuilder mavenProjectBuilder;
 
     // ----------------------------------------------------------------------
