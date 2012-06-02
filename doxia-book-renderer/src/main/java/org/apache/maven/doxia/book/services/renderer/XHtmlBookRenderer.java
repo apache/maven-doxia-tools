@@ -29,6 +29,8 @@ import org.apache.maven.doxia.book.services.renderer.xhtml.XhtmlBookSink;
 import org.apache.maven.doxia.sink.render.RenderingContext;
 import org.apache.maven.doxia.parser.manager.ParserNotFoundException;
 import org.apache.maven.doxia.parser.ParseException;
+import org.codehaus.plexus.component.annotations.Component;
+import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.ReaderFactory;
@@ -43,17 +45,15 @@ import java.io.Writer;
 /**
  * <p>XHtmlBookRenderer class.</p>
  *
- * @plexus.component role-hint="xhtml"
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
+@Component( role = BookRenderer.class, hint = "xhtml" )
 public class XHtmlBookRenderer
     extends AbstractLogEnabled
     implements BookRenderer
 {
-    /**
-     * @plexus.requirement
-     */
+    @Requirement
     private Doxia doxia;
 
     // ----------------------------------------------------------------------

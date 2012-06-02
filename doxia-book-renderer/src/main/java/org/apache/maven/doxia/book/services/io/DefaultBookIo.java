@@ -28,6 +28,8 @@ import org.apache.maven.doxia.module.site.manager.SiteModuleManager;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
+import org.codehaus.plexus.component.annotations.Component;
+import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 import java.io.IOException;
@@ -41,17 +43,15 @@ import java.util.List;
 /**
  * <p>DefaultBookIo class.</p>
  *
- * @plexus.component
  * @author <a href="mailto:trygve.laugstol@objectware.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
+@Component( role = BookIo.class )
 public class DefaultBookIo
     extends AbstractLogEnabled
     implements BookIo
 {
-    /**
-     * @plexus.requirement
-     */
+    @Requirement
     private SiteModuleManager siteModuleManager;
 
     // -----------------------------------------------------------------------

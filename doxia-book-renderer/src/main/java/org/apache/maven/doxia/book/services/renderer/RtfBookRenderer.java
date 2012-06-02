@@ -25,15 +25,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import org.apache.maven.doxia.module.itext.ITextUtil;
+import org.codehaus.plexus.component.annotations.Component;
 
 /**
  * RTF book renderer with the <code>iText</code> framework.
  *
- * @plexus.component role-hint="rtf"
- *
  * @author <a href="mailto:vincent.siveton@gmail.com">Vincent Siveton</a>
  * @version $Id$
  */
+@Component( role = BookRenderer.class, hint = "rtf" )
 public class RtfBookRenderer
     extends AbstractITextBookRenderer
 {

@@ -26,6 +26,8 @@ import org.apache.maven.doxia.book.services.io.BookIo;
 import org.apache.maven.doxia.book.services.renderer.BookRenderer;
 import org.apache.maven.doxia.book.services.validation.BookValidator;
 import org.apache.maven.doxia.book.services.validation.ValidationResult;
+import org.codehaus.plexus.component.annotations.Component;
+import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 import java.io.File;
@@ -40,30 +42,22 @@ import java.util.Set;
  *
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
- * @plexus.component
  */
+@Component( role = BookDoxia.class )
 public class DefaultBookDoxia
     extends AbstractLogEnabled
     implements BookDoxia
 {
-    /**
-     * @plexus.requirement
-     */
+    @Requirement
     private BookIo bookIo;
 
-    /**
-     * @plexus.requirement
-     */
+    @Requirement
     private BookValidator bookValidator;
 
-    /**
-     * @plexus.requirement
-     */
+    @Requirement
     private BookIndexer bookIndexer;
 
-    /**
-     * @plexus.requirement role="org.apache.maven.doxia.book.services.renderer.BookRenderer"
-     */
+    @Requirement( role = BookRenderer.class )
     private Map<String, BookRenderer> bookRenderers;
 
     // ----------------------------------------------------------------------

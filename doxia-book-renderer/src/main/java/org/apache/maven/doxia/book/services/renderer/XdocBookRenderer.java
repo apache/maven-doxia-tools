@@ -41,6 +41,8 @@ import org.apache.maven.doxia.module.xdoc.XdocSink;
 import org.apache.maven.doxia.parser.ParseException;
 import org.apache.maven.doxia.parser.manager.ParserNotFoundException;
 import org.apache.maven.doxia.util.HtmlTools;
+import org.codehaus.plexus.component.annotations.Component;
+import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.i18n.I18N;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.IOUtil;
@@ -54,20 +56,16 @@ import org.codehaus.plexus.util.WriterFactory;
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @author <a href="mailto:vincent.siveton@gmail.com">Vincent Siveton</a>
  * @version $Id$
- * @plexus.component role-hint="xdoc"
  */
+@Component( role = BookRenderer.class, hint = "xdoc" )
 public class XdocBookRenderer
     extends AbstractLogEnabled
     implements BookRenderer
 {
-    /**
-     * @plexus.requirement
-     */
+    @Requirement
     private Doxia doxia;
 
-    /**
-     * @plexus.requirement
-     */
+    @Requirement
     private I18N i18n;
 
     // ----------------------------------------------------------------------

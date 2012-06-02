@@ -33,23 +33,22 @@ import org.apache.maven.doxia.index.IndexEntry;
 import org.apache.maven.doxia.index.IndexingSink;
 import org.apache.maven.doxia.parser.ParseException;
 import org.apache.maven.doxia.parser.manager.ParserNotFoundException;
+import org.codehaus.plexus.component.annotations.Component;
+import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 
 /**
  * Default implementation of BookIndexer.
  *
- * @plexus.component
- *
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
+@Component( role = BookIndexer.class )
 public class DefaultBookIndexer
     extends AbstractLogEnabled
     implements BookIndexer
 {
-    /**
-     * @plexus.requirement
-     */
+    @Requirement
     private Doxia doxia;
 
     // ----------------------------------------------------------------------

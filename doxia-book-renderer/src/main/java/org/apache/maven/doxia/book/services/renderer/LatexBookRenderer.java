@@ -28,6 +28,8 @@ import org.apache.maven.doxia.book.model.Section;
 import org.apache.maven.doxia.parser.manager.ParserNotFoundException;
 import org.apache.maven.doxia.parser.ParseException;
 import org.apache.maven.doxia.Doxia;
+import org.codehaus.plexus.component.annotations.Component;
+import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.IOUtil;
@@ -46,16 +48,14 @@ import java.util.HashMap;
 /**
  * <p>LatexBookRenderer class.</p>
  *
- * @plexus.component role-hint="latex"
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
+@Component( role = BookRenderer.class, hint = "latex" )
 public class LatexBookRenderer
     implements BookRenderer
 {
-    /**
-     * @plexus.requirement
-     */
+    @Requirement
     private Doxia doxia;
 
     // ----------------------------------------------------------------------

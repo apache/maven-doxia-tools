@@ -19,6 +19,7 @@ package org.apache.maven.doxia.book.services.validation;
  * under the License.
  */
 
+import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.StringUtils;
 import org.apache.maven.doxia.book.model.BookModel;
@@ -27,11 +28,10 @@ import org.apache.maven.doxia.book.model.Chapter;
 /**
  * Default implementation of BookValidator.
  *
- * @plexus.component
- *
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  */
+@Component( role = BookValidator.class )
 public class DefaultBookValidator
     extends AbstractLogEnabled
     implements BookValidator

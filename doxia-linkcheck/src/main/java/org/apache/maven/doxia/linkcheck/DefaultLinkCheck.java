@@ -45,6 +45,7 @@ import org.apache.maven.doxia.linkcheck.validation.MailtoLinkValidator;
 import org.apache.maven.doxia.linkcheck.validation.OfflineHTTPLinkValidator;
 import org.apache.maven.doxia.linkcheck.validation.OnlineHTTPLinkValidator;
 
+import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.ReaderFactory;
@@ -59,9 +60,8 @@ import org.codehaus.plexus.util.WriterFactory;
  * @author <a href="mailto:aheritier@apache.org">Arnaud Heritier</a>
  * @author <a href="mailto:vincent.siveton@gmail.com">Vincent Siveton</a>
  * @version $Id$
- *
- * @plexus.component role="org.apache.maven.doxia.linkcheck.LinkCheck" role-hint="default"
  */
+@Component( role = LinkCheck.class )
 public final class DefaultLinkCheck
     implements LinkCheck
 {

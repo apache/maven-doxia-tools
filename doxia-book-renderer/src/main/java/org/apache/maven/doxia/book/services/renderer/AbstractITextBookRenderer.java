@@ -37,6 +37,7 @@ import org.apache.maven.doxia.module.itext.ITextSinkFactory;
 import org.apache.maven.doxia.parser.ParseException;
 import org.apache.maven.doxia.parser.manager.ParserNotFoundException;
 import org.apache.maven.doxia.sink.Sink;
+import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.ReaderFactory;
@@ -55,9 +56,7 @@ public abstract class AbstractITextBookRenderer
     extends AbstractLogEnabled
     implements BookRenderer
 {
-    /**
-     * @plexus.requirement
-     */
+    @Requirement
     private Doxia doxia;
 
     // ----------------------------------------------------------------------
