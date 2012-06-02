@@ -105,7 +105,7 @@ public class BookIndexerTest
             "actual count: " + parent.getChildEntries().size(),
                     childIndex < parent.getChildEntries().size() );
 
-        IndexEntry indexEntry = (IndexEntry) parent.getChildEntries().get( childIndex );
+        IndexEntry indexEntry = parent.getChildEntries().get( childIndex );
 
         assertEquals( title, indexEntry.getTitle() );
 

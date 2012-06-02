@@ -41,7 +41,8 @@ public class BookRendererTest
 
         File book1 = getTestFile( "src/test/resources/book-1.xml" );
 
-        List files = FileUtils.getFiles( getTestFile( "src/test/resources/book-1" ), "**/*.apt, **/*.xml", "" );
+        @SuppressWarnings( "unchecked" )
+        List<File> files = FileUtils.getFiles( getTestFile( "src/test/resources/book-1" ), "**/*.apt, **/*.xml", "" );
 
         BookModel book = doxia.loadBook( book1 );
 
