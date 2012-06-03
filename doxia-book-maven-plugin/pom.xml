@@ -42,7 +42,7 @@ under the License.
   <properties>
     <doxiaVersion>1.3</doxiaVersion>
     <mavenVersion>2.0.6</mavenVersion>
-    <pluginPluginVersion>2.9</pluginPluginVersion>
+    <pluginPluginVersion>3.0</pluginPluginVersion>
   </properties>
 
   <dependencies>
@@ -50,6 +50,11 @@ under the License.
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-plugin-api</artifactId>
       <version>${mavenVersion}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven.plugin-tools</groupId>
+      <artifactId>maven-plugin-annotations</artifactId>
+      <version>${pluginPluginVersion}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>

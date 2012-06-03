@@ -28,6 +28,9 @@ import org.apache.maven.doxia.tools.SiteTool;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.StringUtils;
@@ -40,11 +43,11 @@ import java.util.Locale;
 /**
  * A Mojo to create books in different output formats.
  *
- * @goal render-books
  * @author <a href="mailto:trygvis@inamo.no">Trygve Laugst&oslash;l</a>
  * @version $Id$
  * @since 1.0
  */
+@Mojo( name = "render-books" )
 public class DoxiaRenderBooksMojo
     extends AbstractMojo
 {
@@ -57,16 +60,14 @@ public class DoxiaRenderBooksMojo
 
     /**
      * BookDoxia component
-     *
-     * @component
      */
+    @Component
     private BookDoxia bookDoxia;
 
     /**
      * SiteTool.
-     *
-     * @component
      */
+    @Component
     protected SiteTool siteTool;
 
     // ----------------------------------------------------------------------
@@ -75,46 +76,39 @@ public class DoxiaRenderBooksMojo
 
     /**
      * A list of books.
-     *
-     * @parameter
-     * @required
      */
+    @Parameter( required = true )
     private List<Book> books;
 
     /**
      * Base directory of the project.
-     *
-     * @parameter default-value="${basedir}"
      */
+    @Parameter( defaultValue = "${basedir}", readonly = true )
     private File basedir;
 
     /**
      * Directory containing the generated project docs.
-     *
-     * @parameter default-value="${project.build.directory}/generated-site"
      */
+    @Parameter( defaultValue = "${project.build.directory}/generated-site" )
     private File generatedDocs;
 
     /**
      * A comma separated list of locales supported by Maven. The first valid token will be the default Locale
      * for this instance of the Java Virtual Machine.
-     *
-     * @parameter default-value="${locales}"
      */
+    @Parameter( defaultValue = "${locales}" )
     protected String locales;
 
     /**
      * Specifies the input encoding.
-     *
-     * @parameter expression="${encoding}" default-value="${project.build.sourceEncoding}"
      */
+    @Parameter( property = "encoding", defaultValue = "${project.build.sourceEncoding}" )
     private String inputEncoding;
 
     /**
      * Specifies the output encoding.
-     *
-     * @parameter expression="${outputEncoding}" default-value="${project.reporting.outputEncoding}"
      */
+    @Parameter( property = "outputEncoding", defaultValue = "${project.reporting.outputEncoding}" )
     private String outputEncoding;
 
     // ----------------------------------------------------------------------
