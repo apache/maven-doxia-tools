@@ -1464,6 +1464,11 @@ public class DefaultSiteTool
 
     private static String urlEncode( final String url )
     {
+        if ( url == null )
+        {
+            return null;
+        }
+
         try
         {
             return new File( url ).toURI().toURL().toExternalForm();
