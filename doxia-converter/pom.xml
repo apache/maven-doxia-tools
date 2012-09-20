@@ -30,8 +30,8 @@ under the License.
   </parent>
 
   <artifactId>doxia-converter</artifactId>
-  <name>Doxia Tools :: Converter</name>
-  <description>Doxia Converter Tool to convert a supported format to another</description>
+  <name>Doxia Converter</name>
+  <description>Doxia Converter Tool to convert a supported format to another.</description>
 
   <scm>
     <connection>scm:svn:http://svn.apache.org/repos/asf/maven/doxia/doxia-tools/trunk/doxia-converter</connection>

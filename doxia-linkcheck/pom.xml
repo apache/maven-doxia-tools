@@ -31,8 +31,8 @@ under the License.
 
   <artifactId>doxia-linkcheck</artifactId>
 
-  <name>Doxia Tools :: Linkcheck</name>
-  <description>Doxia linkcheck is a tool to check the validity of links</description>
+  <name>Doxia Linkcheck</name>
+  <description>Doxia linkcheck is a tool to check the validity of links.</description>
 
   <scm>
     <connection>scm:svn:http://svn.apache.org/repos/asf/maven/doxia/doxia-tools/trunk/doxia-linkcheck</connection>
