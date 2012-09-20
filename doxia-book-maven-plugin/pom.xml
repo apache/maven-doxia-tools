@@ -44,6 +44,10 @@ under the License.
     <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/doxia/doxia-tools/trunk/doxia-book-maven-plugin</developerConnection>
     <url>http://svn.apache.org/viewvc/maven/doxia/doxia-tools/trunk/doxia-book-maven-plugin</url>
   </scm>
+  <issueManagement>
+    <system>jira</system>
+    <url>http://jira.codehaus.org/browse/DOXIATOOLS/component/15479</url>
+  </issueManagement>
 
   <properties>
     <doxiaVersion>1.3</doxiaVersion>

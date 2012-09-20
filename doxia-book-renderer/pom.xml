@@ -38,6 +38,10 @@ under the License.
     <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/doxia/doxia-tools/trunk/doxia-book-renderer</developerConnection>
     <url>http://svn.apache.org/viewvc/maven/doxia/doxia-tools/trunk/doxia-book-renderer</url>
   </scm>
+  <issueManagement>
+    <system>jira</system>
+    <url>http://jira.codehaus.org/browse/DOXIATOOLS/component/15478</url>
+  </issueManagement>
 
   <properties>
     <doxiaVersion>1.3</doxiaVersion>
