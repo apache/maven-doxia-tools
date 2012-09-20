@@ -1454,7 +1454,8 @@ public class DefaultSiteTool
     private static String getDistMgmntSiteUrl( Model model )
     {
         if ( model.getDistributionManagement() != null
-            && model.getDistributionManagement().getSite() != null )
+            && model.getDistributionManagement().getSite() != null
+            && model.getDistributionManagement().getSite().getUrl() != null )
         {
             return urlEncode( model.getDistributionManagement().getSite().getUrl() );
         }
