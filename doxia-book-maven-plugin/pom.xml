@@ -39,6 +39,12 @@ under the License.
     <maven>${mavenVersion}</maven>
   </prerequisites>
 
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/doxia/doxia-tools/trunk/doxia-book-maven-plugin</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/doxia/doxia-tools/trunk/doxia-book-maven-plugin</developerConnection>
+    <url>http://svn.apache.org/viewvc/maven/doxia/doxia-tools/trunk/doxia-book-maven-plugin</url>
+  </scm>
+
   <properties>
     <doxiaVersion>1.3</doxiaVersion>
     <mavenVersion>2.0.6</mavenVersion>

@@ -34,6 +34,12 @@ under the License.
   <name>Doxia Tools :: Linkcheck</name>
   <description>Doxia linkcheck is a tool to check the validity of links</description>
 
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/doxia/doxia-tools/trunk/doxia-linkcheck</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/doxia/doxia-tools/trunk/doxia-linkcheck</developerConnection>
+    <url>http://svn.apache.org/viewvc/maven/doxia/doxia-tools/trunk/doxia-linkcheck</url>
+  </scm>
+
   <dependencies>
     <!-- compile dependencies -->
     <dependency>

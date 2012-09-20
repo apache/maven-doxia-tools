@@ -33,6 +33,12 @@ under the License.
   <name>Doxia Tools :: Converter</name>
   <description>Doxia Converter Tool to convert a supported format to another</description>
 
+  <scm>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/doxia/doxia-tools/trunk/doxia-converter</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/doxia/doxia-tools/trunk/doxia-converter</developerConnection>
+    <url>http://svn.apache.org/viewvc/maven/doxia/doxia-tools/trunk/doxia-converter</url>
+  </scm>
+
   <properties>
     <doxiaVersion>1.1.4</doxiaVersion>
   </properties>
