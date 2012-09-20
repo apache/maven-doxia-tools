@@ -37,10 +37,11 @@ under the License.
   <name>Doxia Tools Aggregator</name>
 
   <modules>
-    <module>doxia-book-renderer</module>
     <module>doxia-book-maven-plugin</module>
+    <module>doxia-book-renderer</module>
     <module>doxia-converter</module>
     <module>doxia-integration-tools</module>
     <module>doxia-linkcheck</module>
+    <module>doxia-tools</module>
   </modules>
 </project>

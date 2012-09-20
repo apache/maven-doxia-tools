@@ -150,14 +150,6 @@ under the License.
     </mailingList>
   </mailingLists>
 
-  <modules>
-    <module>doxia-book-renderer</module>
-    <module>doxia-book-maven-plugin</module>
-    <module>doxia-converter</module>
-    <module>doxia-integration-tools</module>
-    <module>doxia-linkcheck</module>
-  </modules>
-
   <scm>
     <connection>scm:svn:http://svn.apache.org/repos/asf/maven/doxia/doxia-tools/trunk/doxia-tools</connection>
     <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/doxia/doxia-tools/trunk/doxia-tools</developerConnection>
