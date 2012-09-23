@@ -239,7 +239,6 @@ under the License.
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-jxr-plugin</artifactId>
-            <version>2.3</version>
             <reportSets>
               <reportSet>
                 <id>non-aggregate</id>
@@ -258,7 +257,6 @@ under the License.
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-javadoc-plugin</artifactId>
-            <version>2.8</version>
             <reportSets>
               <reportSet>
                 <id>non-aggregate</id>
@@ -277,7 +275,6 @@ under the License.
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>cobertura-maven-plugin</artifactId>
-            <version>2.4</version>
            </plugin>
         </plugins>
       </reporting>
