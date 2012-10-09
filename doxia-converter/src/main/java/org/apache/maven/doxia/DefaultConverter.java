@@ -61,7 +61,7 @@ import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.SelectorUtils;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.WriterFactory;
-import org.codehaus.plexus.util.xml.XmlStreamReader;
+import org.apache.commons.io.input.XmlStreamReader;
 import org.codehaus.plexus.util.xml.XmlUtil;
 import org.codehaus.plexus.util.xml.pull.MXParser;
 import org.codehaus.plexus.util.xml.pull.XmlPullParser;
@@ -558,7 +558,7 @@ public class DefaultConverter
         {
             if ( XmlUtil.isXml( f ) )
             {
-                reader = ReaderFactory.newXmlReader( f );
+                reader = new XmlStreamReader( f );
                 return ( (XmlStreamReader) reader ).getEncoding();
             }
 
