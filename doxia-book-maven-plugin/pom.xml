@@ -30,6 +30,7 @@ under the License.
   </parent>
 
   <artifactId>doxia-book-maven-plugin</artifactId>
+  <version>1.3-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
   <name>Doxia Book Maven Plugin</name>
@@ -69,7 +70,7 @@ under the License.
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>doxia-book-renderer</artifactId>
-      <version>2</version>
+      <version>1.3-SNAPSHOT</version>
     </dependency>
 
     <dependency>

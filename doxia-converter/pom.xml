@@ -30,6 +30,8 @@ under the License.
   </parent>
 
   <artifactId>doxia-converter</artifactId>
+  <version>1.3-SNAPSHOT</version>
+
   <name>Doxia Converter</name>
   <description>Doxia Converter Tool to convert a supported format to another.</description>
 

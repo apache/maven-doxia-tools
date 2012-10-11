@@ -30,6 +30,7 @@ under the License.
   </parent>
 
   <artifactId>doxia-linkcheck</artifactId>
+  <version>1.3-SNAPSHOT</version>
 
   <name>Doxia Linkcheck</name>
   <description>Doxia linkcheck is a tool to check the validity of links.</description>

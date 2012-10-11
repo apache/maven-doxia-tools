@@ -30,6 +30,8 @@ under the License.
   </parent>
 
   <artifactId>doxia-book-renderer</artifactId>
+  <version>1.3-SNAPSHOT</version>
+
   <name>Doxia Book Renderer</name>
   <description>A component to render books like user manuals and guides in any format supported by Doxia.</description>
 
