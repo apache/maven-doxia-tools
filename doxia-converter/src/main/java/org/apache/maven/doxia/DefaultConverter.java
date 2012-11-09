@@ -195,7 +195,7 @@ public class DefaultConverter
             }
             else
             {
-                List files;
+                List<File> files;
                 try
                 {
                     files =
@@ -211,10 +211,8 @@ public class DefaultConverter
                     throw new ConverterException( "IllegalStateException: " + e.getMessage(), e );
                 }
 
-                for ( Iterator it = files.iterator(); it.hasNext(); )
+                for ( File f : files )
                 {
-                    File f = (File) it.next();
-
                     parse( f, input.getEncoding(), input.getFormat(), output );
                 }
             }
