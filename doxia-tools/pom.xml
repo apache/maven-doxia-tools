@@ -188,12 +188,7 @@ under the License.
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-utils</artifactId>
-        <version>2.0.5</version>
-      </dependency>
-      <dependency><!-- remove when upgrading parent to version 22 -->
-        <groupId>org.codehaus.plexus</groupId>
-        <artifactId>plexus-component-annotations</artifactId>
-        <version>1.5.5</version>
+        <version>3.0.8</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -236,42 +231,6 @@ under the License.
       <id>reporting</id>
       <reporting>
         <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-jxr-plugin</artifactId>
-            <reportSets>
-              <reportSet>
-                <id>non-aggregate</id>
-                <reports>
-                  <report>jxr</report>
-                </reports>
-              </reportSet>
-              <reportSet>
-                <id>aggregate</id>
-                <reports>
-                  <report>aggregate</report>
-                </reports>
-              </reportSet>
-            </reportSets>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-javadoc-plugin</artifactId>
-            <reportSets>
-              <reportSet>
-                <id>non-aggregate</id>
-                <reports>
-                  <report>javadoc</report>
-                </reports>
-              </reportSet>
-              <reportSet>
-                <id>aggregate</id>
-                <reports>
-                  <report>aggregate</report>
-                </reports>
-              </reportSet>
-            </reportSets>
-          </plugin>
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>cobertura-maven-plugin</artifactId>
