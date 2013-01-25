@@ -281,7 +281,7 @@ public class DoxiaRenderBooksMojo
      */
     private String formatResult( ValidationResult result )
     {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
 
         if ( result.getErrors().size() > 0 )
         {

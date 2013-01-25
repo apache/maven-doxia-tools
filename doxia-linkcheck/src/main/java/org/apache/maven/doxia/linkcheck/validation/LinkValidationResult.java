@@ -96,7 +96,7 @@ public class LinkValidationResult
     /** {@inheritDoc} */
     public String toString()
     {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
         sb.append( "persistent=" ).append( this.persistent ).append( '\n' );
         sb.append( "status=" ).append( this.status ).append( '\n' );

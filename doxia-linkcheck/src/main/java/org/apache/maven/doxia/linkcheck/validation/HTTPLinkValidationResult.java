@@ -83,7 +83,7 @@ public class HTTPLinkValidationResult
     /** {@inheritDoc} */
     public String toString()
     {
-        StringBuffer sb = new StringBuffer( super.toString() );
+        StringBuilder sb = new StringBuilder( super.toString() );
 
         sb.append( '\n' );
         sb.append( "httpStatusCode=" ).append( this.httpStatusCode );

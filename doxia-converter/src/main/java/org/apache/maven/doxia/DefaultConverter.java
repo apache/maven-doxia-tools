@@ -577,7 +577,7 @@ public class DefaultConverter
             IOUtil.close( is );
         }
 
-        StringBuffer msg = new StringBuffer();
+        StringBuilder msg = new StringBuilder();
         msg.append( "Could not detect the encoding for file: " );
         msg.append( f.getAbsolutePath() );
         msg.append( "\n Specify explicitly the encoding." );
@@ -654,7 +654,7 @@ public class DefaultConverter
             }
         }
 
-        StringBuffer msg = new StringBuffer();
+        StringBuilder msg = new StringBuilder();
         msg.append( "Could not detect the Doxia format for file: " );
         msg.append( f.getAbsolutePath() );
         msg.append( "\n Specify explicitly the Doxia format." );

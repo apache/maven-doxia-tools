@@ -74,7 +74,7 @@ abstract class AbstractFileWrapper
         if ( StringUtils.isNotEmpty( encoding ) && !encoding.equalsIgnoreCase( encoding )
             && !validateEncoding( encoding ) )
         {
-            StringBuffer msg = new StringBuffer();
+            StringBuilder msg = new StringBuilder();
             msg.append( "The encoding '" + encoding + "' is not a valid one. The supported charsets are: " );
             msg.append( StringUtils.join( CharsetDetector.getAllDetectableCharsets(), ", " ) );
             throw new UnsupportedEncodingException( msg.toString() );
@@ -176,7 +176,7 @@ abstract class AbstractFileWrapper
     /** {@inheritDoc} */
     public java.lang.String toString()
     {
-        StringBuffer buf = new StringBuffer( super.toString() + "\n" );
+        StringBuilder buf = new StringBuilder( super.toString() + "\n" );
         buf.append( "file= '" );
         buf.append( getFile() + "'" );
         return buf.toString();

@@ -117,7 +117,7 @@ abstract class AbstractWrapper
     /** {@inheritDoc} */
     public java.lang.String toString()
     {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         buf.append( "format = '" );
         buf.append( getFormat() + "'" );
         return buf.toString();
