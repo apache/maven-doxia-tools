@@ -33,7 +33,7 @@ under the License.
   <version>1.3-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
 
-  <name>Doxia Book Maven Plugin</name>
+  <name>Doxia :: Book Maven Plugin</name>
   <description>A Maven plugin for Doxia books.</description>
 
   <prerequisites>

@@ -34,7 +34,7 @@ under the License.
   <version>3-SNAPSHOT</version>
   <packaging>pom</packaging>
 
-  <name>Doxia Tools</name>
+  <name>Doxia :: Tools</name>
   <description>A set of tools for working with Doxia documents.</description>
   <url>http://maven.apache.org/doxia/doxia-tools/</url>
   <inceptionYear>2005</inceptionYear>
