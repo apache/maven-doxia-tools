@@ -63,7 +63,7 @@ class LinkMatcher
      *
      * @param file the file we are reading
      * @param encoding the encoding file used
-     * @return a StringBuffer with file's contents.
+     * @return a String with file's contents.
      * @throws IOException if something goes wrong.
      * @see ReaderFactory#newReader(File, String)
      * @see IOUtil#toString(Reader)
