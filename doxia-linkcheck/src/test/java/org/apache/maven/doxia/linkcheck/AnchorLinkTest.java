@@ -25,7 +25,6 @@ import org.codehaus.plexus.PlexusTestCase;
 
 import java.io.File;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -65,13 +64,10 @@ public class AnchorLinkTest
 
         LinkcheckModel result = lc.execute();
 
-        Iterator iter = result.getFiles().iterator();
+        Map<String, LinkcheckFile> map = new HashMap<String, LinkcheckFile>();
 
-        Map map = new HashMap();
-
-        while ( iter.hasNext() )
+        for ( LinkcheckFile ftc : result.getFiles() )
         {
-            LinkcheckFile ftc = (LinkcheckFile) iter.next();
             map.put( ftc.getRelativePath(), ftc );
         }
 
@@ -85,9 +81,9 @@ public class AnchorLinkTest
         assertEquals( "Should have no failures!", 0, ftc.getUnsuccessful() );
     }
 
-    private LinkcheckFile check( Map map, String name, int linkCount )
+    private LinkcheckFile check( Map<String, LinkcheckFile> map, String name, int linkCount )
     {
-        LinkcheckFile ftc = (LinkcheckFile) map.get( name );
+        LinkcheckFile ftc = map.get( name );
 
         assertNotNull( name + " = null!", ftc );
 
