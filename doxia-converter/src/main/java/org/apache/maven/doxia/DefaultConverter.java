@@ -31,7 +31,6 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -166,6 +165,7 @@ public class DefaultConverter
     }
 
     /** {@inheritDoc} */
+    @SuppressWarnings( "unchecked" )
     public void convert( InputFileWrapper input, OutputFileWrapper output )
         throws UnsupportedFormatException, ConverterException
     {
@@ -510,7 +510,7 @@ public class DefaultConverter
             return;
         }
 
-        Map context = new HashMap();
+        Map<String, String> context = new HashMap<String, String>();
         context.put( "basedir", new File( "" ).getAbsolutePath() );
 
         ContainerConfiguration containerConfiguration = new DefaultContainerConfiguration();

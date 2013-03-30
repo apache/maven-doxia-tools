@@ -40,6 +40,7 @@ import com.ibm.icu.text.CharsetDetector;
  * @author <a href="mailto:vincent.siveton@gmail.com">Vincent Siveton</a>
  * @version $Id$
  */
+@SuppressWarnings( "static-access" )
 class CLIManager
 {
     /** h character */
@@ -161,7 +162,7 @@ class CLIManager
 
     private String[] cleanArgs( String[] args )
     {
-        List cleaned = new ArrayList();
+        List<String> cleaned = new ArrayList<String>();
 
         StringBuilder currentArg = null;
 
