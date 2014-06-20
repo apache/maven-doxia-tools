@@ -1158,12 +1158,13 @@ public class DefaultSiteTool
 
         String siteDescriptorContent = null;
         long siteDescriptorLastModified = 0L;
+        Reader siteDescriptorReader = null;
         try
         {
             if ( siteDescriptor != null && siteDescriptor.exists() )
             {
                 getLogger().debug( "Reading site descriptor from " + siteDescriptor );
-                Reader siteDescriptorReader = ReaderFactory.newXmlReader( siteDescriptor );
+                siteDescriptorReader = ReaderFactory.newXmlReader( siteDescriptor );
                 siteDescriptorContent = IOUtil.toString( siteDescriptorReader );
                 siteDescriptorLastModified = siteDescriptor.lastModified();
             }
@@ -1171,6 +1172,10 @@ public class DefaultSiteTool
         catch ( IOException e )
         {
             throw new SiteToolException( "The site descriptor cannot be read!", e );
+        }
+        finally
+        {
+            IOUtil.close( siteDescriptorReader );
         }
 
         DecorationModel decoration = null;
