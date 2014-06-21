@@ -37,10 +37,6 @@ under the License.
       <item name="Doxia Tools" href="http://maven.apache.org/doxia/doxia-tools/index.html" />
     </breadcrumbs>
 
-    <menu name="Downloads" inherit="bottom">
-      <item name="Download ${project.name}" href="http://maven.apache.org/doxia/downloads.html"/>
-    </menu>
-
     <menu name="Modules">
       <item name="Doxia Book Maven Plugin" href="./doxia-book-maven-plugin/index.html" />
       <item name="Doxia Book Renderer" href="./doxia-book-renderer/index.html" />
