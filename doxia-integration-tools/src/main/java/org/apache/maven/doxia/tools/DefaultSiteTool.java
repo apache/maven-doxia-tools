@@ -1333,13 +1333,7 @@ public class DefaultSiteTool
      */
     private static String getDistMgmntSiteUrl( MavenProject project )
     {
-        DistributionManagement distMgmnt = project.getDistributionManagement();
-        if ( distMgmnt != null && distMgmnt.getSite() != null && distMgmnt.getSite().getUrl() != null )
-        {
-            return urlEncode( distMgmnt.getSite().getUrl() );
-        }
-
-        return null;
+        return getDistMgmntSiteUrl( project.getDistributionManagement() );
     }
 
     /**
@@ -1350,11 +1344,14 @@ public class DefaultSiteTool
      */
     private static String getDistMgmntSiteUrl( Model model )
     {
-        if ( model.getDistributionManagement() != null
-            && model.getDistributionManagement().getSite() != null
-            && model.getDistributionManagement().getSite().getUrl() != null )
+        return getDistMgmntSiteUrl( model.getDistributionManagement() );
+    }
+
+    private static String getDistMgmntSiteUrl( DistributionManagement distMgmnt )
+    {
+        if ( distMgmnt != null && distMgmnt.getSite() != null && distMgmnt.getSite().getUrl() != null )
         {
-            return urlEncode( model.getDistributionManagement().getSite().getUrl() );
+            return urlEncode( distMgmnt.getSite().getUrl() );
         }
 
         return null;
