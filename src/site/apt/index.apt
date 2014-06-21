@@ -30,7 +30,9 @@
 Maven Doxia Integration Tools
 
   This shared component has some utilities that are useful when integrating Doxia in Maven,
-  mainly for site generation and report creation. The main entry point is the
+  mainly for site generation and report creation.
+  
+  The main entry point is the
   {{{./apidocs/org/apache/maven/doxia/tools/SiteTool.html}SiteTool}} Plexus component.
 
 * Usage
