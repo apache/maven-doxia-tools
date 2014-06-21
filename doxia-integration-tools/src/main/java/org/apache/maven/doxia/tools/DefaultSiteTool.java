@@ -131,18 +131,9 @@ public class DefaultSiteTool
                                                    DecorationModel decoration )
         throws SiteToolException
     {
-        if ( localRepository == null )
-        {
-            throw new IllegalArgumentException( "The parameter 'localRepository' can not be null" );
-        }
-        if ( remoteArtifactRepositories == null )
-        {
-            throw new IllegalArgumentException( "The parameter 'remoteArtifactRepositories' can not be null" );
-        }
-        if ( decoration == null )
-        {
-            throw new IllegalArgumentException( "The parameter 'decoration' can not be null" );
-        }
+        checkNotNull( "localRepository", localRepository );
+        checkNotNull( "remoteArtifactRepositories", remoteArtifactRepositories );
+        checkNotNull( "decoration", decoration );
 
         Skin skin = decoration.getSkin();
 
@@ -193,14 +184,8 @@ public class DefaultSiteTool
     /** {@inheritDoc} */
     public String getRelativePath( String to, String from )
     {
-        if ( to == null )
-        {
-            throw new IllegalArgumentException( "The parameter 'to' can not be null" );
-        }
-        if ( from == null )
-        {
-            throw new IllegalArgumentException( "The parameter 'from' can not be null" );
-        }
+        checkNotNull( "to", to );
+        checkNotNull( "from", from );
 
         URL toUrl = null;
         URL fromUrl = null;
@@ -344,10 +329,7 @@ public class DefaultSiteTool
     /** {@inheritDoc} */
     public File getSiteDescriptorFromBasedir( String siteDirectory, File basedir, Locale locale )
     {
-        if ( basedir == null )
-        {
-            throw new IllegalArgumentException( "The parameter 'basedir' can not be null" );
-        }
+        checkNotNull( "basedir", basedir );
 
         String dir = siteDirectory;
         if ( dir == null )
@@ -374,18 +356,9 @@ public class DefaultSiteTool
                                                  List<ArtifactRepository> repositories, Locale locale )
         throws SiteToolException
     {
-        if ( project == null )
-        {
-            throw new IllegalArgumentException( "The parameter 'project' can not be null" );
-        }
-        if ( localRepository == null )
-        {
-            throw new IllegalArgumentException( "The parameter 'localRepository' can not be null" );
-        }
-        if ( repositories == null )
-        {
-            throw new IllegalArgumentException( "The parameter 'remoteArtifactRepositories' can not be null" );
-        }
+        checkNotNull( "project", project );
+        checkNotNull( "localRepository", localRepository );
+        checkNotNull( "repositories", repositories );
 
         final Locale llocale = ( locale == null ) ? new Locale( "" ) : locale;
 
@@ -416,30 +389,12 @@ public class DefaultSiteTool
                                                Locale locale, String inputEncoding, String outputEncoding )
         throws SiteToolException
     {
-        if ( project == null )
-        {
-            throw new IllegalArgumentException( "The parameter 'project' can not be null" );
-        }
-        if ( reactorProjects == null )
-        {
-            throw new IllegalArgumentException( "The parameter 'reactorProjects' can not be null" );
-        }
-        if ( localRepository == null )
-        {
-            throw new IllegalArgumentException( "The parameter 'localRepository' can not be null" );
-        }
-        if ( repositories == null )
-        {
-            throw new IllegalArgumentException( "The parameter 'repositories' can not be null" );
-        }
-        if ( inputEncoding == null )
-        {
-            throw new IllegalArgumentException( "The parameter 'inputEncoding' can not be null" );
-        }
-        if ( outputEncoding == null )
-        {
-            throw new IllegalArgumentException( "The parameter 'outputEncoding' can not be null" );
-        }
+        checkNotNull( "project", project );
+        checkNotNull( "reactorProjects", reactorProjects );
+        checkNotNull( "localRepository", localRepository );
+        checkNotNull( "repositories", repositories );
+        checkNotNull( "inputEncoding", inputEncoding );
+        checkNotNull( "outputEncoding", outputEncoding );
 
         final Locale llocale = ( locale == null ) ? Locale.getDefault() : locale;
 
@@ -498,14 +453,8 @@ public class DefaultSiteTool
     public void populateReportsMenu( DecorationModel decorationModel, Locale locale,
                                      Map<String, List<MavenReport>> categories )
     {
-        if ( decorationModel == null )
-        {
-            throw new IllegalArgumentException( "The parameter 'decorationModel' can not be null" );
-        }
-        if ( categories == null )
-        {
-            throw new IllegalArgumentException( "The parameter 'categories' can not be null" );
-        }
+        checkNotNull( "decorationModel", decorationModel );
+        checkNotNull( "categories", categories );
 
         Menu menu = decorationModel.getMenuRef( "reports" );
 
@@ -556,26 +505,11 @@ public class DefaultSiteTool
                                                         String outputEncoding )
         throws SiteToolException
     {
-        if ( props == null )
-        {
-            throw new IllegalArgumentException( "The parameter 'props' can not be null" );
-        }
-        if ( aProject == null )
-        {
-            throw new IllegalArgumentException( "The parameter 'project' can not be null" );
-        }
-        if ( siteDescriptorContent == null )
-        {
-            throw new IllegalArgumentException( "The parameter 'siteDescriptorContent' can not be null" );
-        }
-        if ( inputEncoding == null )
-        {
-            throw new IllegalArgumentException( "The parameter 'inputEncoding' can not be null" );
-        }
-        if ( outputEncoding == null )
-        {
-            throw new IllegalArgumentException( "The parameter 'outputEncoding' can not be null" );
-        }
+        checkNotNull( "props", props );
+        checkNotNull( "aProject", aProject );
+        checkNotNull( "siteDescriptorContent", siteDescriptorContent );
+        checkNotNull( "inputEncoding", inputEncoding );
+        checkNotNull( "outputEncoding", outputEncoding );
 
         // MSITE-201: The ObjectBasedValueSource( aProject ) below will match
         // ${modules} to aProject.getModules(), so we need to interpolate that
@@ -633,18 +567,9 @@ public class DefaultSiteTool
     public MavenProject getParentProject( MavenProject aProject, List<MavenProject> reactorProjects,
                                           ArtifactRepository localRepository )
     {
-        if ( aProject == null )
-        {
-            throw new IllegalArgumentException( "The parameter 'project' can not be null" );
-        }
-        if ( reactorProjects == null )
-        {
-            throw new IllegalArgumentException( "The parameter 'reactorProjects' can not be null" );
-        }
-        if ( localRepository == null )
-        {
-            throw new IllegalArgumentException( "The parameter 'localRepository' can not be null" );
-        }
+        checkNotNull( "aProject", aProject );
+        checkNotNull( "reactorProjects", reactorProjects );
+        checkNotNull( "localRepository", localRepository );
 
         MavenProject parentProject = null;
 
@@ -721,18 +646,9 @@ public class DefaultSiteTool
     public void populateParentMenu( DecorationModel decorationModel, Locale locale, MavenProject project,
                                     MavenProject parentProject, boolean keepInheritedRefs )
     {
-        if ( decorationModel == null )
-        {
-            throw new IllegalArgumentException( "The parameter 'decorationModel' can not be null" );
-        }
-        if ( project == null )
-        {
-            throw new IllegalArgumentException( "The parameter 'project' can not be null" );
-        }
-        if ( parentProject == null )
-        {
-            throw new IllegalArgumentException( "The parameter 'parentProject' can not be null" );
-        }
+        checkNotNull( "decorationModel", decorationModel );
+        checkNotNull( "project", project );
+        checkNotNull( "parentProject", parentProject );
 
         Menu menu = decorationModel.getMenuRef( "parent" );
 
@@ -827,22 +743,10 @@ public class DefaultSiteTool
                                      Locale locale, boolean keepInheritedRefs )
         throws SiteToolException
     {
-        if ( project == null )
-        {
-            throw new IllegalArgumentException( "The parameter 'project' can not be null" );
-        }
-        if ( reactorProjects == null )
-        {
-            throw new IllegalArgumentException( "The parameter 'reactorProjects' can not be null" );
-        }
-        if ( localRepository == null )
-        {
-            throw new IllegalArgumentException( "The parameter 'localRepository' can not be null" );
-        }
-        if ( decorationModel == null )
-        {
-            throw new IllegalArgumentException( "The parameter 'decorationModel' can not be null" );
-        }
+        checkNotNull( "project", project );
+        checkNotNull( "reactorProjects", reactorProjects );
+        checkNotNull( "localRepository", localRepository );
+        checkNotNull( "decorationModel", decorationModel );
 
         Menu menu = decorationModel.getMenuRef( "modules" );
 
@@ -1498,5 +1402,13 @@ public class DefaultSiteTool
         }
 
         model.getDistributionManagement().getSite().setUrl( url );
+    }
+
+    private void checkNotNull( String name, Object value )
+    {
+        if ( value == null )
+        {
+            throw new IllegalArgumentException( "The parameter '" + name + "' cannot be null." );
+        }
     }
 }
