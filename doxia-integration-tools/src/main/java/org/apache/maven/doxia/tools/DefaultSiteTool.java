@@ -1105,9 +1105,10 @@ public class DefaultSiteTool
             }
 
             // Merge the parent and child site descriptors
-            assembler.assembleModelInheritance( name, decoration, parent, getDistMgmntSiteUrl( project ),
-                        getDistMgmntSiteUrl( parentProject ) == null
-                        ? getDistMgmntSiteUrl( project ) : getDistMgmntSiteUrl( parentProject ) );
+            String projectDistMgmnt = getDistMgmntSiteUrl( project );
+            String parentDistMgmnt = getDistMgmntSiteUrl( parentProject );
+            assembler.assembleModelInheritance( name, decoration, parent, projectDistMgmnt,
+                                                parentDistMgmnt == null ? projectDistMgmnt : parentDistMgmnt );
         }
 
         if ( decoration != null && decoration.getSkin() != null )
@@ -1332,11 +1333,10 @@ public class DefaultSiteTool
      */
     private static String getDistMgmntSiteUrl( MavenProject project )
     {
-        if ( project.getDistributionManagement() != null
-            && project.getDistributionManagement().getSite() != null
-            && project.getDistributionManagement().getSite().getUrl() != null )
+        DistributionManagement distMgmnt = project.getDistributionManagement();
+        if ( distMgmnt != null && distMgmnt.getSite() != null && distMgmnt.getSite().getUrl() != null )
         {
-            return urlEncode( project.getDistributionManagement().getSite().getUrl() );
+            return urlEncode( distMgmnt.getSite().getUrl() );
         }
 
         return null;
