@@ -1080,9 +1080,9 @@ public class DefaultSiteTool
             decoration.setLastModified( siteDescriptorLastModified );
         }
 
-        if ( parentProject != null )
+        if ( parentProject != null && decoration.isMergeParent() )
         {
-            getLogger().debug( "Parent project loaded ..." );
+            getLogger().debug( "Loading parent project site descriptor..." );
 
             MavenProject parentParentProject = getParentProject( parentProject, reactorProjects, localRepository );
 
