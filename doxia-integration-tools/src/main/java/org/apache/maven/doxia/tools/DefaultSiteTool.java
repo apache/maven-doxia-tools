@@ -383,15 +383,13 @@ public class DefaultSiteTool
     public DecorationModel getDecorationModel( MavenProject project, List<MavenProject> reactorProjects,
                                                ArtifactRepository localRepository,
                                                List<ArtifactRepository> repositories, String siteDirectory,
-                                               Locale locale, String inputEncoding, String outputEncoding )
+                                               Locale locale )
         throws SiteToolException
     {
         checkNotNull( "project", project );
         checkNotNull( "reactorProjects", reactorProjects );
         checkNotNull( "localRepository", localRepository );
         checkNotNull( "repositories", repositories );
-        checkNotNull( "inputEncoding", inputEncoding );
-        checkNotNull( "outputEncoding", outputEncoding );
 
         final Locale llocale = ( locale == null ) ? Locale.getDefault() : locale;
 
@@ -405,7 +403,7 @@ public class DefaultSiteTool
 
         DecorationModel decorationModel =
             getDecorationModel( project, parentProject, reactorProjects, localRepository, repositories, siteDirectory,
-                                llocale, props, inputEncoding, outputEncoding );
+                                llocale, props );
 
         if ( decorationModel == null )
         {
@@ -427,8 +425,7 @@ public class DefaultSiteTool
                 IOUtil.close( in );
             }
 
-            siteDescriptorContent = getInterpolatedSiteDescriptorContent( props, project, siteDescriptorContent,
-                                                                          inputEncoding, outputEncoding );
+            siteDescriptorContent = getInterpolatedSiteDescriptorContent( props, project, siteDescriptorContent );
 
             decorationModel = readDecorationModel( siteDescriptorContent );
         }
@@ -503,15 +500,12 @@ public class DefaultSiteTool
 
     /** {@inheritDoc} */
     public String getInterpolatedSiteDescriptorContent( Map<String, String> props, MavenProject aProject,
-                                                        String siteDescriptorContent, String inputEncoding,
-                                                        String outputEncoding )
+                                                        String siteDescriptorContent )
         throws SiteToolException
     {
         checkNotNull( "props", props );
         checkNotNull( "aProject", aProject );
         checkNotNull( "siteDescriptorContent", siteDescriptorContent );
-        checkNotNull( "inputEncoding", inputEncoding );
-        checkNotNull( "outputEncoding", outputEncoding );
 
         // MSITE-201: The ObjectBasedValueSource( aProject ) below will match
         // ${modules} to aProject.getModules(), so we need to interpolate that
@@ -551,10 +545,6 @@ public class DefaultSiteTool
         {
             throw new SiteToolException( "Cannot interpolate site descriptor: " + e.getMessage(), e );
         }
-
-        props.put( "inputEncoding", inputEncoding );
-
-        props.put( "outputEncoding", outputEncoding );
 
         // Legacy for the old ${parentProject} syntax
         props.put( "parentProject", "<menu ref=\"parent\"/>" );
@@ -1029,16 +1019,13 @@ public class DefaultSiteTool
      * @param siteDirectory not null
      * @param locale not null
      * @param origProps not null
-     * @param inputEncoding not null
-     * @param outputEncoding not null
      * @return the decoration model depending the locale
      * @throws SiteToolException if any
      */
     private DecorationModel getDecorationModel( MavenProject project, MavenProject parentProject,
                                                 List<MavenProject> reactorProjects, ArtifactRepository localRepository,
                                                 List<ArtifactRepository> repositories, String siteDirectory,
-                                                Locale locale, Map<String, String> origProps, String inputEncoding,
-                                                String outputEncoding )
+                                                Locale locale, Map<String, String> origProps )
         throws SiteToolException
     {
         Map<String, String> props = new HashMap<String, String>( origProps );
@@ -1087,8 +1074,7 @@ public class DefaultSiteTool
         DecorationModel decoration = null;
         if ( siteDescriptorContent != null )
         {
-            siteDescriptorContent = getInterpolatedSiteDescriptorContent( props, project, siteDescriptorContent,
-                                                                          inputEncoding, outputEncoding );
+            siteDescriptorContent = getInterpolatedSiteDescriptorContent( props, project, siteDescriptorContent );
 
             decoration = readDecorationModel( siteDescriptorContent );
             decoration.setLastModified( siteDescriptorLastModified );
@@ -1102,7 +1088,7 @@ public class DefaultSiteTool
 
             DecorationModel parent =
                 getDecorationModel( parentProject, parentParentProject, reactorProjects, localRepository, repositories,
-                                    siteDirectory, locale, props, inputEncoding, outputEncoding );
+                                    siteDirectory, locale, props );
 
             // MSHARED-116 requires an empty decoration model (instead of a null one)
             // MSHARED-145 requires us to do this only if there is a parent to merge it with

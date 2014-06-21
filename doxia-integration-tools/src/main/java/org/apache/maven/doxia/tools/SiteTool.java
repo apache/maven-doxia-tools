@@ -137,16 +137,13 @@ public interface SiteTool
      * @param siteDirectory The path to the directory containing the <code>site.xml</code> file, relative to the
      * project base directory. If null, using by default "src/site".
      * @param locale the locale used for the i18n in DecorationModel. If null, using the default locale in the jvm.
-     * @param inputEncoding the input encoding of the site descriptor, not null.
-     * @param outputEncoding the output encoding wanted, not null.
      * @return the <code>DecorationModel</code> object corresponding to the <code>site.xml</code> file with some
      * interpolations.
      * @throws SiteToolException if any
      */
     DecorationModel getDecorationModel( MavenProject project, List<MavenProject> reactorProjects,
                                         ArtifactRepository localRepository, List<ArtifactRepository> repositories,
-                                        String siteDirectory, Locale locale, String inputEncoding,
-                                        String outputEncoding )
+                                        String siteDirectory, Locale locale )
         throws SiteToolException;
 
     /**
@@ -192,8 +189,7 @@ public interface SiteTool
      * @throws SiteToolException if errors happened during the interpolation.
      */
     String getInterpolatedSiteDescriptorContent( Map<String, String> props, MavenProject aProject,
-                                                 String siteDescriptorContent, String inputEncoding,
-                                                 String outputEncoding )
+                                                 String siteDescriptorContent )
         throws SiteToolException;
 
     /**
