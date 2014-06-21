@@ -21,12 +21,11 @@ package org.apache.maven.doxia.tools;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
-
 import java.net.MalformedURLException;
 import java.net.URL;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -38,7 +37,6 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 import org.apache.commons.io.FilenameUtils;
-
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.artifact.repository.ArtifactRepository;
@@ -61,7 +59,6 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
 import org.apache.maven.project.ProjectBuildingException;
 import org.apache.maven.reporting.MavenReport;
-
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.i18n.I18N;
@@ -414,15 +411,20 @@ public class DefaultSiteTool
         {
             String siteDescriptorContent;
 
+            InputStream in = null;
             try
             {
                 // Note the default is not a super class - it is used when nothing else is found
-                siteDescriptorContent =
-                    IOUtil.toString( getClass().getResourceAsStream( "/default-site.xml" ), "UTF-8" );
+                in = getClass().getResourceAsStream( "/default-site.xml" );
+                siteDescriptorContent = IOUtil.toString( in, "UTF-8" );
             }
             catch ( IOException e )
             {
                 throw new SiteToolException( "Error reading default site descriptor: " + e.getMessage(), e );
+            }
+            finally
+            {
+                IOUtil.close( in );
             }
 
             siteDescriptorContent = getInterpolatedSiteDescriptorContent( props, project, siteDescriptorContent,
