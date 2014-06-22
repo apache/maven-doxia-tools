@@ -259,7 +259,7 @@ public class SiteToolTest
 
         DecorationModel model =
             tool.getDecorationModel( project, reactorProjects, getLocalRepo(), project.getRemoteArtifactRepositories(),
-                                     siteDirectory, Locale.getDefault(), "ISO-8859-1", "ISO-8859-1" );
+                                     siteDirectory, Locale.getDefault() );
         assertNotNull( model );
         assertNotNull( model.getBannerLeft() );
         assertEquals( "Maven", model.getBannerLeft().getName() );
@@ -286,7 +286,7 @@ public class SiteToolTest
 
         DecorationModel model =
             tool.getDecorationModel( project, reactorProjects, getLocalRepo(), project.getRemoteArtifactRepositories(),
-                                     siteDirectory, Locale.getDefault(), "UTF-8", "UTF-8" );
+                                     siteDirectory, Locale.getDefault() );
         assertNotNull( model );
     }
 
