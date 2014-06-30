@@ -175,7 +175,7 @@ under the License.
 
   <properties>
     <projectVersion>${project.version}</projectVersion>
-    <maven.site.path>doxia-archives/${project.artifactId}-LATEST</maven.site.path>
+    <maven.site.path>doxia-tools-archives/${project.artifactId}-LATEST</maven.site.path>
   </properties>
 
   <dependencyManagement>
@@ -218,21 +218,13 @@ under the License.
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-scm-publish-plugin</artifactId>
+        <configuration>
+          <content>${project.reporting.outputDirectory}</content><!-- doxia-tools are mono-module, no real need for site:stage -->
+        </configuration>
+      </plugin>
     </plugins>
   </build>
-
-  <profiles>
-    <profile>
-      <id>reporting</id>
-      <reporting>
-        <plugins>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>cobertura-maven-plugin</artifactId>
-           </plugin>
-        </plugins>
-      </reporting>
-    </profile>
-  </profiles>
-
 </project>
