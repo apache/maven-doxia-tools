@@ -30,7 +30,7 @@
   </parent>
 
   <artifactId>doxia-integration-tools</artifactId>
-  <version>1.6-SNAPSHOT</version>
+  <version>1.6</version>
 
   <name>Doxia :: Integration Tools</name>
   <description>A collection of tools to help the integration of Doxia in Maven plugins.</description>
@@ -40,9 +40,9 @@
   </prerequisites>
 
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/doxia/doxia-tools/trunk/doxia-integration-tools/</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/doxia/doxia-tools/trunk/doxia-integration-tools/</developerConnection>
-    <url>http://svn.apache.org/viewvc/maven/doxia/doxia-tools/trunk/doxia-integration-tools/</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/doxia/doxia-tools/tags/doxia-integration-tools-1.6</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/doxia/doxia-tools/tags/doxia-integration-tools-1.6</developerConnection>
+    <url>http://svn.apache.org/viewvc/maven/doxia/doxia-tools/tags/doxia-integration-tools-1.6</url>
   </scm>
   <issueManagement>
     <system>jira</system>
