@@ -44,6 +44,12 @@ under the License.
     <system>jira</system>
     <url>http://jira.codehaus.org/browse/DOXIATOOLS/component/14713</url>
   </issueManagement>
+  <distributionManagement>
+    <site>
+      <id>apache.website</id>
+      <url>scm:svn:https://svn.apache.org/repos/infra/websites/production/maven-doxia/content/${maven.site.path}</url>
+    </site>
+  </distributionManagement>
 
   <dependencies>
     <!-- compile dependencies -->
