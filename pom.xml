@@ -31,7 +31,7 @@ under the License.
 
   <groupId>org.apache.maven.doxia</groupId>
   <artifactId>doxia-tools</artifactId>
-  <version>4-SNAPSHOT</version>
+  <version>3-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>Doxia :: Tools</name>
@@ -175,7 +175,7 @@ under the License.
 
   <properties>
     <projectVersion>${project.version}</projectVersion>
-    <maven.site.path>doxia-archives/${project.artifactId}-LATEST</maven.site.path>
+    <maven.site.path>doxia-tools-archives/${project.artifactId}-LATEST</maven.site.path>
   </properties>
 
   <dependencyManagement>
