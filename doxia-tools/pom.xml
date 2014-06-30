@@ -31,7 +31,7 @@ under the License.
 
   <groupId>org.apache.maven.doxia</groupId>
   <artifactId>doxia-tools</artifactId>
-  <version>3-SNAPSHOT</version>
+  <version>3</version>
   <packaging>pom</packaging>
 
   <name>Doxia :: Tools</name>
@@ -151,9 +151,9 @@ under the License.
   </mailingLists>
 
   <scm>
-    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/doxia/doxia-tools/trunk/doxia-tools</connection>
-    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/doxia/doxia-tools/trunk/doxia-tools</developerConnection>
-    <url>http://svn.apache.org/viewvc/maven/doxia/doxia-tools/trunk/doxia-tools</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/maven/doxia/doxia-tools/tags/doxia-tools-3</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/maven/doxia/doxia-tools/tags/doxia-tools-3</developerConnection>
+    <url>http://svn.apache.org/viewvc/maven/doxia/doxia-tools/tags/doxia-tools-3</url>
   </scm>
 
   <issueManagement>
