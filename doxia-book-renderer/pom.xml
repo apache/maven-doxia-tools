@@ -170,6 +170,24 @@ under the License.
           </systemPropertyVariables>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.apache.rat</groupId>
+        <artifactId>apache-rat-plugin</artifactId>
+        <configuration>
+          <excludes>
+            <exclude>src/test/resources/expected/doc-book/plexus-user-guide.xml</exclude>
+            <exclude>src/test/resources/book-1/section-*.apt</exclude>
+          </excludes>            
+        </configuration>
+        <executions>
+          <execution>
+            <id>check</id>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>      
     </plugins>
   </build>
 
