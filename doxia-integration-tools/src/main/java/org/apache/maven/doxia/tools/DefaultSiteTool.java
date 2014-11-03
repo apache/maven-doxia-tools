@@ -584,7 +584,9 @@ public class DefaultSiteTool
             {
                 try
                 {
-                    File pomFile = new File( aProject.getBasedir(), aProject.getModel().getParent().getRelativePath() );
+                    String relativePath = aProject.getModel().getParent().getRelativePath();
+
+                    File pomFile = new File( aProject.getBasedir(), relativePath );
 
                     if ( pomFile.isDirectory() )
                     {
@@ -602,6 +604,8 @@ public class DefaultSiteTool
                         {
                             parentProject = mavenProject;
                         }
+
+                        getLogger().info( "Parent project loaded from a relative path: " + relativePath );
                     }
                 }
                 catch ( ProjectBuildingException e )
