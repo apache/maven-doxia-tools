@@ -1231,23 +1231,10 @@ public class DefaultSiteTool
         for ( Model model : models )
         {
             String reactorUrl = getDistMgmntSiteUrl( model );
-            String name = name( model );
+            String name = ( model.getName() == null ) ? model.getArtifactId() : model.getName();
 
             appendMenuItem( project, menu, name, reactorUrl, model.getArtifactId() );
         }
-    }
-
-    private static String name( final Model model )
-    {
-        String name = model.getName();
-
-        if ( name == null )
-        {
-            name = "Unnamed - " + model.getGroupId() + ":" + model.getArtifactId() + ":"
-                    + model.getPackaging() + ":" + model.getVersion();
-        }
-
-        return name;
     }
 
     /**
