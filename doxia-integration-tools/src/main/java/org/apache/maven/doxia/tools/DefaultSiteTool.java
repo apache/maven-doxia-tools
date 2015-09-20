@@ -475,9 +475,10 @@ public class DefaultSiteTool
             List<MavenReport> categoryReports = categories.get( MavenReport.CATEGORY_PROJECT_INFORMATION );
             if ( !isEmptyList( categoryReports ) )
             {
-                MenuItem item =
-                    createCategoryMenu( i18n.getString( "site-tool", llocale, "decorationModel.menu.projectinformation" ),
-                                        "/project-info.html", categoryReports, llocale );
+                MenuItem item = createCategoryMenu(
+                                                    i18n.getString( "site-tool", llocale,
+                                                                    "decorationModel.menu.projectinformation" ),
+                                                    "/project-info.html", categoryReports, llocale );
                 menu.getItems().add( item );
                 found = true;
             }
