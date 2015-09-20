@@ -1111,6 +1111,11 @@ public class DefaultSiteTool
             // Merge the parent and child site descriptors
             String projectDistMgmnt = getDistMgmntSiteUrl( project );
             String parentDistMgmnt = getDistMgmntSiteUrl( parentProject );
+            if ( getLogger().isDebugEnabled() )
+            {
+                getLogger().debug( "model inheritance distributionManagement.site.url child = " + projectDistMgmnt
+                    + ", parent = " + parentDistMgmnt );
+            }
             assembler.assembleModelInheritance( name, decoration, parent, projectDistMgmnt,
                                                 parentDistMgmnt == null ? projectDistMgmnt : parentDistMgmnt );
         }
