@@ -19,8 +19,6 @@ package org.apache.maven.doxia.util;
  * under the License.
  */
 
-import java.io.IOException;
-
 import org.apache.maven.doxia.UnsupportedFormatException;
 import org.apache.maven.doxia.parser.Parser;
 import org.apache.maven.doxia.sink.SinkFactory;
@@ -87,7 +85,6 @@ public class ConverterUtil
      * @return an instance of <code>SinkFactory</code> depending on the given format.
      * @throws ComponentLookupException if could not find the SinkFactory for the given format.
      * @throws UnsupportedFormatException if the found sink is not instantiated.
-     * @throws IOException if any.
      * @throws IllegalArgumentException if any parameter is null
      */
     public static SinkFactory getSinkFactory( PlexusContainer plexus, String format, String[] supportedFormats )

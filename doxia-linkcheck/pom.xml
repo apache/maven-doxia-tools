@@ -25,7 +25,7 @@ under the License.
   <parent>
     <groupId>org.apache.maven.doxia</groupId>
     <artifactId>doxia-tools</artifactId>
-    <version>2</version>
+    <version>4-SNAPSHOT</version>
     <relativePath>../doxia-tools/pom.xml</relativePath>
   </parent>
 
