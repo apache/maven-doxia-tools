@@ -42,6 +42,5 @@ under the License.
     <module>doxia-converter</module>
     <module>doxia-integration-tools</module>
     <module>doxia-linkcheck</module>
-    <module>doxia-tools</module>
   </modules>
 </project>
