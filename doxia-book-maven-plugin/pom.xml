@@ -141,64 +141,9 @@ under the License.
           <artifactId>maven-plugin-plugin</artifactId>
           <version>${pluginPluginVersion}</version>
         </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-shade-plugin</artifactId>
-          <version>1.2.2</version>
-        </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
-      <!-- Backward compatibility with Maven 2.0.x (MNG-3402) -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-shade-plugin</artifactId>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>shade</goal>
-            </goals>
-            <configuration>
-              <finalName>${project.build.finalName}</finalName>
-              <createDependencyReducedPom>false</createDependencyReducedPom>
-              <keepDependenciesWithProvidedScope>true</keepDependenciesWithProvidedScope>
-              <transformers>
-                <transformer implementation="org.apache.maven.plugins.shade.resource.ComponentsXmlResourceTransformer" />
-              </transformers>
-              <artifactSet>
-                <includes>
-                  <include>org.apache.maven.doxia:doxia-sink-api</include>
-                  <include>org.apache.maven.doxia:doxia-logging-api</include>
-                </includes>
-              </artifactSet>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-<!-- This plugin fails the build, need to investigate more...
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>clirr-maven-plugin</artifactId>
-        <configuration>
-          <comparisonArtifacts>
-            <comparisonArtifact>
-              <groupId>org.apache.maven.doxia</groupId>
-              <artifactId>doxia-maven-plugin</artifactId>
-              <version>1.2</version>
-            </comparisonArtifact>
-          </comparisonArtifacts>
-          <excludes>
--->
-            <!-- exclude shaded packages -->
-<!--
-            <exclude>org/apache/maven/doxia/logging/**</exclude>
-            <exclude>org/apache/maven/doxia/sink/**</exclude>
-            <exclude>org/codehaus/doxia/sink/**</exclude>
-          </excludes>
-        </configuration>
-      </plugin>
--->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plugin-plugin</artifactId>
