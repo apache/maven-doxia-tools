@@ -173,6 +173,20 @@ under the License.
   </dependencies>
 
   <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.rat</groupId>
+          <artifactId>apache-rat-plugin</artifactId>
+          <configuration>
+            <excludes combine.children="append">
+              <exclude>src/test/resources/unit/*/test.*</exclude>
+              <exclude>src/test/resources/book-1/section-*.apt</exclude>
+            </excludes>            
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
     <plugins>
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
@@ -197,24 +211,6 @@ under the License.
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <groupId>org.apache.rat</groupId>
-        <artifactId>apache-rat-plugin</artifactId>
-        <configuration>
-          <excludes combine.children="append">
-            <exclude>src/test/resources/unit/*/test.*</exclude>
-            <exclude>src/test/resources/book-1/section-*.apt</exclude>
-          </excludes>            
-        </configuration>
-        <executions>
-          <execution>
-            <id>check</id>
-            <goals>
-              <goal>check</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>      
     </plugins>
   </build>
 </project>
