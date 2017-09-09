@@ -34,7 +34,7 @@ under the License.
   <version>1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
-  <name>Doxia :: Tools Aggregator</name>
+  <name>Doxia Tools :: Aggregator</name>
 
   <modules>
     <module>doxia-book-maven-plugin</module>
