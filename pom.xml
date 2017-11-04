@@ -39,7 +39,8 @@ under the License.
   <modules>
     <module>doxia-book-maven-plugin</module>
     <module>doxia-book-renderer</module>
-    <module>doxia-converter</module>
-    <module>doxia-linkcheck</module>
+    <!-- modules switched to Git -->
+    <!--module>doxia-converter</module>
+    <module>doxia-linkcheck</module-->
   </modules>
 </project>
